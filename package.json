@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@icon-park/vue-next": "^1.4.2",
+    "crypto-js": "^4.1.1",
+    "openai": "^3.2.1"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.6.0",
+    "@types/crypto-js": "^4.1.1",
+    "nuxt": "^3.3.1"
+  }
+}

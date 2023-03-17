@@ -1,0 +1,11 @@
+version: "3"
+services:
+  chatgpt-nux:
+    image: node:latest
+    ports:
+      - 80:3000
+    working_dir: /app # 指定容器内的工作目录
+    volumes:
+      - .output:/app # 把当前宿主机的目录映射到容器内
+    command: node server/index.mjs
+    restart: unless-stopped # 自动重启
