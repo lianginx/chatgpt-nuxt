@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Tool, SunOne, Chip } from "@icon-park/vue-next";
-import { IconConverter } from "@icon-park/vue-next/lib/runtime";
+
 const examples = [
   {
     name: "工具",
@@ -35,7 +35,7 @@ const emits = defineEmits(["clickExamples"]);
 
 <template>
   <div class="m-4 sm:m-12">
-    <div class="sm:grid grid-cols-3 gap-4 mt-4">
+    <div class="sm:flex sm:space-x-4 mt-4">
       <div class="flex-1" v-for="item of examples">
         <div class="flex justify-center items-center mb-4">
           <component :is="item.icon" fill="#666" />
@@ -43,9 +43,9 @@ const emits = defineEmits(["clickExamples"]);
             {{ item.name }}
           </div>
         </div>
-        <div class="mb-4 grid gap-4">
+        <div class="mb-4 space-y-4">
           <div
-            class="flex justify-center items-center w-full sm:h-20 p-4 rounded bg-white hover:bg-slate-50 text-center text-slate-600 cursor-pointer"
+            class="flex justify-center items-center w-full sm:h-20 p-4 rounded bg-slate-50 hover:bg-white text-center text-slate-600 cursor-pointer"
             v-for="exa of item.examples"
             @click="$emit('clickExamples', exa)"
           >

@@ -1,38 +1,32 @@
 <script setup lang="ts">
-import Loding from "@/components/Loding.vue";
-import CopyText from "~~/components/CopyText.vue";
-import Avatar from "@/components/Avatar.vue";
 import { ChatMessage } from "~~/types";
 
 const props = defineProps<{ message: ChatMessage }>();
+const mdContent = computed(() => md.render(props.message.content));
 </script>
 
 <template>
-  <div
-    class="group flex flex-row mx-4 mb-2 px-4 py-4 bg-white hover:bg-slate-50 rounded-lg"
-  >
-    <Avatar class="mr-4" :role="message.role" />
-    <div>
-      <div class="flex flex-col items-start" v-if="message.content">
-        <pre class="text-slate-700 whitespace-pre-wrap leading-relaxed">{{
-          message.content.replace(/^\n+/, "")
-        }}</pre>
-        <CopyText
-          class="mt-3 invisible group-hover:visible"
-          :content="message.content"
-        />
-      </div>
-      <Loding v-else />
-    </div>
+  <div class="flex mx-4 mb-4">
+    <Avatar
+      class="mr-3 sm:mr-4"
+      :role="message.role"
+      v-show="message.role !== 'user'"
+    />
+    <div
+      class="prose px-3 py-2 rounded"
+      :class="
+        message.role === 'user'
+          ? 'ml-auto bg-blue-500 text-white prose-invert'
+          : 'mr-auto bg-slate-50 text-slate-700 '
+      "
+      v-if="message.content"
+      v-html="mdContent"
+    ></div>
+    <Loding v-else />
+    <Avatar
+      class="ml-3 sm:ml-4"
+      :role="message.role"
+      v-show="message.role === 'user'"
+    />
   </div>
 </template>
-
-<style scoped>
-pre {
-  font-family: -apple-system, "Noto Sans", "Helvetica Neue", Helvetica,
-    "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB",
-    "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN",
-    "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti",
-    SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
-}
-</style>

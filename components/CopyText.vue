@@ -24,7 +24,7 @@ const copyToClipboard = (content: string = porps.content) => {
 <template>
   <div class="flex items-center cursor-pointer" @click="copyToClipboard()">
     <component
-      :class="currentIcon.name === 'icon-loading' ? 'rotate' : null"
+      :class="currentIcon.name === 'icon-loading' ? 'animate-spin' : null"
       :is="currentIcon"
       size="15"
       fill="#999"
@@ -35,18 +35,3 @@ const copyToClipboard = (content: string = porps.content) => {
     </div>
   </div>
 </template>
-
-<style scoped>
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.rotate {
-  animation: spin 2s linear infinite;
-}
-</style>

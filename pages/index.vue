@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { ref, watch, nextTick, onMounted } from "vue";
 import cryptoJS from "crypto-js";
 import { ChatMessage } from "~~/types";
-
-import Message from "~~/components/Message.vue";
-import Reload from "~~/components/Reload.vue";
 
 let apiKey = "";
 let isConfig = ref(false);
 let isTalking = ref(false);
+const isComposing = ref(false);
 let messageContent = ref("");
 const chatListDom = ref<HTMLDivElement>();
+const chatMod = ref<HTMLTextAreaElement>();
 const messageList = ref<ChatMessage[]>([]);
 
 onMounted(() => {
@@ -23,6 +21,7 @@ const sendChatMessage = async (
   content: string = messageContent.value
 ): Promise<void> => {
   try {
+    if (!content.trim()) return;
     isTalking.value = true;
     messageList.value.push(
       { role: "user", content },
@@ -61,6 +60,15 @@ const sendOrSave = () => {
   }
 };
 
+const enterInput = (event: KeyboardEvent) => {
+  if (event.key !== "Enter") return;
+  if (event.shiftKey) return;
+  event.preventDefault();
+  if (isComposing.value) return;
+  if (isTalking.value) return;
+  sendOrSave();
+};
+
 const clickConfig = () => {
   if (!isConfig.value) {
     messageContent.value = getAPIKey();
@@ -93,32 +101,34 @@ const switchConfigStatus = () => (isConfig.value = !isConfig.value);
 
 const clearMessageContent = () => (messageContent.value = "");
 
-const scrollToBottom = () => {
-  if (!chatListDom.value) return;
-  scrollTo(0, chatListDom.value.scrollHeight);
-};
+watch(messageList.value, () =>
+  nextTick(() => {
+    if (!chatListDom.value) return;
+    scrollTo(0, chatListDom.value.scrollHeight);
+  })
+);
 
-watch(messageList.value, () => nextTick(() => scrollToBottom()));
+watch(messageContent, () => {
+  nextTick(() => {
+    if (!chatMod.value) return;
+    chatMod.value.style.height = "auto";
+    chatMod.value.style.height = `${chatMod.value.scrollHeight + 2}px`;
+  });
+});
 </script>
 
 <template>
   <div class="flex flex-col h-screen">
-    <div class="flex items-center fixed w-full px-4 py-3 sm:py-4 bg-white">
-      <div class="flex items-baseline">
-        <div class="text-2xl font-bold">ChatGPT</div>
-        <div class="ml-4 text-sm text-gray-500 hidden sm:block">
-          基于 OpenAI 的 ChatGPT 自然语言模型人工智能对话
-        </div>
-      </div>
+    <NavBar>
       <div
-        class="ml-auto px-3 py-2 text-sm cursor-pointer hover:bg-slate-50 rounded-md"
+        class="ml-auto px-3 py-2 text-sm cursor-pointer hover:bg-slate-100 rounded-md"
         @click="clickConfig()"
       >
         设置
       </div>
-    </div>
+    </NavBar>
 
-    <div class="flex-1 pt-20 pb-2 bg-slate-200" ref="chatListDom">
+    <div class="flex-1 pt-24 pb-4 bg-slate-200" ref="chatListDom">
       <Welcome
         v-if="!messageList.length"
         @click-examples="(exa:string) => {
@@ -132,26 +142,41 @@ watch(messageList.value, () => nextTick(() => scrollToBottom()));
       />
     </div>
 
-    <div class="sticky bottom-0 p-4 sm:p-6 sm:pb-8 bg-white">
-      <div class="-mt-2 mb-2 text-sm text-gray-500" v-if="isConfig">
-        请输入 API Key：
-      </div>
-      <div class="flex items-center">
-        <!-- <Reload /> -->
-        <input
-          class="mr-4 px-4 py-1.5 text-gray-700 bg-white border rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 flex-grow"
-          :type="isConfig ? 'password' : 'text'"
+    <div class="sticky bottom-0 p-4 sm:pb-6 bg-white">
+      <div class="relative">
+        <div class="mb-1 text-sm text-slate-500" v-if="isConfig">
+          输入 API Key:
+        </div>
+        <textarea
+          rows="1"
+          class="w-full max-h-60 p-2 pl-3 pr-10 resize-none border rounded-lg focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
           :placeholder="isConfig ? 'sk-xxxxxxxxxx' : '请输入'"
+          ref="chatMod"
           v-model="messageContent"
-          @keydown.enter="isTalking || sendOrSave()"
-        />
-        <button
-          class="px-4 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-700 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 whitespace-nowrap disabled:bg-blue-300"
-          :disabled="isTalking"
-          @click="sendOrSave()"
-        >
-          {{ isConfig ? "保存" : "发送" }}
-        </button>
+          @keydown="(event) => enterInput(event)"
+          @compositionstart="isComposing = true"
+          @compositionend="isComposing = false"
+        ></textarea>
+        <div class="absolute bottom-1.5 right-0.5">
+          <button
+            class="p-2 text-blue-600 rounded-full cursor-pointer"
+            :disabled="isTalking"
+            @click="sendOrSave()"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-6 h-6 rotate-90"
+              :fill="isTalking ? '#e1e1e1' : 'currentColor'"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"
+              ></path>
+            </svg>
+            <span class="sr-only"> {{ isConfig ? "保存" : "发送" }} </span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
