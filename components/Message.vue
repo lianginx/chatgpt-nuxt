@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Loding from "@/components/Loding.vue";
-import Copy from "@/components/Copy.vue";
+import CopyText from "~~/components/CopyText.vue";
 import Avatar from "@/components/Avatar.vue";
 import { ChatMessage } from "~~/types";
 
@@ -8,14 +8,16 @@ const props = defineProps<{ message: ChatMessage }>();
 </script>
 
 <template>
-  <div class="group flex flex-row px-4 py-4 hover:bg-slate-100 rounded-lg">
+  <div
+    class="group flex flex-row mx-4 mb-2 px-4 py-4 bg-white hover:bg-slate-50 rounded-lg"
+  >
     <Avatar class="mr-4" :role="message.role" />
     <div>
       <div class="flex flex-col items-start" v-if="message.content">
         <pre class="text-slate-700 whitespace-pre-wrap leading-relaxed">{{
-          message.content
+          message.content.replace(/^\n+/, "")
         }}</pre>
-        <Copy
+        <CopyText
           class="mt-3 invisible group-hover:visible"
           :content="message.content"
         />
