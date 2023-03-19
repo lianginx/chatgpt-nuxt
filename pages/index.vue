@@ -157,26 +157,12 @@ watch(messageContent, () => {
           @compositionstart="isComposing = true"
           @compositionend="isComposing = false"
         ></textarea>
-        <div class="absolute bottom-1.5 right-0.5">
-          <button
-            class="p-2 text-blue-600 rounded-full cursor-pointer"
-            :disabled="isTalking"
-            @click="sendOrSave()"
-          >
-            <svg
-              aria-hidden="true"
-              class="w-6 h-6 rotate-90"
-              :fill="isTalking ? '#e1e1e1' : 'currentColor'"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"
-              ></path>
-            </svg>
-            <span class="sr-only"> {{ isConfig ? "保存" : "发送" }} </span>
-          </button>
-        </div>
+        <Send
+          class="absolute bottom-1.5 right-0.5"
+          :is-talking="isTalking"
+          :is-config="isConfig"
+          @click="sendOrSave()"
+        />
       </div>
     </div>
   </div>
