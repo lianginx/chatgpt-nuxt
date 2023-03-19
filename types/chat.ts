@@ -1,4 +1,5 @@
 import { ChatCompletionResponseMessage } from "openai";
+import { APIResponse } from "./index";
 
 export type Role = "user" | "assistant" | "system";
 
@@ -11,10 +12,6 @@ export interface ChatRequest {
   messages: ChatMessage[];
 }
 
-export type ChatResponseStatus = "success" | "error";
-
-export interface ChatResponse {
-  status: ChatResponseStatus;
+export interface ChatResponse extends APIResponse {
   data?: ChatCompletionResponseMessage;
-  message?: string;
 }

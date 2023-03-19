@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import cryptoJS from "crypto-js";
+import { EmailFail } from "@icon-park/vue-next";
 import { ChatMessage } from "~~/types";
 
-let apiKey = "";
-let isConfig = ref(false);
-let isTalking = ref(false);
+const isConfig = ref(false);
+const isTalking = ref(false);
 const isComposing = ref(false);
-let messageContent = ref("");
+const messageContent = ref("");
 const chatListDom = ref<HTMLDivElement>();
 const chatMod = ref<HTMLTextAreaElement>();
 const messageList = ref<ChatMessage[]>([]);
 
-onMounted(() => {
-  if (!getAPIKey()) {
+onMounted(async () => {
+  if (!(await getAPIKey())) {
     switchConfigStatus();
   }
 });
@@ -22,7 +21,9 @@ const sendChatMessage = async (
 ): Promise<void> => {
   try {
     if (!content.trim()) return;
+
     isTalking.value = true;
+
     messageList.value.push(
       { role: "user", content },
       { role: "assistant", content: "" }
@@ -31,12 +32,15 @@ const sendChatMessage = async (
 
     const complete = await $fetch("/api/chat", {
       method: "post",
-      body: JSON.stringify({ apiKey, messages: messageList.value }),
+      body: {
+        apiKey: await getAPIKey(),
+        messages: messageList.value,
+      },
     });
     appendLastMessageContent(
       complete.status === "success"
-        ? complete.data?.content ?? ""
-        : complete.message ?? ""
+        ? complete.data?.content ?? "答复消息为空，请重试"
+        : complete.message ?? "未知错误，请重试"
     );
   } catch (e: any) {
     appendLastMessageContent(e.message);
@@ -48,10 +52,11 @@ const sendChatMessage = async (
 const appendLastMessageContent = (content: string) =>
   (messageList.value[messageList.value.length - 1].content += content);
 
-const sendOrSave = () => {
+const sendOrSave = async () => {
   if (!messageContent.value.length) return;
   if (isConfig.value) {
-    if (saveAPIKey(messageContent.value.trim())) {
+    if (await saveAPIKey(messageContent.value.trim())) {
+      sendChatMessage("Hello, Happy World!");
       switchConfigStatus();
     }
     clearMessageContent();
@@ -60,41 +65,37 @@ const sendOrSave = () => {
   }
 };
 
+let msgIndex: number | undefined;
 const enterInput = (event: KeyboardEvent) => {
-  if (event.key !== "Enter") return;
-  if (event.shiftKey) return;
-  event.preventDefault();
-  if (isComposing.value) return;
-  if (isTalking.value) return;
-  sendOrSave();
+  if (event.key === "Enter") {
+    if (event.shiftKey) return;
+    event.preventDefault();
+    if (isComposing.value) return;
+    if (isTalking.value) return;
+    sendOrSave();
+  } else if (event.metaKey || event.ctrlKey) {
+    if (!["ArrowUp", "ArrowDown"].includes(event.key)) return;
+    let userMsg;
+    console.log(event.key);
+
+    if (event.key === "ArrowUp") {
+      userMsg = previousMessage(messageList.value, msgIndex);
+    }
+    if (event.key === "ArrowDown") {
+      userMsg = nextMessage(messageList.value, msgIndex);
+    }
+    msgIndex = userMsg?.index;
+    messageContent.value = userMsg?.message ?? "";
+  }
 };
 
-const clickConfig = () => {
+const clickConfig = async () => {
   if (!isConfig.value) {
-    messageContent.value = getAPIKey();
+    messageContent.value = await getAPIKey();
   } else {
     clearMessageContent();
   }
   switchConfigStatus();
-};
-
-const getSecretKey = () => "lianginx";
-
-const saveAPIKey = (key: string) => {
-  checkAPIKeyError(key);
-  apiKey = key;
-  const aesAPIKey = cryptoJS.AES.encrypt(key, getSecretKey()).toString();
-  localStorage.setItem("apiKey", aesAPIKey);
-  return true;
-};
-
-const getAPIKey = () => {
-  if (apiKey) return apiKey;
-  const aesAPIKey = localStorage.getItem("apiKey") ?? "";
-  apiKey = cryptoJS.AES.decrypt(aesAPIKey, getSecretKey()).toString(
-    cryptoJS.enc.Utf8
-  );
-  return apiKey;
 };
 
 const switchConfigStatus = () => (isConfig.value = !isConfig.value);

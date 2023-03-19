@@ -6,14 +6,14 @@ const mdContent = computed(() => md.render(props.message.content));
 </script>
 
 <template>
-  <div class="flex mx-4 mb-4">
+  <div class="flex mx-4 mb-4 ">
     <Avatar
       class="mr-3 sm:mr-4"
       :role="message.role"
       v-show="message.role !== 'user'"
     />
     <div
-      class="prose px-3 py-2 rounded"
+      class="prose break-words px-3 py-2 rounded-lg text-sm sm:text-base"
       :class="
         message.role === 'user'
           ? 'ml-auto bg-blue-500 text-white prose-invert'
@@ -30,3 +30,9 @@ const mdContent = computed(() => md.render(props.message.content));
     />
   </div>
 </template>
+
+<style scoped>
+.prose{
+  max-width: 85%;
+}
+</style>
