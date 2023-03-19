@@ -1,5 +1,7 @@
 # chatgpt-nuxt
 
+![preview](assets/preview.gif)
+
 ## Setup
 
 To begin, please ensure you have installed all dependencies:
@@ -48,6 +50,6 @@ docker-compose stop  # Stop
 docker-compose down  # Stop and delete
 ```
 
-When completed, your project will be deployed onto port 80.
+When completed, your project will be deployed onto port `80`.
 
-Please consider reviewing and editing this README document accordingly.
+If you have any feedback or suggestions for improving this README document, please don’t hesitate to let me know. I appreciate your input.
