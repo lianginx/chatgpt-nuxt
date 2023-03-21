@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { EmailFail } from "@icon-park/vue-next";
 import { ChatMessage } from "~~/types";
 
 const isConfig = ref(false);
@@ -9,19 +8,17 @@ const messageContent = ref("");
 const chatListDom = ref<HTMLDivElement>();
 const chatMod = ref<HTMLTextAreaElement>();
 const messageList = ref<ChatMessage[]>([]);
+const decoder = new TextDecoder("utf-8");
 
 onMounted(async () => {
-  if (!(await getAPIKey())) {
+  if (!getAPIKey()) {
     switchConfigStatus();
   }
 });
 
-const sendChatMessage = async (
-  content: string = messageContent.value
-): Promise<void> => {
+const sendChatMessage = async (content: string = messageContent.value) => {
   try {
     if (!content.trim()) return;
-
     isTalking.value = true;
 
     messageList.value.push(
@@ -30,18 +27,46 @@ const sendChatMessage = async (
     );
     clearMessageContent();
 
-    const complete = await $fetch("/api/chat", {
+    // 发送消息
+    const { status, body } = await fetch("/api/chat", {
       method: "post",
-      body: {
-        apiKey: await getAPIKey(),
-        messages: messageList.value,
-      },
+      body: JSON.stringify({
+        apiKey: getAPIKey(),
+        messages: messageList.value.slice(0, -1),
+      }),
     });
-    appendLastMessageContent(
-      complete.status === "success"
-        ? complete.data?.content ?? "答复消息为空，请重试"
-        : complete.message ?? "未知错误，请重试"
-    );
+
+    // console.log("status", status);
+    // console.log("body", body);
+
+    // 流式读取
+    const reader = body?.getReader();
+    while (reader) {
+      const { done, value } = await reader.read();
+
+      if (done) {
+        // console.log("done", done);
+        reader.closed;
+        break;
+      }
+
+      const text = decoder.decode(value);
+      // console.log(`======\n${text}===`);
+
+      const dataList = status === 200 ? text.match(/({.*?]})/g) : [text];
+      // console.log("dataList", dataList);
+
+      dataList?.forEach((textData) => {
+        const data = JSON.parse(textData);
+        // console.log("data", data);
+
+        const content =
+          status === 200 ? data.choices[0].delta.content ?? "" : data.message;
+        // console.log("content", content);
+
+        appendLastMessageContent(content);
+      });
+    }
   } catch (e: any) {
     appendLastMessageContent(e.message);
   } finally {
@@ -55,7 +80,7 @@ const appendLastMessageContent = (content: string) =>
 const sendOrSave = async () => {
   if (!messageContent.value.length) return;
   if (isConfig.value) {
-    if (await saveAPIKey(messageContent.value.trim())) {
+    if (saveAPIKey(messageContent.value.trim())) {
       sendChatMessage("Hello, Happy World!");
       switchConfigStatus();
     }
@@ -91,7 +116,7 @@ const enterInput = (event: KeyboardEvent) => {
 
 const clickConfig = async () => {
   if (!isConfig.value) {
-    messageContent.value = await getAPIKey();
+    messageContent.value = getAPIKey();
   } else {
     clearMessageContent();
   }

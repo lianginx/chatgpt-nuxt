@@ -1,26 +1,15 @@
-export const saveAPIKey = async (key: string) => {
-  checkAPIKeyError(key);
-  const res = await $fetch("/api/crypto", {
+export const saveAPIKey = (apiKey: string) => {
+  checkAPIKeyError(apiKey);
+  const AESKey = useFetch("/api/crypto", {
     params: {
-      message: key,
+      message: apiKey,
       type: "en",
     },
-  });
-  if (res.status === "success" && res.data) {
-    localStorage.setItem("apiKey", res.data);
-    return res.data;
+  }).data.value;
+  if (AESKey) {
+    localStorage.setItem("apiKey", AESKey);
   }
-  return "";
+  return AESKey;
 };
 
-export const getAPIKey = async () => {
-  const AESMessage = localStorage.getItem("apiKey");
-  if (!AESMessage) return "";
-  const res = await $fetch("/api/crypto", {
-    params: {
-      message: AESMessage,
-      type: "de",
-    },
-  });
-  return res.status === "success" && res.data ? res.data : "";
-};
+export const getAPIKey = () => localStorage.getItem("apiKey") ?? "";
