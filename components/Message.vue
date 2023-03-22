@@ -6,7 +6,7 @@ const mdContent = computed(() => md.render(props.message.content));
 </script>
 
 <template>
-  <div class="flex mx-4 mb-4 ">
+  <div class="flex mx-4 mb-4">
     <Avatar
       class="mr-3 sm:mr-4"
       :role="message.role"
@@ -21,7 +21,7 @@ const mdContent = computed(() => md.render(props.message.content));
       "
       v-if="message.content"
       v-html="mdContent"
-    ></div>
+    />
     <Loding v-else />
     <Avatar
       class="ml-3 sm:ml-4"
@@ -32,7 +32,7 @@ const mdContent = computed(() => md.render(props.message.content));
 </template>
 
 <style scoped>
-.prose{
-  max-width: 85%;
+.prose {
+  max-width: 95%;
 }
 </style>
