@@ -2,6 +2,7 @@
 import { ChatMessage } from "~~/types";
 
 let msgIndex: number | null;
+let controller: AbortController;
 const isConfig = ref(false);
 const isTalking = ref(false);
 const isComposing = ref(false);
@@ -26,6 +27,10 @@ watch(messageContent, () => {
   nextTick(() => resetMsgInputHeight());
 });
 
+const stopChat = () => {
+  controller?.abort("test");
+};
+
 const sendChatMessage = async (content: string = messageContent.value) => {
   try {
     if (!content.trim()) return;
@@ -37,16 +42,20 @@ const sendChatMessage = async (content: string = messageContent.value) => {
     );
     clearMessageContent();
 
-    // 发送消息
+    // 用于主动中断请求
+    controller = new AbortController();
+
+    // 发送请求
     const { status, body } = await fetch("/api/chat", {
       method: "post",
       body: JSON.stringify({
         apiKey: getAPIKey(),
         messages: messageList.value.slice(0, -1),
       }),
+      signal: controller.signal,
     });
 
-    // 流式读取
+    // 读取流
     const reader = body?.getReader();
     while (reader) {
       const { done, value } = await reader.read();
@@ -64,7 +73,7 @@ const sendChatMessage = async (content: string = messageContent.value) => {
       });
     }
   } catch (e: any) {
-    appendLastMessageContent(e.message);
+    appendLastMessageContent(`\n\n**${e.message}**`);
   } finally {
     isTalking.value = false;
   }
@@ -143,7 +152,7 @@ const resetMsgInputHeight = () => {
 </script>
 
 <template>
-  <div class="flex flex-col h-screen">
+  <div class="flex flex-col bg-slate-200 min-h-screen">
     <NavBar>
       <div
         class="ml-auto px-3 py-2 text-sm cursor-pointer hover:bg-slate-100 rounded-md"
@@ -153,7 +162,7 @@ const resetMsgInputHeight = () => {
       </div>
     </NavBar>
 
-    <div class="flex-1 pt-24 pb-4 bg-slate-200" ref="chatListDom">
+    <div class="flex-1 pt-24 pb-4" ref="chatListDom">
       <Welcome
         v-if="!messageList.length"
         @click-examples="(exa:string) => {
@@ -167,15 +176,24 @@ const resetMsgInputHeight = () => {
       />
     </div>
 
-    <div class="sticky bottom-0 p-4 sm:pb-6 bg-white">
-      <div class="relative">
+    <div class="sticky bottom-0 pointer-events-none">
+      <div class="flex justify-center" :class="{ 'pb-3': isTalking }">
+        <StopChat
+          class="pointer-events-auto"
+          v-show="isTalking"
+          @click="() => stopChat()"
+        />
+      </div>
+      <div class="relative p-4 sm:pb-6 bg-white pointer-events-auto">
         <div class="mb-1 text-sm text-slate-500" v-if="isConfig">
           输入 API Key:
         </div>
         <textarea
           rows="1"
-          class="w-full h max-h-60 p-2 pl-3 pr-10 resize-none border rounded-lg focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
-          :placeholder="isConfig ? 'sk-xxxxxxxxxx' : '请输入'"
+          class="w-full h max-h-60 p-1.5 pl-3 pr-10 resize-none border rounded-lg focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+          :placeholder="
+            isConfig ? 'sk-xxxxxxxxxx' : '输入内容和 AI 开始聊天吧 …'
+          "
           ref="chatMod"
           v-model="messageContent"
           @keydown="(event) => enterInput(event)"
@@ -183,7 +201,7 @@ const resetMsgInputHeight = () => {
           @compositionend="isComposing = false"
         ></textarea>
         <Send
-          class="absolute bottom-1.5 right-0.5"
+          class="absolute bottom-5 sm:bottom-7 right-4"
           :is-talking="isTalking"
           :is-config="isConfig"
           :event-send="sendOrSave"
