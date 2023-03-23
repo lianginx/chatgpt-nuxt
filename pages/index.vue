@@ -186,7 +186,7 @@ const resetMsgInputHeight = () => {
           class="absolute bottom-1.5 right-0.5"
           :is-talking="isTalking"
           :is-config="isConfig"
-          @click="sendOrSave()"
+          :event-send="sendOrSave"
         />
       </div>
     </div>
