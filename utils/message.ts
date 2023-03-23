@@ -2,7 +2,7 @@ import { ChatMessage } from "../types";
 
 export { getUserMessages, nextMessage, previousMessage };
 
-const nextMessage = (messages: ChatMessage[], currentIndex?: number) => {
+const nextMessage = (messages: ChatMessage[], currentIndex?: number | null) => {
   if (!messages.length) return null;
   const userMessages = getUserMessages(messages);
   const index = currentIndex ?? -1;
@@ -13,7 +13,10 @@ const nextMessage = (messages: ChatMessage[], currentIndex?: number) => {
   };
 };
 
-const previousMessage = (messages: ChatMessage[], currentIndex?: number) => {
+const previousMessage = (
+  messages: ChatMessage[],
+  currentIndex?: number | null
+) => {
   if (!messages.length) return null;
   const userMessages = getUserMessages(messages);
   const index = currentIndex ?? userMessages.length;

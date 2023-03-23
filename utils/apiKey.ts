@@ -1,11 +1,12 @@
-export const saveAPIKey = (apiKey: string) => {
-  checkAPIKeyError(apiKey);
-  const AESKey = useFetch("/api/crypto", {
+export const saveAPIKey = async (apiKey: string) => {
+  const AESKey = await $fetch("/api/crypto", {
     params: {
       message: apiKey,
       type: "en",
     },
-  }).data.value;
+  });
+  console.log("AESKey", AESKey);
+
   if (AESKey) {
     localStorage.setItem("apiKey", AESKey);
   }

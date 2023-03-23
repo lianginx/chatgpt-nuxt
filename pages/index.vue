@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ChatMessage } from "~~/types";
 
+let msgIndex: number | null;
 const isConfig = ref(false);
 const isTalking = ref(false);
 const isComposing = ref(false);
@@ -10,10 +11,19 @@ const chatMod = ref<HTMLTextAreaElement>();
 const messageList = ref<ChatMessage[]>([]);
 const decoder = new TextDecoder("utf-8");
 
-onMounted(async () => {
-  if (!getAPIKey()) {
-    switchConfigStatus();
-  }
+onMounted(() => {
+  if (!getAPIKey()) switchConfigStatus();
+});
+
+watch(messageList.value, () =>
+  nextTick(() => {
+    scrollToBottom();
+    resetMsgIndex();
+  })
+);
+
+watch(messageContent, () => {
+  nextTick(() => resetMsgInputHeight());
 });
 
 const sendChatMessage = async (content: string = messageContent.value) => {
@@ -36,34 +46,20 @@ const sendChatMessage = async (content: string = messageContent.value) => {
       }),
     });
 
-    // console.log("status", status);
-    // console.log("body", body);
-
     // 流式读取
     const reader = body?.getReader();
     while (reader) {
       const { done, value } = await reader.read();
 
-      if (done) {
-        // console.log("done", done);
-        reader.closed;
-        break;
-      }
+      if (done) break;
 
       const text = decoder.decode(value);
-      // console.log(`======\n${text}===`);
-
       const dataList = status === 200 ? text.match(/({.*?]})/g) : [text];
-      // console.log("dataList", dataList);
 
       dataList?.forEach((textData) => {
         const data = JSON.parse(textData);
-        // console.log("data", data);
-
         const content =
           status === 200 ? data.choices[0].delta.content ?? "" : data.message;
-        // console.log("content", content);
-
         appendLastMessageContent(content);
       });
     }
@@ -74,42 +70,44 @@ const sendChatMessage = async (content: string = messageContent.value) => {
   }
 };
 
-const appendLastMessageContent = (content: string) =>
-  (messageList.value[messageList.value.length - 1].content += content);
-
 const sendOrSave = async () => {
-  if (!messageContent.value.length) return;
-  if (isConfig.value) {
-    if (saveAPIKey(messageContent.value.trim())) {
-      sendChatMessage("Hello, Happy World!");
-      switchConfigStatus();
-    }
-    clearMessageContent();
-  } else {
+  const content = messageContent.value.trim();
+
+  if (!content) return;
+  if (!isConfig.value) {
     sendChatMessage();
+  } else if (await saveAPIKey(content)) {
+    switchConfigStatus();
+    sendChatMessage("Hello, Happy World!"); // 发送测试消息
   }
 };
 
-let msgIndex: number | undefined;
 const enterInput = (event: KeyboardEvent) => {
+  // 拦截 Enter 实现禁用发送、换行
   if (event.key === "Enter") {
     if (event.shiftKey) return;
     event.preventDefault();
     if (isComposing.value) return;
     if (isTalking.value) return;
     sendOrSave();
-  } else if (event.metaKey || event.ctrlKey) {
-    if (!["ArrowUp", "ArrowDown"].includes(event.key)) return;
+  }
+
+  // Ctrl/command + up/down 查看发送记录
+  if (
+    (event.metaKey || event.ctrlKey) &&
+    ["ArrowUp", "ArrowDown"].includes(event.key)
+  ) {
     let userMsg;
-    console.log(event.key);
 
     if (event.key === "ArrowUp") {
       userMsg = previousMessage(messageList.value, msgIndex);
     }
+
     if (event.key === "ArrowDown") {
       userMsg = nextMessage(messageList.value, msgIndex);
     }
-    msgIndex = userMsg?.index;
+
+    msgIndex = userMsg?.index ?? null;
     messageContent.value = userMsg?.message ?? "";
   }
 };
@@ -123,24 +121,25 @@ const clickConfig = async () => {
   switchConfigStatus();
 };
 
+const appendLastMessageContent = (content: string) =>
+  (messageList.value[messageList.value.length - 1].content += content);
+
 const switchConfigStatus = () => (isConfig.value = !isConfig.value);
 
 const clearMessageContent = () => (messageContent.value = "");
 
-watch(messageList.value, () =>
-  nextTick(() => {
-    if (!chatListDom.value) return;
-    scrollTo(0, chatListDom.value.scrollHeight);
-  })
-);
+const resetMsgIndex = () => (msgIndex = null);
 
-watch(messageContent, () => {
-  nextTick(() => {
-    if (!chatMod.value) return;
-    chatMod.value.style.height = "auto";
-    chatMod.value.style.height = `${chatMod.value.scrollHeight + 2}px`;
-  });
-});
+const scrollToBottom = () => {
+  if (!chatListDom.value) return;
+  scrollTo(0, chatListDom.value.scrollHeight);
+};
+
+const resetMsgInputHeight = () => {
+  if (!chatMod.value) return;
+  chatMod.value.style.height = "auto";
+  chatMod.value.style.height = `${chatMod.value.scrollHeight + 2}px`;
+};
 </script>
 
 <template>
@@ -175,7 +174,7 @@ watch(messageContent, () => {
         </div>
         <textarea
           rows="1"
-          class="w-full max-h-60 p-2 pl-3 pr-10 resize-none border rounded-lg focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+          class="w-full h max-h-60 p-2 pl-3 pr-10 resize-none border rounded-lg focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
           :placeholder="isConfig ? 'sk-xxxxxxxxxx' : '请输入'"
           ref="chatMod"
           v-model="messageContent"
