@@ -16,7 +16,7 @@ const mdContent = computed(() => md.render(props.message.content));
     />
     <div class="group max-w" v-if="message.content">
       <div
-        class="prose break-words px-3 py-2 rounded-xl text-sm sm:text-base"
+        class="prose break-words px-3 py-2 rounded-lg text-sm sm:text-base"
         :class="
           message.role === 'user'
             ? 'bg-blue-500 text-white'

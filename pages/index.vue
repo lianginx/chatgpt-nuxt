@@ -56,9 +56,6 @@ const sendChatMessage = async (content: string = messageContent.value) => {
       signal: controller.signal,
     });
 
-    console.log("status", status);
-    console.log("body", body);
-
     // 读取流
     const reader = body?.getReader();
     while (reader) {
