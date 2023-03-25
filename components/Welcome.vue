@@ -37,9 +37,9 @@ const emits = defineEmits(["clickExamples"]);
   <div class="m-4 sm:m-12">
     <div class="sm:flex sm:space-x-4 mt-4">
       <div class="flex-1" v-for="item of examples">
-        <div class="flex justify-center items-center mb-4">
-          <component :is="item.icon" fill="#666" />
-          <div class="ml-1 text-center font-bold">
+        <div class="flex justify-center items-center mb-4 text-slate-700">
+          <component :is="item.icon" />
+          <div class="ml-1 text-center font-bold text-lg">
             {{ item.name }}
           </div>
         </div>

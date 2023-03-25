@@ -13,11 +13,11 @@ const mdContent = computed(() => md.render(props.message.content));
       v-show="message.role !== 'user'"
     />
     <div
-      class="prose break-words px-3 py-2 rounded-lg text-sm sm:text-base"
+      class="prose break-words px-3 py-2 rounded-xl text-sm sm:text-base"
       :class="
         message.role === 'user'
-          ? 'ml-auto bg-blue-500 text-white prose-invert'
-          : 'mr-auto bg-slate-50 text-slate-700 '
+          ? 'ml-auto bg-blue-500 text-white'
+          : 'mr-auto bg-slate-50 text-slate-700'
       "
       v-if="message.content"
       v-html="mdContent"

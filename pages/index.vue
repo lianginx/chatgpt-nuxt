@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { stat } from "fs";
 import { ChatMessage } from "~~/types";
+import { Github, SettingTwo } from "@icon-park/vue-next";
 
 let msgIndex: number | null;
 let controller: AbortController;
@@ -169,11 +169,15 @@ const resetMsgInputHeight = () => {
 <template>
   <div class="flex flex-col bg-slate-200 min-h-screen">
     <NavBar>
-      <div
-        class="ml-auto px-3 py-2 text-sm cursor-pointer hover:bg-slate-100 rounded-md"
-        @click="clickConfig()"
+      <NuxtLink
+        class="bar-btn"
+        to="https://github.com/lianginx/chatgpt-nuxt"
+        target="_blank"
       >
-        设置
+        <Github class="text-slate-700" theme="outline" size="22" />
+      </NuxtLink>
+      <div class="bar-btn" @click="clickConfig()">
+        <SettingTwo class="text-slate-700" theme="outline" size="22" />
       </div>
     </NavBar>
 
@@ -225,3 +229,9 @@ const resetMsgInputHeight = () => {
     </div>
   </div>
 </template>
+
+<style>
+.bar-btn {
+  @apply ml-2 p-2 text-sm cursor-pointer hover:bg-slate-100 rounded-md;
+}
+</style>
