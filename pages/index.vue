@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { stat } from "fs";
 import { ChatMessage } from "~~/types";
 
 let msgIndex: number | null;
@@ -28,7 +29,7 @@ watch(messageContent, () => {
 });
 
 const stopChat = () => {
-  controller?.abort("test");
+  controller?.abort();
 };
 
 const sendChatMessage = async (content: string = messageContent.value) => {
@@ -55,6 +56,9 @@ const sendChatMessage = async (content: string = messageContent.value) => {
       signal: controller.signal,
     });
 
+    console.log("status", status);
+    console.log("body", body);
+
     // 读取流
     const reader = body?.getReader();
     while (reader) {
@@ -67,13 +71,24 @@ const sendChatMessage = async (content: string = messageContent.value) => {
 
       dataList?.forEach((textData) => {
         const data = JSON.parse(textData);
-        const content =
-          status === 200 ? data.choices[0].delta.content ?? "" : data.message;
+        let content = "";
+        switch (status) {
+          case 200:
+            content = data.choices[0].delta.content ?? "";
+            break;
+          case 500:
+            content = data.message;
+            break;
+          default:
+            content = data.error.message;
+            break;
+        }
         appendLastMessageContent(content);
       });
     }
   } catch (e: any) {
-    appendLastMessageContent(`\n\n**${e.message}**`);
+    let eMessage = e.name === "AbortError" ? "已停止回答" : e.message;
+    appendLastMessageContent(`\n\n**${eMessage}**`);
   } finally {
     isTalking.value = false;
   }

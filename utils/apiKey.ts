@@ -5,11 +5,11 @@ export const saveAPIKey = async (apiKey: string) => {
       type: "en",
     },
   });
-  console.log("AESKey", AESKey);
 
   if (AESKey) {
     localStorage.setItem("apiKey", AESKey);
   }
+
   return AESKey;
 };
 
