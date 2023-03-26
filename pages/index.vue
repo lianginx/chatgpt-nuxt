@@ -4,14 +4,15 @@ import { Github, SettingTwo } from "@icon-park/vue-next";
 
 let msgIndex: number | null;
 let controller: AbortController;
+const decoder = new TextDecoder("utf-8");
+
 const isConfig = ref(false);
 const isTalking = ref(false);
 const isComposing = ref(false);
 const messageContent = ref("");
 const chatListDom = ref<HTMLDivElement>();
-const chatMod = ref<HTMLTextAreaElement>();
+const chatDom = ref<HTMLTextAreaElement>();
 const messageList = ref<ChatMessage[]>([]);
-const decoder = new TextDecoder("utf-8");
 
 onMounted(() => {
   if (!getAPIKey()) switchConfigStatus();
@@ -47,11 +48,12 @@ const sendChatMessage = async (content: string = messageContent.value) => {
     controller = new AbortController();
 
     // 发送请求
+    const messages = messageList.value.slice(0, -1);
     const { status, body } = await fetch("/api/chat", {
       method: "post",
       body: JSON.stringify({
         apiKey: getAPIKey(),
-        messages: messageList.value.slice(0, -1),
+        messages,
       }),
       signal: controller.signal,
     });
@@ -73,10 +75,10 @@ const sendChatMessage = async (content: string = messageContent.value) => {
           case 200:
             content = data.choices[0].delta.content ?? "";
             break;
-          case 500:
+          case 500: // 后端错误信息
             content = data.message;
             break;
-          default:
+          default: // API 错误信息
             content = data.error.message;
             break;
         }
@@ -107,10 +109,16 @@ const enterInput = (event: KeyboardEvent) => {
   // 拦截 Enter 实现禁用发送、换行
   if (event.key === "Enter") {
     if (event.shiftKey) return;
+
     event.preventDefault();
+
     if (isComposing.value) return;
     if (isTalking.value) return;
+
     sendOrSave();
+
+    // 当设备为移动端时，发送后关闭键盘
+    if (isMobile()) (event.target as HTMLTextAreaElement).blur();
   }
 
   // Ctrl/command + up/down 查看发送记录
@@ -157,9 +165,9 @@ const scrollToBottom = () => {
 };
 
 const resetMsgInputHeight = () => {
-  if (!chatMod.value) return;
-  chatMod.value.style.height = "auto";
-  chatMod.value.style.height = `${chatMod.value.scrollHeight + 2}px`;
+  if (!chatDom.value) return;
+  chatDom.value.style.height = "auto";
+  chatDom.value.style.height = `${chatDom.value.scrollHeight + 2}px`;
 };
 </script>
 
@@ -210,7 +218,7 @@ const resetMsgInputHeight = () => {
           :placeholder="
             isConfig ? 'sk-xxxxxxxxxx' : '输入内容和 AI 开始聊天吧 …'
           "
-          ref="chatMod"
+          ref="chatDom"
           v-model="messageContent"
           @keydown="(event) => enterInput(event)"
           @compositionstart="isComposing = true"
