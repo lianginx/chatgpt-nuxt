@@ -1,6 +1,8 @@
 # chatgpt-nuxt
 
-![preview](assets/preview.gif)
+![preview](/assets/preview.gif)
+
+ENGLISH | [简体中文](/docs/README-CN.md)
 
 ## Setup
 

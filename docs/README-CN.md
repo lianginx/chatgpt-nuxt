@@ -1,6 +1,6 @@
 # chatgpt-nuxt
 
-![preview](assets/preview.gif)
+![preview](/assets/preview.gif)
 
 [ENGLISH](/README.md) | 简体中文
 
