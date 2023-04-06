@@ -11,10 +11,13 @@
   },
   "dependencies": {
     "@icon-park/vue-next": "^1.4.2",
+    "@pinia/nuxt": "^0.4.7",
     "crypto-js": "^4.1.1",
+    "dexie": "^3.2.3",
     "highlight.js": "^11.7.0",
     "markdown-it": "^13.0.1",
-    "openai": "^3.2.1"
+    "openai": "^3.2.1",
+    "pinia": "^2.0.33"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.6.0",

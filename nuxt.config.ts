@@ -11,11 +11,13 @@ export default defineNuxtConfig({
       ],
     },
   },
-  modules: ["@nuxtjs/tailwindcss"],
+  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
   css: ["highlight.js/styles/dark.css"],
   tailwindcss: {
     config: {
+      content: [],
       plugins: [require("@tailwindcss/typography")],
     },
   },
+  ssr: false,
 });
