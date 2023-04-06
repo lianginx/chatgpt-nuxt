@@ -5,7 +5,7 @@ export type ChatSettingType = "default" | "global" | "chat";
 export interface ChatSetting {
   id?: number;
   type: ChatSettingType;
-  apiKey: number;
+  apiKey: string;
   temperature?: number;
   maxTokens?: number;
 }
@@ -64,4 +64,5 @@ export interface ChatMessageExOption {
 export interface ChatRequest {
   apiKey: string;
   messages: ChatMessage[];
+  temperature: number;
 }

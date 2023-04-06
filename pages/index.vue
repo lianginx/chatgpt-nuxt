@@ -6,9 +6,9 @@ const sotre = useChatStore();
 
 <template>
   <div class="flex w-screen h-screen overflow-hidden text-slate-700">
-    <SideBar />
-    <Setting v-if="sotre.showSetting" />
-    <Content v-else />
+    <ChatSideBar />
+    <ChatSetting v-if="sotre.showSetting" />
+    <ChatContentBar v-else />
   </div>
 </template>
 

@@ -11,7 +11,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
+  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt", "nuxt-icon"],
   css: ["highlight.js/styles/dark.css"],
   tailwindcss: {
     config: {

@@ -1,11 +1,20 @@
 <template>
-  <div class="relative m-4 sm:mb-2 bg-white pointer-events-auto">
+  <div class="relative m-4 mt-3 sm:mb-2 pointer-events-auto">
     <textarea
-      class="w-full h max-h-60 p-1.5 pl-3 pr-10 resize-none border rounded-lg focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
-      rows="3" ref="textareaDom" v-model="store.messageContent" :placeholder="placeholder"
-      @keydown="(event) => enterInput(event)" @compositionstart="composing = true"
-      @compositionend="composing = false"></textarea>
-    <Send class="absolute bottom-5 sm:bottom-1.5 right-0" :is-talking="store.talking" @click="sendMessage" />
+      class="w-full max-h-60 p-1.5 pl-3 pr-10 resize-none border rounded-lg outline-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-40"
+      rows="3"
+      ref="textareaDom"
+      v-model="store.messageContent"
+      :placeholder="placeholder"
+      @keydown="(event) => enterInput(event)"
+      @compositionstart="composing = true"
+      @compositionend="composing = false"
+    ></textarea>
+    <ChatSendButton
+      class="absolute bottom-5 sm:bottom-2 right-3"
+      :is-talking="store.talking"
+      @click="sendMessage"
+    />
   </div>
 </template>
 

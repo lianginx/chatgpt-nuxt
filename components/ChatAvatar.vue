@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ChatRole } from "~~/types";
 
-const props = defineProps<{
+defineProps<{
   role: ChatRole;
 }>();
 const avatars = {
@@ -12,9 +12,5 @@ const avatars = {
 </script>
 
 <template>
-  <img
-    class="hidden sm:block w-8 h-8 sm:w-10 sm:h-10 rounded-md bg-slate-100"
-    :src="avatars[role]"
-    :alt="role"
-  />
+  <img class="hidden sm:block w-8 h-8 sm:w-10 sm:h-10 rounded-md bg-slate-100" :src="avatars[role]" :alt="role" />
 </template>

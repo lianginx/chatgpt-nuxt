@@ -14,7 +14,7 @@
         <IconMessage /><span>{{ item.name }}</span>
       </div>
       <CloseOne
-        class="invisible group-hover:visible text-red-400"
+        class="invisible group-hover:visible text-rose-400"
         @click.stop.left="removeChat(item)"
       />
     </div>

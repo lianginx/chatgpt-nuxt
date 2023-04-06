@@ -7,21 +7,24 @@ export default defineEventHandler((event) => chat(event));
 
 const chat = async (event: H3Event) => {
   try {
-    const { apiKey, messages } = (await readBody(event)) as ChatRequest;
+    const { apiKey, messages, temperature } = (await readBody(
+      event
+    )) as ChatRequest;
 
     // AES 解密 API Key
-    const decrypt = await $fetch("/api/crypto", {
-      method: "post",
-      params: { message: apiKey, type: "de" },
-    });
+    // const decrypt = await $fetch("/api/crypto", {
+    //   method: "post",
+    //   params: { message: apiKey, type: "de" },
+    // });
 
     // 调用 API 发送请求
-    const config = new Configuration({ apiKey: decrypt ?? "" });
+    const config = new Configuration({ apiKey });
     const openai = new OpenAIApi(config);
 
     const request: CreateChatCompletionRequest = {
       model: "gpt-3.5-turbo",
       messages,
+      temperature,
       stream: true,
     };
 

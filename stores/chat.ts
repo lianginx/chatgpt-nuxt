@@ -126,11 +126,14 @@ export const useChatStore = defineStore("chat", () => {
       controller = new AbortController();
 
       // 发送请求
+      const setting = loadSetting();
+      console.log(setting);
+
       const { status, body } = await fetch("/api/chat", {
         method: "post",
         body: JSON.stringify({
-          apiKey:
-            "U2FsdGVkX1/O4I+YJKICmo6VNzoDmbltcZVNRkwwggjjS1yPnP3JXOz08H+dlKaNTFZ3xDG8fro7+5zUIrJJ/MuSis9WLdX+HYfHFQMaIXI=",
+          apiKey: setting.apiKey,
+          temperature: setting.temperature,
           messages: standardList,
         }),
         signal: controller.signal,

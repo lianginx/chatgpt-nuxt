@@ -1,3 +1,16 @@
+<template>
+  <div @click="copyToClipboard()">
+    <div class="icon" v-show="!copyStatus">
+      <Copy :size="size" />
+      <span>复制全文</span>
+    </div>
+    <div class="icon" v-show="copyStatus">
+      <CheckOne class="text-blue-700" :size="size" />
+      <span>复制成功</span>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { Copy, CheckOne } from "@icon-park/vue-next";
 
@@ -33,19 +46,6 @@ async function copyToClipboardEx(content: string = porps.content) {
   }
 }
 </script>
-
-<template>
-  <div @click="copyToClipboard()">
-    <div class="icon" v-show="!copyStatus">
-      <Copy :size="size" />
-      <span>复制全文</span>
-    </div>
-    <div class="icon" v-show="copyStatus">
-      <CheckOne class="text-blue-700" :size="size" />
-      <span>复制成功</span>
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .icon {

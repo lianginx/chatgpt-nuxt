@@ -24,6 +24,8 @@
     "@tailwindcss/typography": "^0.5.9",
     "@types/crypto-js": "^4.1.1",
     "@types/markdown-it": "^12.2.3",
-    "nuxt": "^3.3.1"
+    "@types/node": "^18.15.11",
+    "nuxt": "^3.3.1",
+    "nuxt-icon": "^0.3.3"
   }
 }
