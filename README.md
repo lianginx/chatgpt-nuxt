@@ -55,3 +55,7 @@ docker-compose down  # Stop and delete
 When completed, your project will be deployed onto port `80`.
 
 If you have any feedback or suggestions for improving this README document, please don’t hesitate to let me know. I appreciate your input.
+
+## License
+
+This project uses the [MIT](/LICENSE) license.
