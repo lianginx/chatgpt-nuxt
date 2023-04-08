@@ -11,7 +11,7 @@
       @compositionend="composing = false"
     ></textarea>
     <ChatSendButton
-      class="absolute bottom-5 sm:bottom-2 right-3"
+      class="absolute bottom-2 sm:bottom-2 right-3"
       :is-talking="store.talking"
       @click="sendMessage"
     />

@@ -1,7 +1,7 @@
 <template>
-  <div class="flex justify-between items-center h-16 px-4 border-b">
+  <div class="flex justify-between items-center h-14 sm:h-16 px-4 border-b">
     <div class="flex items-center space-x-2">
-      <IconMessage size="24" theme="filled" />
+      <Message size="24" theme="filled" />
       <input
         ref="titleInputDom"
         class="border px-2 py-1 rounded-md"
@@ -16,17 +16,25 @@
         {{ title }}
       </div>
     </div>
-    <div
-      class="p-2.5 rounded-md hover:bg-slate-200 cursor-pointer"
-      @click="clearMessages"
-    >
-      <Clear size="22" />
+    <div class="flex items-center">
+      <div
+        class="p-2.5 rounded-md hover:bg-slate-200 cursor-pointer visible sm:invisible"
+        @click="store.showSetting = true"
+      >
+        <SettingOne size="22" />
+      </div>
+      <div
+        class="p-2.5 rounded-md hover:bg-slate-200 cursor-pointer"
+        @click="clearMessages"
+      >
+        <Clear size="22" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Message as IconMessage, Clear } from "@icon-park/vue-next";
+import { Message, Clear, SettingOne } from "@icon-park/vue-next";
 import { useChatStore } from "@/stores/chat";
 import { ChatItem } from "@/types";
 
