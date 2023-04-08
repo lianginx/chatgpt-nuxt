@@ -1,12 +1,12 @@
 <template>
-  <div class="flex justify-between items-center h-16 px-4 b-slate border-b">
+  <div class="flex justify-between items-center h-16 px-4 border-b">
     <div class="flex items-center space-x-2">
       <IconMessage size="24" theme="filled" />
       <input
         ref="titleInputDom"
         class="border px-2 py-1 rounded-md"
         v-if="editTitle"
-        v-model="editTitle"
+        v-model.trim="editTitle"
         type="text"
         name="title"
         @focusout="exitEditing"
@@ -27,7 +27,8 @@
 
 <script setup lang="ts">
 import { Message as IconMessage, Clear } from "@icon-park/vue-next";
-import { useChatStore } from "~~/stores/chat";
+import { useChatStore } from "@/stores/chat";
+import { ChatItem } from "@/types";
 
 const store = useChatStore();
 const titleInputDom = ref<HTMLInputElement>();
@@ -35,28 +36,25 @@ const editTitle = ref("");
 
 const title = computed(() => store.chat?.name ?? "闲聊");
 
-const enterEditing = () => {
+function enterEditing() {
+  if (!store.chat?.id) return;
   editTitle.value = store.chat?.name ?? title.value;
   nextTick(() => titleInputDom.value?.focus());
-};
+}
 
-const exitEditing = async () => {
-  if (!editTitle.value.trim()) return;
-  if (store.chat?.id) {
-    const chatId = await store.db.chat.update(store.chat.id, {
-      name: editTitle.value,
-    });
-    store.chat.name = editTitle.value;
-    store.getAllChats();
-  }
+async function exitEditing() {
+  const chatId = store.chat?.id;
+  if (!editTitle.value) return;
+  if (!chatId) return;
+  await store.reChatName(chatId, editTitle.value);
   editTitle.value = "";
-};
+}
 
-const clearMessages = () => {
+function clearMessages() {
   if (confirm("是否清空聊天记录？")) {
-    store.clearMessages();
+    store.clearMessages((store.chat as ChatItem).id);
   }
-};
+}
 </script>
 
 <style scoped></style>

@@ -1,11 +1,11 @@
-import { ChatSetting } from "~/types";
+import { ChatSettingItem, ChatSettingOption } from "@/types";
 
 const key = "chatSetting";
 
-export const saveSetting = (setting: ChatSetting) => {
+export function saveSetting(setting: ChatSettingOption) {
   localStorage.setItem(key, JSON.stringify({ ...setting }));
-};
+}
 
-export const loadSetting = (): ChatSetting => {
+export function loadSetting(): ChatSettingItem {
   return JSON.parse(localStorage.getItem(key) ?? "null");
-};
+}

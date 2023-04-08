@@ -1,145 +1,182 @@
 import { defineStore } from "pinia";
-import { Chat, ChatMessage, ChatMessageEx } from "~~/types";
-
-const decoder = new TextDecoder("utf-8");
+import {
+  ChatItem,
+  ChatMessage,
+  ChatMessageExItem,
+  ChatMessageExOption,
+  ChatOption,
+  ChatRole,
+} from "@/types";
 
 export const useChatStore = defineStore("chat", () => {
+  const decoder = new TextDecoder("utf-8");
+  const db = new ChatDB();
+
   let controller: AbortController;
 
-  const db = new ChatDB();
   const showSetting = ref(false);
-  const chats = ref<Chat[]>([]);
-  const chat = ref<Chat | null>(null);
-  const messages = ref<ChatMessageEx[]>([]);
+  const chats = ref<ChatItem[]>([]);
+  const chat = ref<ChatItem>();
+  const messages = ref<ChatMessageExItem[]>([]);
   const messageContent = ref("");
-  const talking = ref(false);
+  const talkingChats = ref(new Set<number>([]));
 
-  const lastMessage = computed(() => messages.value[messages.value.length - 1]);
+  // talking
 
-  const stop = () => controller?.abort();
+  const talking = computed(
+    () => talkingChats.value.has(chat.value?.id ?? 0) ?? false
+  );
 
-  const getAllChats = async () => {
-    chats.value = await db.chat.toArray();
-  };
+  function startTalking(chatId: number) {
+    talkingChats.value.add(chatId);
+  }
 
-  const createChat = async (item?: Chat) => {
-    if (!item) {
-      item = { name: "新的聊天", order: 0 };
-    }
+  function endTalking(chatId: number) {
+    talkingChats.value.delete(chatId);
+  }
 
-    const id = await db.chat.put({ ...item });
-    const newChat = { id, ...item };
+  // chat
 
-    // 追加到消息队列
-    chats.value.unshift(newChat);
-    chat.value = chats.value[0];
+  async function getAllChats() {
+    chats.value = (await db.chat.reverse().toArray()) as ChatItem[];
 
-    // 加载历史消息
-    await getChatMessages(chat.value?.id);
-
-    return newChat;
-  };
-
-  const removeChat = async (item: Chat) => {
-    if (item.id) {
-      await db.chat.delete(item.id);
-      await clearMessages(item.id);
-      await getAllChats();
-      if (!chats.value.length) createChat();
-    }
-  };
-
-  const clearMessages = async (chatId?: number) => {
-    const id = chatId ?? chat.value?.id;
-    if (id) {
-      await db.messages.where("chatId").equals(id).delete();
-      await getChatMessages();
-    }
-  };
-
-  const getChatMessages = async (chatId?: number) => {
-    const id = chatId ?? chat.value?.id;
-    if (id) {
-      messages.value = await db.messages.where("chatId").equals(id).toArray();
-    }
-  };
-
-  const appendMessage = async (message: ChatMessageEx) => {
-    message.chatId = chat.value?.id;
-    message.active = message.active ?? true;
-    message.show = message.show ?? true;
-    message.error = message.error ?? false;
-    message.errorMessage = message.errorMessage ?? undefined;
-
-    // 保存到数据库
-    const id = await db.messages.put({ ...message });
-
-    // 追加到消息队列
-    const newMessage = { id, ...message };
-
-    let hasItem = messages.value.find((item) => item.id === id);
-    if (hasItem) {
-      hasItem = newMessage;
+    // 没有则创建
+    if (!chats.value.length) {
+      await createChat();
     } else {
-      messages.value.push(newMessage);
+      await openChat(chats.value[0]);
     }
+  }
 
-    return newMessage;
-  };
+  async function createChat(item?: ChatOption) {
+    const chatItem: ChatOption = item ?? { name: "New Chat", order: 0 };
+    await db.chat.put({ ...chatItem });
 
-  const formatStandardList = (): ChatMessage[] => {
-    return messages.value
+    // 加载列表并打开第一个
+    await getAllChats();
+    await openChat(chats.value[0]);
+  }
+
+  async function openChat(item: ChatItem) {
+    chat.value = item;
+    await getChatMessages(item.id);
+  }
+
+  async function removeChat(chatId: number) {
+    await db.transaction("rw", "chat", "message", async () => {
+      await db.chat.delete(chatId);
+      await clearMessages(chatId);
+    });
+    await getAllChats();
+  }
+
+  async function reChatName(chatId: number, name: string) {
+    await db.chat.update(chatId, { name });
+    await getAllChats();
+  }
+
+  // message
+
+  const standardList = computed(() =>
+    messages.value
       .filter((item) => item.active && !item.error && item.content)
       .map((item) => ({
         role: item.role,
         content: item.content,
-      }));
+      }))
+  );
+
+  const setNotActiveDbMessages = () => {
+    return db.message.toCollection().modify({ active: false });
   };
 
-  const appendMessageContent = (content: string) => {
-    return (lastMessage.value.content += content ?? "");
-  };
+  async function getChatMessages(chatId: number) {
+    messages.value = (await db.message
+      .where("chatId")
+      .equals(chatId)
+      .toArray()) as ChatMessageExItem[];
+  }
 
-  const makeErrorMessage = (errorMessage: string) => {
-    lastMessage.value.error = false;
-    lastMessage.value.errorMessage = errorMessage;
-    return lastMessage.value;
-  };
+  async function clearMessages(chatId: number) {
+    await db.message.where("chatId").equals(chatId).delete();
+    await getChatMessages(chatId);
+  }
 
-  const sendMessage = async (message: ChatMessageEx) => {
+  async function createMessage(message: ChatMessageExOption) {
+    if (!chat.value && !message.chatId) await createChat();
+
+    const chatId = message.chatId ?? (chat.value as ChatItem).id;
+
+    message.chatId = chatId;
+    message.active = message.active ?? true;
+    message.show = message.show ?? true;
+    message.error = message.error ?? false;
+    message.errorMessage = message.errorMessage ?? undefined;
+    message.sendDate = Date.now();
+
+    const id = await db.message.put({ ...message });
+    await getChatMessages(chatId);
+
+    return id;
+  }
+
+  async function updateMessageContent(id: number, content: string) {
+    await db.message.update(id, { content });
+    await getChatMessages((chat.value as ChatItem).id);
+  }
+
+  async function makeErrorMessage(id: number, errorMessage: string) {
+    await db.message.update(id, { error: true, errorMessage });
+    await getChatMessages((chat.value as ChatItem).id);
+  }
+
+  function stop() {
+    controller?.abort();
+  }
+
+  function clearSendMessageContent() {
+    messageContent.value = "";
+  }
+
+  async function sendMessage(message: ChatMessageExOption) {
     if (talking.value) return;
     if (!message?.content.trim()) return;
 
-    messageContent.value = "";
-    talking.value = true;
+    const chatId = message.chatId ?? chat.value?.id;
+    if (!chatId) return;
+
+    clearSendMessageContent();
+    startTalking(chatId);
+
+    // 追加到消息队列
+    await createMessage(message);
+    const assistantId = await createMessage({
+      role: "assistant",
+      content: "",
+      chatId,
+    });
+
+    // 用于主动中断请求
+    controller = new AbortController();
 
     try {
-      // 追加到消息队列
-      await appendMessage(message);
-      await appendMessage({ role: "assistant", content: "" });
-
-      // 格式化标准消息队列
-      const standardList = formatStandardList();
-      console.log("standardList", standardList);
-
-      // 用于主动中断请求
-      controller = new AbortController();
+      // 打印标准列表
+      console.log(standardList.value);
 
       // 发送请求
       const setting = loadSetting();
-      console.log(setting);
-
       const { status, body } = await fetch("/api/chat", {
         method: "post",
         body: JSON.stringify({
           apiKey: setting.apiKey,
           temperature: setting.temperature,
-          messages: standardList,
+          messages: standardList.value,
         }),
         signal: controller.signal,
       });
 
       // 读取流
+      let content = "";
       const reader = body?.getReader();
       while (reader) {
         const { done, value } = await reader.read();
@@ -149,31 +186,30 @@ export const useChatStore = defineStore("chat", () => {
         const text = decoder.decode(value);
         const dataList = status === 200 ? text.match(/({.*?]})/g) : [text];
 
-        dataList?.forEach((textData) => {
+        dataList?.forEach(async (textData) => {
           const data = JSON.parse(textData);
-
           if (status === 200) {
-            appendMessageContent(data.choices[0].delta.content);
-          } else if (status === 500) {
-            makeErrorMessage(data.message);
+            content += data.choices[0].delta.content ?? "";
+            await updateMessageContent(assistantId, content);
           } else {
-            makeErrorMessage(data.error.message);
+            await makeErrorMessage(
+              assistantId,
+              status === 500 ? data.message : data.error.message
+            );
           }
         });
       }
     } catch (e: any) {
-      let eMessage = e.name === "AbortError" ? "已停止回答" : e.message;
-      makeErrorMessage(`\n\n**${eMessage}**`);
+      await makeErrorMessage(
+        assistantId,
+        `\n\n**${e.name === "AbortError" ? "已停止回答" : e.message}**`
+      );
     } finally {
-      talking.value = false;
-
-      // 更新消息到数据库
-      await appendMessage(lastMessage.value);
+      endTalking(chatId);
     }
-  };
+  }
 
   return {
-    db,
     showSetting,
     chats,
     chat,
@@ -181,11 +217,15 @@ export const useChatStore = defineStore("chat", () => {
     messageContent,
     talking,
     stop,
+    openChat,
+    reChatName,
+    setNotActiveDbMessages,
+    getChatMessages,
     getAllChats,
     createChat,
     clearMessages,
     removeChat,
-    appendMessage,
+    appendMessage: createMessage,
     sendMessage,
   };
 });

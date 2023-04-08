@@ -27,11 +27,10 @@
 </template>
 
 <script setup lang="ts">
-import { ChatSetting } from "~/types";
+import { ChatSettingOption } from "@/types";
 
-const setting = ref<ChatSetting>({
+const setting = ref<ChatSettingOption>({
   apiKey: "",
-  maxTokens: 2048,
   temperature: 1,
   type: "global",
 });

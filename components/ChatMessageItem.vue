@@ -1,6 +1,5 @@
 <template>
-  <!-- system -->
-  <div>
+  <div :class="{ 'opacity-70': !item.active }">
     <div
       class="flex justify-center mb-6"
       v-if="item.role === 'system' && item.show"
@@ -11,8 +10,6 @@
         {{ item.content }}
       </div>
     </div>
-
-    <!-- chat -->
     <div
       class="flex"
       :class="{ 'flex-row-reverse': item.role === 'user' }"
@@ -29,10 +26,12 @@
           "
           v-html="md.render(getContent(item))"
         />
-        <CopyText
-          class="mt-1.5 visible sm:invisible group-hover:visible"
-          :content="getContent(item)"
-        />
+        <div class="flex items-center space-x-2">
+          <CopyText
+            class="mt-1.5 visible sm:invisible group-hover:visible"
+            :content="getContent(item)"
+          />
+        </div>
       </div>
       <ChatMessageLoding class="item-gap" v-else />
     </div>
@@ -40,17 +39,17 @@
 </template>
 
 <script setup lang="ts">
-import { ChatMessageEx } from "~~/types";
+import { ChatMessageExItem } from "@/types";
 
 defineProps<{
-  item: ChatMessageEx;
+  item: ChatMessageExItem;
 }>();
 
-const getContent = (item: ChatMessageEx) => {
+function getContent(item: ChatMessageExItem) {
   return item.role === "assistant"
     ? item.content + (item.errorMessage ?? "")
     : item.content;
-};
+}
 </script>
 
 <style scoped>

@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { useChatStore } from "~~/stores/chat";
+import { useChatStore } from "@/stores/chat";
 
 const store = useChatStore();
 const composing = ref(false);
@@ -42,7 +42,7 @@ watch(
   { flush: "post" }
 );
 
-const sendMessage = async () => {
+async function sendMessage() {
   if (!store.messageContent.trim()) return;
 
   await store.sendMessage({
@@ -50,9 +50,9 @@ const sendMessage = async () => {
     content: store.messageContent,
     chatId: store.chat?.id,
   });
-};
+}
 
-const enterInput = (event: KeyboardEvent) => {
+function enterInput(event: KeyboardEvent) {
   // 拦截 Enter 实现禁用发送、换行
   if (event.key === "Enter") {
     if (event.shiftKey) return;
@@ -70,24 +70,24 @@ const enterInput = (event: KeyboardEvent) => {
   }
 
   // Ctrl/command + up/down 查看发送记录
-  if (
-    (event.metaKey || event.ctrlKey) &&
-    ["ArrowUp", "ArrowDown"].includes(event.key)
-  ) {
-    let userMsg;
+  // if (
+  //   (event.metaKey || event.ctrlKey) &&
+  //   ["ArrowUp", "ArrowDown"].includes(event.key)
+  // ) {
+  //   let userMsg;
 
-    if (event.key === "ArrowUp") {
-      // userMsg = previousMessage(msgIndex);
-    }
+  //   if (event.key === "ArrowUp") {
+  //     // userMsg = previousMessage(msgIndex);
+  //   }
 
-    if (event.key === "ArrowDown") {
-      // userMsg = nextMessage(msgIndex);
-    }
+  //   if (event.key === "ArrowDown") {
+  //     // userMsg = nextMessage(msgIndex);
+  //   }
 
-    // msgIndex = userMsg?.index ?? null;
-    // messageContent.value = userMsg?.message ?? "";
-  }
-};
+  //   // msgIndex = userMsg?.index ?? null;
+  //   // messageContent.value = userMsg?.message ?? "";
+  // }
+}
 </script>
 
 <style scoped></style>

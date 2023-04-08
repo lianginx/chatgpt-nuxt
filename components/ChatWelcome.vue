@@ -22,12 +22,12 @@
 <script setup lang="ts">
 import { Tool, SunOne, Chip } from "@icon-park/vue-next";
 import { Icon } from "@icon-park/vue-next/lib/runtime";
-import { useChatStore } from "~~/stores/chat";
-import { ChatMessageEx } from "~~/types";
+import { useChatStore } from "@/stores/chat";
+import { ChatMessageExOption } from "@/types";
 
 interface ChatMessageTemplate {
   title: string;
-  message: ChatMessageEx;
+  message: ChatMessageExOption;
 }
 
 interface ChatMessageTemplateGroup {

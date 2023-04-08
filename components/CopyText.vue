@@ -1,5 +1,5 @@
 <template>
-  <div @click="copyToClipboard()">
+  <span @click="copyToClipboard()">
     <div class="icon" v-show="!copyStatus">
       <Copy :size="size" />
       <span>复制全文</span>
@@ -8,7 +8,7 @@
       <CheckOne class="text-blue-700" :size="size" />
       <span>复制成功</span>
     </div>
-  </div>
+  </span>
 </template>
 
 <script setup lang="ts">
@@ -18,11 +18,11 @@ const porps = defineProps<{ content: string }>();
 const copyStatus = ref(false);
 const size = 14;
 
-const copyToClipboard = (content: string = porps.content) => {
+function copyToClipboard(content: string = porps.content) {
   copyToClipboardEx(content)
     .then(() => (copyStatus.value = true))
     .finally(() => setTimeout(() => (copyStatus.value = false), 1500));
-};
+}
 
 async function copyToClipboardEx(content: string = porps.content) {
   if (navigator.clipboard && window.isSecureContext) {

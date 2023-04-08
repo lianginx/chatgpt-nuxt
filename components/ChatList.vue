@@ -23,36 +23,21 @@
 
 <script setup lang="ts">
 import { Message as IconMessage, CloseOne } from "@icon-park/vue-next";
-import { useChatStore } from "~~/stores/chat";
-import { Chat } from "~~/types";
+import { useChatStore } from "@/stores/chat";
+import { ChatItem } from "@/types";
 
 const store = useChatStore();
 
-onMounted(async () => {
-  store.chats = await store.db.chat.toArray();
-
-  if (!store.chats.length) {
-    await store.createChat({ name: "新的聊天" });
-  }
-
-  openChat(store.chats[0]);
-});
-
-const openChat = async (item: Chat) => {
+async function openChat(item: ChatItem) {
   store.$patch({ showSetting: false, chat: item });
-  if (item?.id) {
-    store.messages = await store.db.messages
-      .where("chatId")
-      .equals(item.id)
-      .toArray();
-  }
-};
+  await store.getChatMessages(item.id);
+}
 
-const removeChat = (item: Chat) => {
+async function removeChat(item: ChatItem) {
   if (confirm("确认删除当前会话？")) {
-    store.removeChat(item);
+    await store.removeChat(item.id);
   }
-};
+}
 </script>
 
 <style scoped></style>

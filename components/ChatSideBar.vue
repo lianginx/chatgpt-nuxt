@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import ChatList from "./ChatList.vue";
-</script>
-
 <template>
   <div
     class="sm:flex flex-col hidden sm:visible min-w-fit sm:w-1/5 overflow-hidden p-3 bg-slate-100 select-none"
@@ -11,6 +7,8 @@ import ChatList from "./ChatList.vue";
     <FuncBar />
   </div>
 </template>
+
+<script setup lang="ts"></script>
 
 <style scoped>
 :deep(.bar-btn) {

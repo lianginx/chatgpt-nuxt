@@ -6,7 +6,6 @@ const mdOptions: Markdown.Options = {
   typographer: true,
   breaks: true,
   langPrefix: "language-",
-  // 代码高亮
   highlight(str, lang) {
     if (lang && highlight.getLanguage(lang)) {
       try {

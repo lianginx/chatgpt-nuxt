@@ -1,4 +1,4 @@
-import { ChatRole } from "~~/types";
+import { ChatRole } from "@/types";
 
 let total = 0;
 const tokens = {

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 mx-2.5 pt-4 space-y-4 overflow-auto" ref="messagesDom">
+  <div ref="messagesDom" class="flex-1 mx-2.5 pt-4 space-y-4 overflow-auto">
     <ChatMessageItem
       v-for="item in store.messages"
       :key="item.id"
@@ -10,13 +10,13 @@
 </template>
 
 <script setup lang="ts">
-import { useChatStore } from "~~/stores/chat";
+import { useChatStore } from "@/stores/chat";
 
 const store = useChatStore();
 const messagesDom = ref<HTMLDivElement>();
 
 watch(
-  store.messages,
+  () => store.messages,
   () =>
     nextTick(() => {
       if (!messagesDom.value) return;

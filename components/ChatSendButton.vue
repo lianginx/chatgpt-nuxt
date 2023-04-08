@@ -1,11 +1,3 @@
-<script setup lang="ts">
-import { Send, Telegram } from "@icon-park/vue-next";
-
-defineProps<{
-  isTalking: boolean;
-}>();
-</script>
-
 <template>
   <div>
     <button class="rounded-md cursor-pointer" :disabled="isTalking">
@@ -17,3 +9,11 @@ defineProps<{
     </button>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Telegram } from "@icon-park/vue-next";
+
+defineProps<{
+  isTalking: boolean;
+}>();
+</script>

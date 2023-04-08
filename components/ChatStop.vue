@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { Square } from "@icon-park/vue-next";
-import { useChatStore } from "~~/stores/chat";
+import { useChatStore } from "@/stores/chat";
 
 const store = useChatStore();
 </script>

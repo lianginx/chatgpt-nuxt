@@ -1,17 +1,22 @@
 import Dexie from "dexie";
 import {
-  ChatMessageEx,
-  ChatPrompt,
-  Chat,
-  ChatSetting,
-  ChatPromptCategory,
-} from "~~/types";
+  ChatSettingOption,
+  ChatItem,
+  ChatMessageExItem,
+  ChatSettingItem,
+  ChatPromptCategoryItem,
+  ChatPromptItem,
+  ChatMessageExOption,
+  ChatOption,
+  ChatPromptOption,
+  ChatPromptCategoryOption,
+} from "@/types";
 
 const databaseName = "ChatGPT";
-const lastVersion = 1;
+const lastVersion = 2;
 
-const chat = ["++id", "promptId", "settingId", "name", "order"];
-const messages = [
+const chat = ["++id", "promptId", "settingId", "name", "order"].toString();
+const message = [
   "++id",
   "chatId",
   "role",
@@ -20,28 +25,32 @@ const messages = [
   "current",
   "error",
   "sendData",
-];
-const setting = ["++id", "type"];
-const promptCategory = ["++id", "name", "order"];
-const prompt = ["++id", "promptCategoryId", "name", "order"].concat(
-  messages.slice(1)
-);
+].toString();
+const setting = ["++id", "type"].toString();
+const promptCategory = ["++id", "name", "order"].toString();
+const prompt = [
+  "++id",
+  "promptCategoryId",
+  "name",
+  "order",
+  "message",
+].toString();
 
 export class ChatDB extends Dexie {
-  chat!: Dexie.Table<Chat, number | undefined>;
-  messages!: Dexie.Table<ChatMessageEx, number | undefined>;
-  setting!: Dexie.Table<ChatSetting, number | undefined>;
-  promptCategory!: Dexie.Table<ChatPromptCategory, number | undefined>;
-  prompt!: Dexie.Table<ChatPrompt, number | undefined>;
+  chat!: Dexie.Table<ChatOption, number>;
+  message!: Dexie.Table<ChatMessageExOption, number>;
+  setting!: Dexie.Table<ChatSettingOption, number>;
+  promptCategory!: Dexie.Table<ChatPromptCategoryOption, number>;
+  prompt!: Dexie.Table<ChatPromptOption, number>;
 
   constructor() {
     super(databaseName);
     this.version(lastVersion).stores({
-      chat: chat.toString(),
-      messages: messages.toString(),
-      setting: setting.toString(),
-      promptCategory: promptCategory.toString(),
-      prompt: prompt.toString(),
+      chat,
+      message,
+      setting,
+      promptCategory,
+      prompt,
     });
   }
 }
