@@ -143,6 +143,13 @@ export const useChatStore = defineStore("chat", () => {
     const chatId = message.chatId ?? chat.value?.id;
     if (!chatId) return;
 
+    const setting = loadSetting();
+    if (!setting) {
+      showSetting.value = true;
+      return;
+    }
+
+    // 开始对话
     clearSendMessageContent();
     startTalking(chatId);
 
@@ -162,8 +169,6 @@ export const useChatStore = defineStore("chat", () => {
       console.log(standardList.value);
 
       // 发送请求
-      const setting = loadSetting();
-
       const { status, body } = await fetch("/api/chat", {
         method: "post",
         body: JSON.stringify({

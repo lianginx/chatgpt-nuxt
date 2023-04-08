@@ -12,6 +12,7 @@ import { useChatStore } from "@/stores/chat";
 const store = useChatStore();
 
 onMounted(async () => {
+  if (!loadSetting()) store.showSetting = true;
   await store.setNotActiveDbMessages();
   await store.getAllChats();
 });

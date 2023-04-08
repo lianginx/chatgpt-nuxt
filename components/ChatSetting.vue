@@ -21,14 +21,16 @@
       />
     </div>
     <div>
-      <button @click="saveSetting(setting)">保存</button>
+      <button @click="save">保存</button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ChatSettingOption } from "@/types";
+import { useChatStore } from "~/stores/chat";
 
+const store = useChatStore();
 const setting = ref<ChatSettingOption>({
   apiKey: "",
   temperature: 1,
@@ -38,6 +40,14 @@ const setting = ref<ChatSettingOption>({
 onMounted(() => {
   setting.value = loadSetting() ?? setting.value;
 });
+
+async function save() {
+  if (!setting.value.apiKey.trim()) return;
+  await saveSetting(setting.value);
+  store.showSetting = false;
+  await store.openChat(store.chats[0]);
+  await store.sendMessage({ role: "user", content: "嘿！能听到我说话吗？" });
+}
 </script>
 
 <style scoped>
