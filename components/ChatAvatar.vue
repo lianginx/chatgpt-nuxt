@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { Role } from "~~/types";
+import { ChatRole } from "@/types";
 
-const props = defineProps<{
-  role: Role;
+defineProps<{
+  role: ChatRole;
 }>();
+
 const avatars = {
   assistant: "/assistant.webp",
   system: "/system.png",

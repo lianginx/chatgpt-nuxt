@@ -1,4 +1,4 @@
-import { ChatMessage } from "~~/types";
+import { ChatMessage } from "@/types";
 
 export const checkAPIKeyError = (apiKey: string) => {
   if (!apiKey) {

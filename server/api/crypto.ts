@@ -1,10 +1,10 @@
 import CryptoJS from "crypto-js";
 import { H3Event } from "h3";
-import { CryptoRequest } from "~~/types";
+import { CryptoRequest } from "@/types";
 
 export default defineEventHandler((event) => AESCrypto(event));
 
-const AESCrypto = async (event: H3Event) => {
+async function AESCrypto(event: H3Event) {
   const { message, type } = getQuery(event) as unknown as CryptoRequest;
 
   const key = "lianginx";
@@ -17,4 +17,4 @@ const AESCrypto = async (event: H3Event) => {
   }
 
   return null;
-};
+}
