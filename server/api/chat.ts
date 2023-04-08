@@ -1,7 +1,6 @@
 import { H3Event, sendStream } from "h3";
 import { ChatRequest } from "@/types";
-import { AxiosRequestConfig } from "axios";
-import { OpenAIApi, Configuration, CreateChatCompletionRequest } from "openai";
+import { OpenAIApi, Configuration } from "openai";
 
 export default defineEventHandler((event) => chat(event));
 
@@ -12,28 +11,32 @@ async function chat(event: H3Event) {
     )) as ChatRequest;
 
     // AES 解密 API Key
-    // const decrypt = await $fetch("/api/crypto", {
-    //   method: "post",
-    //   params: { message: apiKey, type: "de" },
-    // });
-    // 调用 API 发送请求
-    const config = new Configuration({ apiKey });
-    const openai = new OpenAIApi(config);
+    const decrypt = await $fetch("/api/crypto", {
+      method: "post",
+      params: { message: apiKey },
+    });
 
-    const request: CreateChatCompletionRequest = {
-      model: "gpt-3.5-turbo",
-      messages,
-      temperature,
-      stream: true,
-    };
+    // 初始化 API
+    const openai = new OpenAIApi(
+      new Configuration({
+        apiKey: decrypt ?? "",
+      })
+    );
 
-    const option: AxiosRequestConfig = {
-      responseType: "stream",
-      timeout: 1000 * 20,
-      timeoutErrorMessage: "**网络连接超时，请重试**",
-    };
-
-    const complete = await openai.createChatCompletion(request, option);
+    // 发送请求
+    const complete = await openai.createChatCompletion(
+      {
+        model: "gpt-3.5-turbo",
+        messages,
+        temperature,
+        stream: true,
+      },
+      {
+        responseType: "stream",
+        timeout: 1000 * 20,
+        timeoutErrorMessage: "**网络连接超时，请重试**",
+      }
+    );
 
     // 向客户端转发流事件
     setResStatus(event, complete.status, complete.statusText);

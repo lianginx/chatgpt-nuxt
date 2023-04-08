@@ -1,11 +1,9 @@
 import { defineStore } from "pinia";
 import {
   ChatItem,
-  ChatMessage,
   ChatMessageExItem,
   ChatMessageExOption,
   ChatOption,
-  ChatRole,
 } from "@/types";
 
 export const useChatStore = defineStore("chat", () => {
@@ -165,6 +163,7 @@ export const useChatStore = defineStore("chat", () => {
 
       // 发送请求
       const setting = loadSetting();
+
       const { status, body } = await fetch("/api/chat", {
         method: "post",
         body: JSON.stringify({

@@ -11,10 +11,7 @@ async function AESCrypto(event: H3Event) {
 
   if (type === "en") {
     return CryptoJS.AES.encrypt(message, key).toString();
-  }
-  if (type === "de") {
+  } else {
     return CryptoJS.AES.decrypt(message, key).toString(CryptoJS.enc.Utf8);
   }
-
-  return null;
 }
