@@ -20,13 +20,13 @@
     </div>
     <div class="flex items-center">
       <div
-        class="p-2.5 rounded-md hover:bg-slate-200 cursor-pointer"
+        class="p-2.5 rounded-md hover:active:bg-slate-200 cursor-pointer"
         @click="clearMessages"
       >
         <Clear size="22" />
       </div>
       <div
-        class="p-2.5 rounded-md hover:bg-slate-200 cursor-pointer block sm:hidden"
+        class="p-2.5 rounded-md hover:active:bg-slate-200 cursor-pointer block sm:hidden"
         @click="store.showSetting = true"
       >
         <SettingOne size="22" />
