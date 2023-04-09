@@ -1,10 +1,13 @@
 import { defineStore } from "pinia";
 import {
+  ApiRequest,
   ChatItem,
   ChatMessageExItem,
   ChatMessageExOption,
   ChatOption,
 } from "@/types";
+import { CreateChatCompletionRequest } from "openai";
+import { json } from "stream/consumers";
 
 export const useChatStore = defineStore("chat", () => {
   const decoder = new TextDecoder("utf-8");
@@ -172,36 +175,44 @@ export const useChatStore = defineStore("chat", () => {
       const { status, body } = await fetch("/api/chat", {
         method: "post",
         body: JSON.stringify({
-          apiKey: setting.apiKey,
-          temperature: setting.temperature,
-          messages: standardList.value,
-        }),
+          cipherAPIKey: setting.apiKey,
+          model: "chat",
+          request: {
+            model: "gpt-3.5-turbo",
+            messages: standardList.value,
+            temperature: setting.temperature,
+            stream: true,
+          },
+        } as ApiRequest),
         signal: controller.signal,
       });
 
-      // 读取流
+      // 读取 Stream
       let content = "";
       const reader = body?.getReader();
       while (reader) {
-        const { done, value } = await reader.read();
-
-        if (done) break;
+        const { value } = await reader.read();
 
         const text = decoder.decode(value);
-        const dataList = status === 200 ? text.match(/({.*?]})/g) : [text];
 
-        dataList?.forEach(async (textData) => {
-          const data = JSON.parse(textData);
-          if (status === 200) {
-            content += data.choices[0].delta.content ?? "";
-            await updateMessageContent(assistantId, content);
-          } else {
-            await makeErrorMessage(
-              assistantId,
-              status === 500 ? data.message : data.error.message
-            );
-          }
-        });
+        if (status !== 200) {
+          const error = JSON.parse(text);
+          content += [404, 500].includes(status)
+            ? error.message
+            : error.error.message;
+          await makeErrorMessage(assistantId, content);
+          return;
+        }
+
+        for (const line of text.split(/\r?\n/)) {
+          if (line.length === 0) continue;
+          if (line.startsWith(":")) continue;
+          if (line === "data: [DONE]") return;
+
+          const data = JSON.parse(line.substring(6));
+          content += data.choices[0].delta.content ?? "";
+          await updateMessageContent(assistantId, content);
+        }
       }
     } catch (e: any) {
       await makeErrorMessage(
