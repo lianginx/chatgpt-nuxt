@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 relative flex flex-col p-3">
+  <div class="flex-1 max-w-full relative flex flex-col p-3">
     <ChatTitleBar />
     <ChatMessageList v-if="store.messages.length" />
     <ChatWelcome v-else />

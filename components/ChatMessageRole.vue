@@ -3,7 +3,7 @@
     <ChatAvatar class="item-gap" :role="item.role" />
     <div class="group item-gap overflow-x-hidden" v-if="getContent(item)">
       <div
-        class="prose break-words whitespace-normal px-3 py-2 rounded-lg text-sm sm:text-base"
+        class="prose break-words px-3 py-2 rounded-lg text-sm sm:text-base overflow-x-auto"
         :class="
           item.role === 'user'
             ? 'ml-auto bg-blue-500 text-white prose-invert'
