@@ -20,8 +20,11 @@
         step="0.1"
       />
     </div>
-    <div>
-      <button @click="save">保存</button>
+    <div class="space-x-3">
+      <button class="main-button" @click="save">保存</button>
+      <button class="second-button" @click="store.showSetting = false">
+        返回
+      </button>
     </div>
   </div>
 </template>
@@ -43,8 +46,8 @@ onMounted(() => {
 
 async function save() {
   if (!setting.value.apiKey.trim()) return;
-  await saveSetting(setting.value);
   store.showSetting = false;
+  await saveSetting(setting.value);
   await store.openChat(store.chats[0]);
   await store.sendMessage({ role: "user", content: "嘿！能听到我说话吗？" });
 }
@@ -65,6 +68,14 @@ input[type="range"] {
 }
 
 button {
-  @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center;
+  @apply font-medium rounded-lg text-sm px-5 py-2.5 text-center;
+}
+
+.main-button {
+  @apply text-white bg-blue-700 hover:bg-blue-800;
+}
+
+.second-button {
+  @apply bg-white text-gray-900 hover:bg-gray-50 border shadow-sm;
 }
 </style>
