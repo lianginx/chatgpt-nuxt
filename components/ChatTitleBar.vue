@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-between items-center h-14 sm:h-16 pl-2 sm:px-4 border-b"
+    class="flex justify-between items-center bg-white h-14 sm:h-16 pl-2 sm:px-4 border-b"
   >
     <div class="flex items-center space-x-2">
       <Message size="24" theme="filled" />

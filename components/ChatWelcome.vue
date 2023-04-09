@@ -1,8 +1,8 @@
 <template>
   <div
-    class="flex-1 sm:flex px-1.5 sm:px-6 pt-6 sm:pt-14 sm:space-x-4 space-y-6 sm:space-y-0 overflow-y-scroll"
+    class="sm:flex px-1.5 sm:px-6 pt-6 sm:pt-14 sm:space-x-4 space-y-6 sm:space-y-0 overflow-y-scroll"
   >
-    <div class="flex-1 space-y-4" v-for="item of examples">
+    <div class="sm:flex-1 space-y-4" v-for="item of examples">
       <div class="flex flex-col items-center space-y-2">
         <component class="text-slate-400" :is="item.icon" size="20" />
         <div class="font-bold text-base">
@@ -17,7 +17,6 @@
         {{ exa.title }}
       </div>
     </div>
-    <div class="h-28"></div>
   </div>
 </template>
 

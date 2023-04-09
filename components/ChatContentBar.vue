@@ -1,8 +1,8 @@
 <template>
-  <div class="flex-1 max-w-full relative flex flex-col p-3">
+  <div class="flex flex-col p-3 max-w-full relative">
     <ChatTitleBar />
-    <ChatMessageList v-if="store.messages.length" />
-    <ChatWelcome v-else />
+    <ChatMessageList class="flex-1" v-if="store.messages.length" />
+    <ChatWelcome class="flex-1" v-else />
     <div
       class="absolute pb-2 bottom-0 left-0 right-0 bg-gradient-to-t from-white"
     >

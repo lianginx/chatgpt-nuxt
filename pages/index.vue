@@ -1,8 +1,8 @@
 <template>
   <div class="flex w-screen h-screen overflow-hidden text-slate-700">
     <ChatSideBar />
-    <ChatSetting v-if="store.showSetting" />
-    <ChatContentBar v-else />
+    <ChatSetting class="flex-1" v-if="store.showSetting" />
+    <ChatContentBar class="flex-1" v-else />
   </div>
 </template>
 

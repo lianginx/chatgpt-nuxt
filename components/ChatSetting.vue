@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 flex flex-col p-6 space-y-6">
+  <div class="flex flex-col p-6 space-y-6">
     <div>
       <label>API Key</label>
       <input
