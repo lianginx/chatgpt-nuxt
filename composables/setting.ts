@@ -11,7 +11,7 @@ export async function saveSetting(setting: ChatSettingOption) {
   ) {
     const encrypt = await $fetch("/api/crypto", {
       method: "post",
-      params: { message: setting.apiKey, type: "en" },
+      body: { message: setting.apiKey, type: "en" },
     });
     setting.apiKey = encrypt;
   }

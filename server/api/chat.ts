@@ -1,57 +1,52 @@
 import { H3Event, sendStream } from "h3";
-import { ChatRequest } from "@/types";
+import {
+  CreateChatCompletionRequest,
+  CreateCompletionRequest,
+  CreateImageRequest,
+} from "openai";
 import { OpenAIApi, Configuration } from "openai";
+import { aesCrypto } from "@/server/api/crypto";
+import { AxiosRequestConfig } from "axios";
+import { ApiRequest } from "@/types";
 
-export default defineEventHandler((event) => chat(event));
-
-async function chat(event: H3Event) {
+export default defineEventHandler(async (event) => {
   try {
-    const { apiKey, messages, temperature } = (await readBody(
-      event
-    )) as ChatRequest;
+    const body = (await readBody(event)) as ApiRequest;
+    const complete = await hiOpenAPI(body);
 
-    // AES 解密 API Key
-    const decrypt = await $fetch("/api/crypto", {
-      method: "post",
-      params: { message: apiKey },
-    });
-
-    // 初始化 API
-    const openai = new OpenAIApi(
-      new Configuration({
-        apiKey: decrypt ?? "",
-      })
-    );
-
-    // 发送请求
-    const complete = await openai.createChatCompletion(
-      {
-        model: "gpt-3.5-turbo",
-        messages,
-        temperature,
-        stream: true,
-      },
-      {
-        responseType: "stream",
-        timeout: 1000 * 20,
-        timeoutErrorMessage: "**网络连接超时，请重试**",
-      }
-    );
-
-    // 向客户端转发流事件
     setResStatus(event, complete.status, complete.statusText);
     return sendStream(event, complete.data);
   } catch (e: any) {
-    if (e.response) {
-      setResStatus(
-        event,
-        e.response.data.statusCode,
-        e.response.data.statusText
+    setResStatus(event, e.response.data.statusCode, e.response.data.statusText);
+    return sendStream(event, e.response.data);
+  }
+});
+
+async function hiOpenAPI(body: ApiRequest) {
+  const { cipherAPIKey, model, request } = body;
+
+  const apiKey = aesCrypto({ message: cipherAPIKey, type: "de" });
+  const openai = new OpenAIApi(new Configuration({ apiKey }));
+
+  const requestConfig: AxiosRequestConfig = {
+    responseType: "stream",
+    timeout: 1000 * 20,
+    timeoutErrorMessage: "**网络连接超时，请重试**",
+  };
+
+  switch (model) {
+    case "chat":
+      return openai.createChatCompletion(
+        request as CreateChatCompletionRequest,
+        requestConfig
       );
-      return sendStream(event, e.response.data);
-    } else {
-      return e;
-    }
+    case "text":
+      return openai.createCompletion(
+        request as CreateCompletionRequest,
+        requestConfig
+      );
+    case "img":
+      return openai.createImage(request as CreateImageRequest, requestConfig);
   }
 }
 

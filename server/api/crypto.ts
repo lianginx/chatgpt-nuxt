@@ -1,17 +1,19 @@
 import CryptoJS from "crypto-js";
-import { H3Event } from "h3";
 import { CryptoRequest } from "@/types";
 
-export default defineEventHandler((event) => AESCrypto(event));
+const key = "lianginx";
 
-async function AESCrypto(event: H3Event) {
-  const { message, type } = getQuery(event) as unknown as CryptoRequest;
+export default defineEventHandler(async (event) => {
+  const crypto = (await readBody(event)) as CryptoRequest;
+  return aesCrypto(crypto);
+});
 
-  const key = "lianginx";
-
-  if (type === "en") {
-    return CryptoJS.AES.encrypt(message, key).toString();
+export function aesCrypto(crypto: CryptoRequest) {
+  if (crypto.type === "en") {
+    return CryptoJS.AES.encrypt(crypto.message, key).toString();
   } else {
-    return CryptoJS.AES.decrypt(message, key).toString(CryptoJS.enc.Utf8);
+    return CryptoJS.AES.decrypt(crypto.message, key).toString(
+      CryptoJS.enc.Utf8
+    );
   }
 }
