@@ -6,8 +6,6 @@ import {
   ChatMessageExOption,
   ChatOption,
 } from "@/types";
-import { CreateChatCompletionRequest } from "openai";
-import { json } from "stream/consumers";
 
 export const useChatStore = defineStore("chat", () => {
   const decoder = new TextDecoder("utf-8");
@@ -231,6 +229,7 @@ export const useChatStore = defineStore("chat", () => {
     messages,
     messageContent,
     talking,
+    standardList,
     stop,
     openChat,
     reChatName,

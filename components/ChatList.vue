@@ -10,8 +10,11 @@
       :key="item.id"
       @click="openChat(item)"
     >
-      <div class="flex items-center space-x-1">
-        <IconMessage /><span>{{ item.name }}</span>
+      <div class="max-w-[85%] flex items-center space-x-1">
+        <IconMessage /><span
+          class="overflow-hidden whitespace-nowrap text-ellipsis"
+          >{{ item.name }}</span
+        >
       </div>
       <CloseOne
         class="invisible group-hover:visible text-rose-400"
