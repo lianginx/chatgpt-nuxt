@@ -1,5 +1,5 @@
 <template>
-  <div ref="messagesDom" class="flex-1 mx-2.5 pt-4 space-y-4 overflow-auto">
+  <div ref="messagesDom" class="sm:mx-2.5 pt-4 space-y-4 overflow-auto">
     <ChatMessageItem
       v-for="item in store.messages"
       :key="item.id"
