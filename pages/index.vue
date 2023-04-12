@@ -26,43 +26,33 @@ watch(
     if (newValue.length !== 1 || oldValue.length !== 0) return;
     if (!store.chat?.id) return;
 
-    const title = await generateChatTitle(
-      `"""\n${newValue[0].content}\n"""\n将以上内容总结为简短的标题：`
-    );
-
+    const title = await generateChatTitle(newValue[0].content);
     store.reChatName(store.chat.id, title);
   }
 );
 
-async function generateChatTitle(
-  prompt: string,
-  content: string = ""
-): Promise<string> {
+async function generateChatTitle(content: string) {
   const setting = loadSetting();
   if (!setting) return "";
 
-  const complete = await fetch("/api/chat", {
+  const complete = await $fetch("/api/chat", {
     method: "post",
     body: JSON.stringify({
       cipherAPIKey: setting.apiKey,
-      model: "text",
+      model: "chat",
       request: {
-        model: "text-davinci-003",
-        prompt,
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "user",
+            content: `"""\n${content}\n"""\n限定10个字以内总结上面的内容作为标题，不要使用符号，开始总结：`,
+          },
+        ],
       },
     } as ApiRequest),
   });
 
-  const data = await complete.json();
-
-  prompt += data.choices[0].text;
-  content += data.choices[0].text;
-
-  if (data.choices[0].finish_reason === "stop") {
-    return content.replace("\n\n", "");
-  }
-
-  return await generateChatTitle(prompt, content);
+  return complete.choices[0].message.content.trim().replace(/\。$/, ""); // 移除末尾的句号
 }
 </script>
 
