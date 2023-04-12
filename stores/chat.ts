@@ -156,7 +156,7 @@ export const useChatStore = defineStore("chat", () => {
 
     // 追加到消息队列
     await createMessage(message);
-    const assistantId = await createMessage({
+    const assistantMessageId = await createMessage({
       role: "assistant",
       content: "",
       chatId,
@@ -188,20 +188,20 @@ export const useChatStore = defineStore("chat", () => {
       // 读取 Stream
       let content = "";
       const reader = body?.getReader();
+
       while (reader) {
         const { value } = await reader.read();
 
         const text = decoder.decode(value);
 
+        // 处理服务端返回的异常消息并终止读取
         if (status !== 200) {
           const error = JSON.parse(text);
-          content += [404, 500].includes(status)
-            ? error.message
-            : error.error.message;
-          await makeErrorMessage(assistantId, content);
-          return;
+          content += error.error?.message ?? error.message;
+          return await makeErrorMessage(assistantMessageId, content);
         }
 
+        // 读取正文
         for (const line of text.split(/\r?\n/)) {
           if (line.length === 0) continue;
           if (line.startsWith(":")) continue;
@@ -209,12 +209,13 @@ export const useChatStore = defineStore("chat", () => {
 
           const data = JSON.parse(line.substring(6));
           content += data.choices[0].delta.content ?? "";
-          await updateMessageContent(assistantId, content);
+          await updateMessageContent(assistantMessageId, content);
         }
       }
     } catch (e: any) {
+      // 主动终止时触发
       await makeErrorMessage(
-        assistantId,
+        assistantMessageId,
         `\n\n**${e.name === "AbortError" ? "已停止回答" : e.message}**`
       );
     } finally {

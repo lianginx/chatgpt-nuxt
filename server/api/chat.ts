@@ -1,4 +1,4 @@
-import { H3Event, sendStream } from "h3";
+import { H3Event } from "h3";
 import {
   CreateChatCompletionRequest,
   CreateCompletionRequest,
@@ -15,10 +15,26 @@ export default defineEventHandler(async (event) => {
     const complete = await hiOpenAPI(body);
 
     setResStatus(event, complete.status, complete.statusText);
-    return sendStream(event, complete.data);
+    return complete.data;
   } catch (e: any) {
-    setResStatus(event, e.response.data.statusCode, e.response.data.statusText);
-    return sendStream(event, e.response.data);
+    setResStatus(event, e.response.status, e.response.data.statusText);
+
+    let isStreamNull = true;
+
+    for await (const data of e.response.data) {
+      isStreamNull = false;
+      const message = data.toString();
+      try {
+        const parsed = JSON.parse(message);
+        return parsed;
+      } catch (error) {
+        return message;
+      }
+    }
+
+    if (isStreamNull) {
+      return e;
+    }
   }
 });
 
@@ -50,7 +66,7 @@ async function hiOpenAPI(body: ApiRequest) {
   }
 }
 
-const setResStatus = (event: H3Event, code: number, message: string) => {
+function setResStatus(event: H3Event, code: number, message: string) {
   event.node.res.statusCode = code;
   event.node.res.statusMessage = message;
-};
+}
