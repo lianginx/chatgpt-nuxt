@@ -12,7 +12,7 @@
       <div
         class="flex justify-center items-center p-2 h-20 rounded bg-slate-100 hover:bg-slate-200 text-center cursor-pointer"
         v-for="exa of item.templates"
-        @click="store.sendMessage(exa.message)"
+        @click="store.sendMessage({ ...exa.message, chatId: store.chat?.id })"
       >
         {{ exa.title }}
       </div>

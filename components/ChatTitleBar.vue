@@ -19,16 +19,13 @@
       </div>
     </div>
     <div class="flex items-center">
-      <div
-        class="p-2.5 rounded-md hover:active:bg-slate-200 cursor-pointer"
-        @click="clearMessages"
-      >
+      <div class="icon-btn" @click="store.showHelp = true">
+        <Help size="22" />
+      </div>
+      <div class="icon-btn" @click="clearMessages">
         <Clear size="22" />
       </div>
-      <div
-        class="p-2.5 rounded-md hover:active:bg-slate-200 cursor-pointer block sm:hidden"
-        @click="store.showSetting = true"
-      >
+      <div class="icon-btn block sm:hidden" @click="store.showSetting = true">
         <SettingOne size="22" />
       </div>
     </div>
@@ -36,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { Message, Clear, SettingOne } from "@icon-park/vue-next";
+import { Message, Clear, SettingOne, Help } from "@icon-park/vue-next";
 import { useChatStore } from "@/stores/chat";
 import { ChatItem } from "@/types";
 
@@ -67,4 +64,8 @@ function clearMessages() {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.icon-btn {
+  @apply p-2.5 rounded-md sm:hover:bg-slate-200 active:bg-slate-200 cursor-pointer;
+}
+</style>

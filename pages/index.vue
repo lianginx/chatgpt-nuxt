@@ -1,5 +1,11 @@
 <template>
-  <div class="flex w-screen h-screen overflow-hidden text-slate-700">
+  <div
+    class="flex w-screen h-screen overflow-hidden text-slate-700 text-sm sm:text-base"
+  >
+    <HotKeyHelp
+      class="absolute"
+      :class="store.showHelp ? 'visible' : 'invisible'"
+    />
     <ChatSideBar />
     <ChatSetting class="flex-1" v-if="store.showSetting" />
     <ChatContentBar class="flex-1" v-else />
@@ -9,15 +15,19 @@
 <script setup lang="ts">
 import { useChatStore } from "@/stores/chat";
 import { ApiRequest } from "@/types";
+import hotkeys from "hotkeys-js";
 
 const store = useChatStore();
 
 // 页面初始化
-onMounted(async () => {
+
+onMounted(() => initPage());
+
+async function initPage() {
   if (!loadSetting()) store.showSetting = true;
   await store.setNotActiveDbMessages();
   await store.getAllChats();
-});
+}
 
 // 自动生成聊天标题
 watch(
@@ -26,8 +36,10 @@ watch(
     if (newValue.length !== 1 || oldValue.length !== 0) return;
     if (!store.chat?.id) return;
 
+    const chatId = store.chat.id;
     const title = await generateChatTitle(newValue[0].content);
-    store.reChatName(store.chat.id, title);
+
+    store.reChatName(chatId, title);
   }
 );
 
@@ -54,6 +66,49 @@ async function generateChatTitle(content: string) {
 
   return complete.choices[0].message.content.trim().replace(/\。$/, ""); // 移除末尾的句号
 }
+
+// 注册全局快捷键
+// 中文文档：https://github.com/jaywcjlove/hotkeys/blob/master/README-zh.md
+
+hotkeys.filter = () => true; // input、textarea、select 组件默认不响应快捷键，true 表示启用快捷键
+
+// Option + R 开始新话题
+hotkeys("option+r", (e) => {
+  e.preventDefault();
+
+  if (!store.messages.length) return;
+  if (!store.chat) return;
+
+  store.setNotActiveDbMessages();
+  store.getChatMessages(store.chat.id);
+
+  alert("已开始新话题，历史消息不参与本次对话！");
+});
+
+// Option + Shift + R 清空聊天记录
+hotkeys("option+shift+r", (e) => {
+  e.preventDefault();
+
+  if (!store.messages.length) return;
+  if (!store.chat) return;
+
+  store.clearMessages(store.chat.id);
+});
+
+// Option + Shift + N 新建聊天
+hotkeys("option+shift+n", (e) => {
+  e.preventDefault();
+  store.createChat();
+});
+
+// Option + W 删除聊天
+hotkeys("option+w", (e) => {
+  e.preventDefault();
+
+  if (!store.chat) return;
+
+  store.removeChat(store.chat.id);
+});
 </script>
 
 <style></style>

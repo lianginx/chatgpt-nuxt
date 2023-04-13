@@ -14,6 +14,8 @@ export const useChatStore = defineStore("chat", () => {
   let controller: AbortController;
 
   const showSetting = ref(false);
+  const showHelp = ref(false);
+
   const chats = ref<ChatItem[]>([]);
   const chat = ref<ChatItem>();
   const messages = ref<ChatMessageExItem[]>([]);
@@ -53,7 +55,6 @@ export const useChatStore = defineStore("chat", () => {
 
     // 加载列表并打开第一个
     await getAllChats();
-    await openChat(chats.value[0]);
   }
 
   async function openChat(item: ChatItem) {
@@ -62,6 +63,7 @@ export const useChatStore = defineStore("chat", () => {
   }
 
   async function removeChat(chatId: number) {
+    if (!confirm("确认删除当前会话？")) return;
     await db.transaction("rw", "chat", "message", async () => {
       await db.chat.delete(chatId);
       await clearMessages(chatId);
@@ -72,6 +74,8 @@ export const useChatStore = defineStore("chat", () => {
   async function reChatName(chatId: number, name: string) {
     await db.chat.update(chatId, { name });
     await getAllChats();
+    const chat = chats.value.find((item) => item.id === chatId);
+    if (chat) openChat(chat);
   }
 
   // message
@@ -142,6 +146,9 @@ export const useChatStore = defineStore("chat", () => {
     if (!message?.content.trim()) return;
 
     const chatId = message.chatId ?? chat.value?.id;
+    console.log("store chatId", chat.value?.id);
+    console.log("message chatId", message.chatId);
+
     if (!chatId) return;
 
     const setting = loadSetting();
@@ -225,6 +232,7 @@ export const useChatStore = defineStore("chat", () => {
 
   return {
     showSetting,
+    showHelp,
     chats,
     chat,
     messages,
