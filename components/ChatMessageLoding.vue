@@ -17,6 +17,7 @@
 <style scoped>
 .loading,
 .loading > div {
+  line-height: 0;
   position: relative;
   box-sizing: border-box;
 }

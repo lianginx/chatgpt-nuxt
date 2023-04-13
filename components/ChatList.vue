@@ -18,7 +18,7 @@
       </div>
       <CloseOne
         class="invisible group-hover:visible text-rose-400"
-        @click.stop.left="removeChat(item)"
+        @click.stop.left="store.removeChat(item.id)"
       />
     </div>
   </div>
@@ -34,12 +34,6 @@ const store = useChatStore();
 async function openChat(item: ChatItem) {
   store.$patch({ showSetting: false, chat: item });
   await store.getChatMessages(item.id);
-}
-
-async function removeChat(item: ChatItem) {
-  if (confirm("确认删除当前会话？")) {
-    await store.removeChat(item.id);
-  }
 }
 </script>
 
