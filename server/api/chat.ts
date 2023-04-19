@@ -54,6 +54,12 @@ async function hiOpenAPI(body: ApiRequest) {
     responseType: "stream",
     timeout: 1000 * 20,
     timeoutErrorMessage: "**网络连接超时，请重试**",
+    // 使用代理，配置参考 https://axios-http.com/docs/req_config
+    // proxy: {
+    //   protocol: "http",
+    //   host: "127.0.0.1",
+    //   port: 7890,
+    // },
   };
 
   switch (model) {
