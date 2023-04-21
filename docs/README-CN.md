@@ -56,12 +56,6 @@ docker-compose down  # 停止并删除
 
 如果您对此 README 文档有任何反馈或建议，立即告诉我，我将很感激您的意见。
 
-## 赞赏
-
-如果您觉得我的项目对您有所帮助，可以通过扫描下方二维码进行打赏，让我更有动力继续开发和改进，感谢您的支持！
-
-![appreciation-qr](/assets/appreciation-qr.png)
-
 ## 许可证
 
 本项目使用 [MIT](/license) 许可证。
