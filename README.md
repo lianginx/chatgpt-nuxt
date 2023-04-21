@@ -56,12 +56,6 @@ When completed, your project will be deployed onto port `80`.
 
 If you have any feedback or suggestions for improving this README document, please don’t hesitate to let me know. I appreciate your input.
 
-## Support
-
-If you find my project helpful, you can scan the QR code below to make a donation and support me to continue developing and improving. Thank you for your support!
-
-![appreciation-qr](/assets/appreciation-qr.png)
-
 ## License
 
 This project uses the [MIT](/LICENSE) license.
