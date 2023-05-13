@@ -2,11 +2,11 @@
   <span @click="copyToClipboard()">
     <div class="icon" v-show="!copyStatus">
       <Copy :size="size" />
-      <span>复制全文</span>
+      <span>{{ $t("CopyText.copyAll") }}</span>
     </div>
     <div class="icon" v-show="copyStatus">
       <CheckOne class="text-blue-700" :size="size" />
-      <span>复制成功</span>
+      <span>{{ $t("CopyText.copySuccessful") }}</span>
     </div>
   </span>
 </template>

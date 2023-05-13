@@ -19,11 +19,27 @@ import hotkeys from "hotkeys-js";
 
 const store = useChatStore();
 
+const i18n = useI18n();
+const locale = computed(() => store.getLocale());
+
+// head
+
+useHead({
+  title: i18n.t("app.title"),
+  meta: [
+    {
+      name: "description",
+      content: i18n.t("app.description"),
+    },
+  ],
+});
+
 // 页面初始化
 
 onMounted(() => initPage());
 
 async function initPage() {
+  i18n.setLocale(locale.value);
   if (!loadSetting()) store.showSetting = true;
   await store.setNotActiveDbMessages();
   await store.getAllChats();
@@ -57,7 +73,7 @@ async function generateChatTitle(content: string) {
         messages: [
           {
             role: "user",
-            content: `"""\n${content}\n"""\n限定10个字以内总结上面的内容作为标题，不要使用符号，开始总结：`,
+            content: `"""\n${content}\n"""\n${i18n.t("titlePrompt")}`,
           },
         ],
       },
@@ -82,7 +98,7 @@ hotkeys("option+r", (e) => {
   store.setNotActiveDbMessages();
   store.getChatMessages(store.chat.id);
 
-  alert("已开始新话题，历史消息不参与本次对话！");
+  alert(i18n.t("newTopicAlert"));
 });
 
 // Option + Shift + R 清空聊天记录

@@ -5,7 +5,7 @@
         :class="isTalking ? 'text-slate-300' : 'text-blue-600'"
         size="24"
       />
-      <span class="sr-only">发送</span>
+      <span class="sr-only">{{ $t("ChatSendButton.label") }}</span>
     </button>
   </div>
 </template>

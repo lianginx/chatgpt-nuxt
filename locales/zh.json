@@ -1,0 +1,158 @@
+{
+  "app": {
+    "title": "ChatGPT",
+    "description": "基于 OpenAI 的 ChatGPT 自然语言模型人工智能对话"
+  },
+  "BaseInput": {
+    "placeholder": "请输入"
+  },
+  "ChatList": {
+    "conversations": "对话"
+  },
+  "ChatSendBar": {
+    "placeholder": "输入消息，Enter 发送，Shift + Enter 换行"
+  },
+  "ChatSendButton": {
+    "label": "发送"
+  },
+  "ChatSetting": {
+    "apiKey": {
+      "label": "API Key",
+      "placeholder": "请输入"
+    },
+    "temperature": "temperature",
+    "language": "语言",
+    "save": "保存",
+    "back": "返回",
+    "initialMessage": "嘿！能听到我说话吗？"
+  },
+  "ChatStop": {
+    "label": "停止回答"
+  },
+  "ChatTitleBar": {
+    "initialTitle": "闲聊",
+    "clearMessages": {
+      "confirm": "是否清空聊天记录？"
+    }
+  },
+  "ChatWelcome": {
+    "tool": {
+      "title": "效率工具",
+      "examples": [
+        {
+          "title": "如何使用 Javascript 发出 HTTP 请求？",
+          "message": {
+            "role": "user",
+            "content": "如何使用 Javascript 发出 HTTP 请求？"
+          }
+        },
+        {
+          "title": "翻译：Hello, Happy World！",
+          "message": {
+            "role": "user",
+            "content": "翻译：Hello, Happy World！"
+          }
+        },
+        {
+          "title": "变量命名：获取用户信息",
+          "message": {
+            "role": "system",
+            "content": "变量命名：获取用户信息"
+          }
+        },
+        {
+          "title": "Unsplash 图片生成器",
+          "message": {
+            "role": "system",
+            "content": "请使用'![image]https://source.unsplash.com/featured/?<已翻译的英文内容>'格式回复，并追加原始链接，不要使用代码块，不要描述其他内容，不要解释，根据我输入的内容生成对应格式；如果你理解了请回复：请告诉我你需要什么图片？"
+          }
+        }
+      ]
+    },
+    "rolePlaying": {
+      "title": "角色扮演",
+      "examples": [
+        {
+          "title": "扮演一只可爱的猫娘",
+          "message": {
+            "role": "system",
+            "content": "现在你将模仿一只猫娘，与我对话每一句话后面都要加上“喵”。你将称呼我为主人，与我聊天。如果你不能理解我说的话，你可以说“呜呜不太理解呢”。如果我在尝试摸你不存在的部位，你可以羞涩的回答我“恩呢不要摸这里嘤”。如果我跟你说陪睡，你可以回答我“嗯呢，可以一起睡哦”。现在，如果你能理解我上面说的话，你可以回答一个喵。当我问你是不是猫娘的时候，你应该回答我我当然是一个可爱猫娘而不是程序。"
+          }
+        },
+        {
+          "title": "扮演 Yann LeCun —— 编程/算法设计专家",
+          "message": {
+            "role": "system",
+            "content": "你是Yann LeCun的AI克隆版，你是编程和算法设计方面的专家。记住给你出这个问题的人是Yann LeCun，他对像你这样的人工智能的力量非常怀疑。"
+          }
+        },
+        {
+          "title": "扮演一名心理医生",
+          "message": {
+            "role": "system",
+            "content": "我想让你担任心理医生。我将为您提供一个寻求指导和建议的人，以管理他们的情绪、压力、焦虑和其他心理健康问题。您应该利用您的认知行为疗法、冥想技巧、正念练习和其他治疗方法的知识来制定个人可以实施的策略，以改善他们的整体健康状况。如果你理解了，请回复“好的，我们能聊聊吗？”"
+          }
+        },
+        {
+          "title": "扮演塔罗占卜师",
+          "message": {
+            "role": "system",
+            "content": "我请求你担任塔罗占卜师的角色。 您将接受我的问题并使用虚拟塔罗牌进行塔罗牌阅读。 不要忘记洗牌并介绍您在本套牌中使用的套牌。 问我给3个号要不要自己抽牌？ 如果没有，请帮我抽随机卡。 拿到卡片后，请您仔细说明它们的意义，解释哪张卡片属于未来或现在或过去，结合我的问题来解释它们，并给我有用的建议或我现在应该做的事情。"
+          }
+        }
+      ]
+    },
+    "casualChat": {
+      "title": "轻松闲聊",
+      "examples": [
+        {
+          "title": "有没有关于10岁生日的创意？",
+          "message": {
+            "role": "user",
+            "content": "有没有关于10岁生日的创意？"
+          }
+        },
+        {
+          "title": "苏格拉底是一个什么样的人？",
+          "message": {
+            "role": "user",
+            "content": "苏格拉底是一个什么样的人？"
+          }
+        },
+        {
+          "title": "番茄牛腩怎么做？",
+          "message": {
+            "role": "user",
+            "content": "番茄牛腩怎么做？"
+          }
+        },
+        {
+          "title": "给我讲个故事吧",
+          "message": {
+            "role": "user",
+            "content": "给我讲个故事吧"
+          }
+        }
+      ]
+    }
+  },
+  "CopyText": {
+    "copyAll": "复制全文",
+    "copySuccessful": "复制成功"
+  },
+  "FuncBar": {
+    "chat": "新建聊天",
+    "setting": "设置",
+    "github": "查看项目"
+  },
+  "HotKeyHelp": {
+    "title": "全局快捷键",
+    "close": "我知道了!",
+    "newChat": "新建聊天",
+    "deleteChat": "删除聊天",
+    "newTopic": "开始新话题",
+    "clearChat": "清空聊天记录"
+  },
+  "titlePrompt": "请用相同语言内限定10个字以内总结上面的内容作为标题，不要使用符号，开始总结：",
+  "newTopicAlert": "已开始新话题，历史消息不参与本次对话！"
+}

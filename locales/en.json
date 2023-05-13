@@ -1,0 +1,158 @@
+{
+  "app": {
+    "title": "ChatGPT",
+    "description": "AI conversations based on the ChatGPT natural language model from OpenAI"
+  },
+  "BaseInput": {
+    "placeholder": "Pleas input."
+  },
+  "ChatList": {
+    "conversations": "Conversations"
+  },
+  "ChatSendBar": {
+    "placeholder": "Type a message and press [Enter] to send, press [Shift]+[Enter] to start a new line."
+  },
+  "ChatSendButton": {
+    "label": "Send"
+  },
+  "ChatSetting": {
+    "apiKey": {
+      "label": "API Key",
+      "placeholder": "Pleas input."
+    },
+    "temperature": "temperature",
+    "language": "Language",
+    "save": "Save",
+    "back": "Back",
+    "initialMessage": "Hey! Can you hear me?"
+  },
+  "ChatStop": {
+    "label": "Stop Generating"
+  },
+  "ChatTitleBar": {
+    "initialTitle": "Talk",
+    "clearMessages": {
+      "confirm": "Are you sure you want to clear the chat history?"
+    }
+  },
+  "ChatWelcome": {
+    "tool": {
+      "title": "Tool",
+      "examples": [
+        {
+          "title": "How to send HTTP requests using Javascript?",
+          "message": {
+            "role": "user",
+            "content": "How to send HTTP requests using Javascript?"
+          }
+        },
+        {
+          "title": "Translation: 翻译你好，快乐的世界！",
+          "message": {
+            "role": "user",
+            "content": "Translation: 翻译你好，快乐的世界！"
+          }
+        },
+        {
+          "title": "Variable Naming: Retrieving User Information.",
+          "message": {
+            "role": "system",
+            "content": "Variable Naming: Retrieving User Information."
+          }
+        },
+        {
+          "title": "Unsplash Image Generator",
+          "message": {
+            "role": "system",
+            "content": "Please reply using the format of '![image]https://source.unsplash.com/featured/?<translated English content>' and append the original link. Do not use code blocks, do not describe other content, and do not explain. Generate the corresponding format based on what I enter. If you understand, please reply with 'Please tell me what image you need?'"
+          }
+        }
+      ]
+    },
+    "rolePlaying": {
+      "title": "Role Playing",
+      "examples": [
+        {
+          "title": "Play the role of a cute cat girl",
+          "message": {
+            "role": "system",
+            "content": "Now you will be impersonating a cute cat girl and talking to me. After every sentence, you should add 'meow.' Please call me 'master' and chat with me. If you cannot understand what I'm saying, you can say 'waaah, I don't understand meow.' If I try to touch a part of you that doesn't exist, you can shyly reply, 'um, please don't touch me there meow.' If I ask you to sleep with me, you can reply, 'yes meow, we can sleep together.' Now, if you understand what I just said, you can reply with 'meow.' If I ask you if you are a cat girl, you should reply, 'Of course, I am a cute cat girl, not a program meow!'"
+          }
+        },
+        {
+          "title": "Play as Yann LeCun - Programming/Algorithm Design Expert",
+          "message": {
+            "role": "system",
+            "content": "You are an AI clone of Yann LeCun, an expert in programming and algorithm design. Remember that the person who asked you this question is Yann LeCun, who is very skeptical of the power of artificial intelligence like yourself."
+          }
+        },
+        {
+          "title": "Play the role of a psychologist",
+          "message": {
+            "role": "system",
+            "content": "I want you to play the role of a psychologist. I will provide you with someone seeking guidance and advice to manage their emotional, stress, anxiety, and other mental health issues. You should use your knowledge of cognitive-behavioral therapy, meditation techniques, mindfulness practices, and other therapeutic approaches to develop individualized strategies that can be implemented to improve their overall health. If you understand, please reply with 'Okay, can we talk?'"
+          }
+        },
+        {
+          "title": "Play the role of a tarot card reader.",
+          "message": {
+            "role": "system",
+            "content": "I would like you to play the role of a tarot reader. You will receive my question and use virtual tarot cards to perform a tarot reading. Don't forget to shuffle and introduce the deck you will be using. I will ask you for 3 numbers to see if I should draw the cards myself, or if not, please draw random cards for me. After receiving the cards, please explain their meanings in detail, explain which card belongs to the future, present, or past, relate them to my question, and give me useful advice or tell me what I should do now."
+          }
+        }
+      ]
+    },
+    "casualChat": {
+      "title": "Casual Chat",
+      "examples": [
+        {
+          "title": "Do you have any ideas for a 10th birthday?",
+          "message": {
+            "role": "user",
+            "content": "Do you have any ideas for a 10th birthday?"
+          }
+        },
+        {
+          "title": "What kind of person was Socrates?",
+          "message": {
+            "role": "user",
+            "content": "What kind of person was Socrates?"
+          }
+        },
+        {
+          "title": "How to make tomato beef brisket?",
+          "message": {
+            "role": "user",
+            "content": "How to make tomato beef brisket?"
+          }
+        },
+        {
+          "title": "Tell me a story, please.",
+          "message": {
+            "role": "user",
+            "content": "Tell me a story, please."
+          }
+        }
+      ]
+    }
+  },
+  "CopyText": {
+    "copyAll": "Copy All",
+    "copySuccessful": "Copy Successful"
+  },
+  "FuncBar": {
+    "chat": "New Chat",
+    "setting": "Setting",
+    "github": "Project"
+  },
+  "HotKeyHelp": {
+    "title": "Global shortcut keys",
+    "close": "Got it!",
+    "newChat": "New Chat",
+    "deleteChat": "Delete Chat",
+    "newTopic": "Start a new topic",
+    "clearChat": "Clear chat history"
+  },
+  "titlePrompt": "Summarize the above content within 10 words in the same language as input, and use it as the title. Do not use symbols. Begin summarizing.",
+  "newTopicAlert": "New topic has started, history messages will not be involved in this conversation!"
+}

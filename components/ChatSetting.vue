@@ -1,16 +1,17 @@
 <template>
   <div class="flex flex-col p-6 space-y-6">
     <div>
-      <label>API Key</label>
+      <label>{{ $t("ChatSetting.apiKey.label") }}</label>
       <input
         type="password"
-        placeholder="请输入"
+        :placeholder="$t('ChatSetting.apiKey.placeholder')"
         v-model.trim="setting.apiKey"
       />
     </div>
     <div>
       <label class="space-x-3">
-        <span>temperature</span><span>{{ setting.temperature }}</span>
+        <span>{{ $t("ChatSetting.temperature") }}</span>
+        <span>{{ setting.temperature }}</span>
       </label>
       <input
         type="range"
@@ -20,10 +21,22 @@
         step="0.1"
       />
     </div>
+    <div>
+      <label class="space-x-3">
+        <span>{{ $t("ChatSetting.language") }}</span>
+      </label>
+      <select v-model="setting.locale">
+        <option v-for="locale in availableLocales" :value="locale.code">
+          {{ locale.name }}
+        </option>
+      </select>
+    </div>
     <div class="space-x-3">
-      <button class="main-button" @click="save">保存</button>
+      <button class="main-button" @click="save">
+        {{ $t("ChatSetting.save") }}
+      </button>
       <button class="second-button" @click="store.showSetting = false">
-        返回
+        {{ $t("ChatSetting.back") }}
       </button>
     </div>
   </div>
@@ -31,12 +44,17 @@
 
 <script setup lang="ts">
 import { ChatSettingOption } from "@/types";
+import { LocaleObject } from "@nuxtjs/i18n/dist/runtime/composables";
 import { useChatStore } from "~/stores/chat";
 
 const store = useChatStore();
+const i18n = useI18n();
+const availableLocales = i18n.locales.value as LocaleObject[];
+
 const setting = ref<ChatSettingOption>({
   apiKey: "",
   temperature: 1,
+  locale: i18n.getBrowserLocale()!,
   type: "global",
 });
 
@@ -48,8 +66,12 @@ async function save() {
   if (!setting.value.apiKey.trim()) return;
   store.showSetting = false;
   await saveSetting(setting.value);
+  i18n.setLocale(store.getLocale());
   await store.openChat(store.chats[0]);
-  await store.sendMessage({ role: "user", content: "嘿！能听到我说话吗？" });
+  await store.sendMessage({
+    role: "user",
+    content: i18n.t("ChatSetting.initialMessage"),
+  });
 }
 </script>
 
