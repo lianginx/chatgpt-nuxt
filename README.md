@@ -2,7 +2,7 @@
 
 ![preview](/assets/preview-v2.png)
 
-ENGLISH | [简体中文](/docs/README-CN.md)
+ENGLISH | [简体中文](/docs/README-CN.md) | [日本語](/docs/README-JA.md)
 
 ## Setup
 
@@ -10,7 +10,7 @@ To begin, please ensure you have installed all dependencies:
 
 ```bash
 npm i
-#or
+# or
 yarn
 ```
 
