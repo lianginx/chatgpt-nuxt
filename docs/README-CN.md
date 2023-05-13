@@ -2,7 +2,7 @@
 
 ![preview](/assets/preview-v2.png)
 
-[ENGLISH](/README.md) | 简体中文
+[ENGLISH](/README.md) | 简体中文 | [日本語](/docs/README-JA.md)
 
 ## 设置
 
