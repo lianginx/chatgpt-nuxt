@@ -5,7 +5,7 @@
       :id="label"
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
       type="text"
-      :placeholder="placeholder ?? '请输入'"
+      :placeholder="placeholder ?? $t('baseInput.placeholder')"
       :disabled="disabled"
       :value="value"
       @input="$emit('input', ($event.target as HTMLInputElement).value)"

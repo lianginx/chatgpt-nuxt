@@ -5,7 +5,7 @@
       rows="3"
       ref="textareaDom"
       v-model="store.messageContent"
-      :placeholder="placeholder"
+      :placeholder="placeholder || $t('ChatSendBar.placeholder')"
       @keydown="(event) => enterInput(event)"
       @compositionstart="composing = true"
       @compositionend="composing = false"
@@ -28,7 +28,6 @@ const textareaDom = ref<HTMLTextAreaElement>();
 defineProps({
   placeholder: {
     type: String,
-    default: "输入消息，Enter 发送，Shift + Enter 换行",
   },
 });
 

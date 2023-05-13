@@ -223,11 +223,18 @@ export const useChatStore = defineStore("chat", () => {
       // 主动终止时触发
       await makeErrorMessage(
         assistantMessageId,
-        `\n\n**${e.name === "AbortError" ? "已停止回答" : e.message}**`
+        `\n\n**${e.name === "AbortError" ? "Generating stopped" : e.message}**`
       );
     } finally {
       endTalking(chatId);
     }
+  }
+
+  // locale
+
+  function getLocale() {
+    const setting = loadSetting();
+    return (setting && setting.locale) ?? useI18n().getBrowserLocale() ?? "en";
   }
 
   return {
@@ -250,5 +257,6 @@ export const useChatStore = defineStore("chat", () => {
     removeChat,
     appendMessage: createMessage,
     sendMessage,
+    getLocale,
   };
 });

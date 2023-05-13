@@ -38,10 +38,15 @@ import { useChatStore } from "@/stores/chat";
 import { ChatItem } from "@/types";
 
 const store = useChatStore();
+const i18n = useI18n();
+
 const titleInputDom = ref<HTMLInputElement>();
 const editTitle = ref("");
+const clearConfirmMessage = i18n.t("ChatTitleBar.clearMessages.confirm");
 
-const title = computed(() => store.chat?.name ?? "闲聊");
+const title = computed(
+  () => store.chat?.name ?? i18n.t("ChatTitleBar.initialTitle")
+);
 
 function enterEditing() {
   if (!store.chat?.id) return;
@@ -58,7 +63,7 @@ async function exitEditing() {
 }
 
 function clearMessages() {
-  if (confirm("是否清空聊天记录？")) {
+  if (confirm(clearConfirmMessage)) {
     store.clearMessages((store.chat as ChatItem).id);
   }
 }

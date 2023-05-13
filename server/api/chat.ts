@@ -53,7 +53,7 @@ async function hiOpenAPI(body: ApiRequest) {
   const requestConfig: AxiosRequestConfig = {
     responseType: "stream",
     timeout: 1000 * 20,
-    timeoutErrorMessage: "**网络连接超时，请重试**",
+    timeoutErrorMessage: "**Network connection timed out. Please try again**",
     // 使用代理，配置参考 https://axios-http.com/docs/req_config
     // proxy: {
     //   protocol: "http",

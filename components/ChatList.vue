@@ -1,6 +1,8 @@
 <template>
   <div class="h-2/3 overflow-y-scroll scroll-smooth">
-    <div class="m-6 mb-2 text-sm text-slate-500">对话</div>
+    <div class="m-6 mb-2 text-sm text-slate-500">
+      {{ $t("ChatList.conversations") }}
+    </div>
     <div
       :class="[
         'group bar-btn flex justify-between',

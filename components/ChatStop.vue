@@ -5,7 +5,7 @@
       @click="store.stop()"
     >
       <Square theme="outline" size="14" />
-      <span class="select-none">停止回答</span>
+      <span class="select-none">{{ $t("ChatStop.label") }}</span>
     </div>
   </div>
 </template>
