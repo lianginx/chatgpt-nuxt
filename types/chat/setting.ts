@@ -1,5 +1,4 @@
 export type ChatSettingType = "default" | "global" | "chat";
-export type ColorMode = "system" | "light" | "dark" | "sepia";
 
 export interface ChatSettingItem extends ChatSettingOption {
   id: number;
