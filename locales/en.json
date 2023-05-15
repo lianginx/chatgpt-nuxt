@@ -27,7 +27,8 @@
     "initialMessage": "Hey! Can you hear me?"
   },
   "ChatStop": {
-    "label": "Stop Generating"
+    "label": "Stop Generating",
+    "message": "Generating stopped"
   },
   "ChatTitleBar": {
     "initialTitle": "Talk",
@@ -154,5 +155,6 @@
     "clearChat": "Clear chat history"
   },
   "titlePrompt": "Summarize the above content within 10 words in the same language as input, and use it as the title. Do not use symbols. Begin summarizing.",
-  "newTopicAlert": "New topic has started, history messages will not be involved in this conversation!"
+  "newTopicAlert": "New topic has started, history messages will not be involved in this conversation!",
+  "removeChatConfirm": "Are you sure you want to delete this chat?"
 }

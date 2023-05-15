@@ -11,6 +11,8 @@ export const useChatStore = defineStore("chat", () => {
   const decoder = new TextDecoder("utf-8");
   const db = new ChatDB();
 
+  const i18n = useI18n();
+
   let controller: AbortController;
 
   const showSetting = ref(false);
@@ -63,7 +65,7 @@ export const useChatStore = defineStore("chat", () => {
   }
 
   async function removeChat(chatId: number) {
-    if (!confirm("确认删除当前会话？")) return;
+    if (!confirm(i18n.t("removeChatConfirm"))) return;
     await db.transaction("rw", "chat", "message", async () => {
       await db.chat.delete(chatId);
       await clearMessages(chatId);
@@ -223,7 +225,9 @@ export const useChatStore = defineStore("chat", () => {
       // 主动终止时触发
       await makeErrorMessage(
         assistantMessageId,
-        `\n\n**${e.name === "AbortError" ? "Generating stopped" : e.message}**`
+        `\n\n**${
+          e.name === "AbortError" ? i18n.t("ChatStop.message") : e.message
+        }**`
       );
     } finally {
       endTalking(chatId);
@@ -234,7 +238,7 @@ export const useChatStore = defineStore("chat", () => {
 
   function getLocale() {
     const setting = loadSetting();
-    return (setting && setting.locale) ?? useI18n().getBrowserLocale() ?? "en";
+    return (setting && setting.locale) ?? i18n.getBrowserLocale() ?? "en";
   }
 
   return {
