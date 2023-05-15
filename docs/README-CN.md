@@ -4,6 +4,9 @@
 
 [ENGLISH](/README.md) | 简体中文 | [日本語](/docs/README-JA.md)
 
+这是一个使用[Nuxt 3](https://nuxt.com/)实现的前端应用程序，用于OpenAI的[ChatGPT](https://openai.com/blog/chatgpt)。  
+它不仅支持[OpenAI API](https://openai.com/blog/openai-api)，还支持[Azure Open AI Service API](https://learn.microsoft.com/zh-cn/azure/cognitive-services/openai/reference)。
+
 ## 设置
 
 首先，请确保您已安装所有依赖项：

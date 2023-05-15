@@ -4,6 +4,9 @@
 
 [ENGLISH](/README.md) | [简体中文](/docs/README-CN.md) | 日本語
 
+OpenAIの[ChatGPT](https://openai.com/blog/chatgpt)用に[Nuxt 3](https://nuxt.com/)で実装したフロントエンドアプリケーションです。  
+[OpenAI API](https://openai.com/blog/openai-api)はもちろん、[Azure Open AI Service API](https://learn.microsoft.com/ja-jp/azure/cognitive-services/openai/reference)もサポートしています。
+
 ## セットアップ
 
 最初に全ての依存関係をインストールします。

@@ -16,8 +16,21 @@
     "label": "发送"
   },
   "ChatSetting": {
+    "apiType": "API 类型",
     "apiKey": {
       "label": "API Key",
+      "placeholder": "请输入"
+    },
+    "apiHost": {
+      "label": "API 终点",
+      "placeholder": "https://YOUR_RESOURCE_NAME.openai.azure.com/"
+    },
+    "azureDeploymentId": {
+      "label": "模型的部署名称",
+      "placeholder": "请输入"
+    },
+    "azureApiVersion": {
+      "label": "Azure OpenAI Service 的 API 版本",
       "placeholder": "请输入"
     },
     "temperature": "temperature",

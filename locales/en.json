@@ -16,8 +16,21 @@
     "label": "Send"
   },
   "ChatSetting": {
+    "apiType": "API Type",
     "apiKey": {
       "label": "API Key",
+      "placeholder": "Pleas input."
+    },
+    "apiHost": {
+      "label": "API Endpoint",
+      "placeholder": "https://YOUR_RESOURCE_NAME.openai.azure.com/"
+    },
+    "azureDeploymentId": {
+      "label": "Deployment name of the model",
+      "placeholder": "Pleas input."
+    },
+    "azureApiVersion": {
+      "label": "API version of Azure OpenAI Service",
       "placeholder": "Pleas input."
     },
     "temperature": "temperature",

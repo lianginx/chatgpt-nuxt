@@ -16,8 +16,21 @@
     "label": "送信"
   },
   "ChatSetting": {
+    "apiType": "API 種別",
     "apiKey": {
-      "label": "APIキー",
+      "label": "API キー",
+      "placeholder": "入力してください"
+    },
+    "apiHost": {
+      "label": "API エンドポイント",
+      "placeholder": "https://YOUR_RESOURCE_NAME.openai.azure.com/"
+    },
+    "azureDeploymentId": {
+      "label": "モデルのデプロイ名",
+      "placeholder": "入力してください"
+    },
+    "azureApiVersion": {
+      "label": "Azure OpenAI Service の API バージョン",
       "placeholder": "入力してください"
     },
     "temperature": "temperature",

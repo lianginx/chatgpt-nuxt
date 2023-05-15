@@ -4,6 +4,9 @@
 
 ENGLISH | [简体中文](/docs/README-CN.md) | [日本語](/docs/README-JA.md)
 
+This is a frontend application implemented in [Nuxt 3](https://nuxt.com/) for OpenAI's [ChatGPT](https://openai.com/blog/chatgpt).  
+It supports not only the [OpenAI API](https://openai.com/blog/openai-api) but also the [Azure Open AI Service API](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/reference).
+
 ## Setup
 
 To begin, please ensure you have installed all dependencies:
