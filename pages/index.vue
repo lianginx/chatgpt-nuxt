@@ -66,10 +66,17 @@ async function generateChatTitle(content: string) {
   const complete = await $fetch("/api/chat", {
     method: "post",
     body: JSON.stringify({
+      apiType: setting.apiType,
       cipherAPIKey: setting.apiKey,
+      apiHost: setting.apiHost,
+      azureApiVersion: setting.azureApiVersion,
+      azureDeploymentId: setting.azureDeploymentId,
       model: "chat",
       request: {
-        model: "gpt-3.5-turbo",
+        model:
+          setting.apiType === "openai"
+            ? "gpt-3.5-turbo"
+            : setting.azureDeploymentId,
         messages: [
           {
             role: "user",

@@ -45,10 +45,35 @@ export default defineEventHandler(async (event) => {
 });
 
 async function hiOpenAPI(body: ApiRequest) {
-  const { cipherAPIKey, model, request } = body;
+  const {
+    apiType,
+    cipherAPIKey,
+    apiHost,
+    azureApiVersion,
+    azureDeploymentId,
+    model,
+    request,
+  } = body;
 
   const apiKey = aesCrypto({ message: cipherAPIKey, type: "de" });
-  const openai = new OpenAIApi(new Configuration({ apiKey }));
+  const azureOptions =
+    apiType === "azure"
+      ? {
+          basePath: `${apiHost}/openai/deployments/${azureDeploymentId}`,
+          baseOptions: {
+            headers: { "api-key": apiKey },
+            params: {
+              "api-version": azureApiVersion,
+            },
+          },
+        }
+      : {};
+  const openai = new OpenAIApi(
+    new Configuration({
+      apiKey,
+      ...azureOptions,
+    })
+  );
 
   const requestConfig: AxiosRequestConfig = {
     responseType: "stream",
