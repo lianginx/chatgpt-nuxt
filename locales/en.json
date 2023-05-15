@@ -48,10 +48,10 @@
           }
         },
         {
-          "title": "Translation: 翻译你好，快乐的世界！",
+          "title": "Translation: 你好，快乐的世界！",
           "message": {
             "role": "user",
-            "content": "Translation: 翻译你好，快乐的世界！"
+            "content": "Translation: 你好，快乐的世界！"
           }
         },
         {
