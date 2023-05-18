@@ -9,6 +9,8 @@ import { aesCrypto } from "@/server/api/crypto";
 import { AxiosRequestConfig } from "axios";
 import { ApiRequest } from "@/types";
 
+const runtimeConfig = useRuntimeConfig();
+
 export default defineEventHandler(async (event) => {
   try {
     const body = (await readBody(event)) as ApiRequest;
@@ -45,17 +47,25 @@ export default defineEventHandler(async (event) => {
 });
 
 async function hiOpenAPI(body: ApiRequest) {
-  const {
-    apiType,
-    cipherAPIKey,
-    apiHost,
-    azureApiVersion,
-    azureDeploymentId,
-    model,
-    request,
-  } = body;
+  const useEnvironmentVariables = runtimeConfig.public.useEnvironmentVariables;
 
-  const apiKey = aesCrypto({ message: cipherAPIKey, type: "de" });
+  const apiType = useEnvironmentVariables
+    ? runtimeConfig.public.apiType
+    : body.apiType;
+  const apiKey = useEnvironmentVariables
+    ? runtimeConfig.apiKey
+    : aesCrypto({ message: body.cipherAPIKey, type: "de" });
+  const apiHost = useEnvironmentVariables
+    ? runtimeConfig.apiHost
+    : body.apiHost;
+  const azureApiVersion = useEnvironmentVariables
+    ? runtimeConfig.azureApiVersion
+    : body.azureApiVersion;
+  const azureDeploymentId = useEnvironmentVariables
+    ? runtimeConfig.azureDevelopmentId
+    : body.azureDeploymentId;
+  const { model, request } = body;
+
   const azureOptions =
     apiType === "azure"
       ? {

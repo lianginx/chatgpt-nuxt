@@ -205,10 +205,16 @@ export const useChatStore = defineStore("chat", () => {
       let content = "";
       const reader = body?.getReader();
 
+      let parsedCount = 0;
+      let concatenatedValue = new Uint8Array();
+
       while (reader) {
         const { value } = await reader.read();
 
-        const text = decoder.decode(value);
+        // concatenate with the previous value
+        concatenatedValue = new Uint8Array([...concatenatedValue, ...value!]);
+
+        const text = decoder.decode(concatenatedValue);
 
         // 处理服务端返回的异常消息并终止读取
         if (status !== 200) {
@@ -218,14 +224,23 @@ export const useChatStore = defineStore("chat", () => {
         }
 
         // 读取正文
-        for (const line of text.split(/\r?\n/)) {
-          if (line.length === 0) continue;
-          if (line.startsWith(":")) continue;
-          if (line === "data: [DONE]") return;
+        const line = text
+          .split(/\r?\n/)
+          .map((line) => line.replace(/(\n)?^data:\s*/, "").trim()) // remove prefix
+          .filter((line) => line !== ""); // remove empty lines
+        for (let i = parsedCount; i < line.length; i++) {
+          if (line[i] === "[DONE]") return;
 
-          const data = JSON.parse(line.substring(6));
-          content += data.choices[0].delta.content ?? "";
-          await updateMessageContent(assistantMessageId, content);
+          try {
+            const data = JSON.parse(line[i]);
+            content += data.choices[0].delta.content ?? "";
+            console.log(content);
+            await updateMessageContent(assistantMessageId, content);
+            parsedCount++;
+          } catch (e) {
+            console.warn("Could not JSON parse stream message", e);
+            continue;
+          }
         }
       }
     } catch (e: any) {
