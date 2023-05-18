@@ -59,6 +59,24 @@ When completed, your project will be deployed onto port `80`.
 
 If you have any feedback or suggestions for improving this README document, please don’t hesitate to let me know. I appreciate your input.
 
+## Configuration
+
+There are two ways to configure the application:
+
+- setting it up using the configuration screen on the application.
+- setting it up by using environment variables in advance.
+
+If you want to set environment variables, please refer to `.env.example` and place a `.env` file in the root directory.
+
+| Environment Variable | Examples of expected value                    | Description                                                                                                     |
+| -------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| OPENAI_API_TYPE      | `openai` or `azure`                           | The API type.                                                                                                   |
+| OPENAI_API_KEY       |                                               | The API key used for authentication with OpenAI or Azure OpenAI Service.                                        |
+| DEFAULT_TEMPERATURE  | `0.0` - `2.0`                                 | Higher values will make the output more random, while lower values will make it more focused and deterministic. |
+| AZURE_API_HOST       | `https://YOUR_RESOURCE_NAME.openai.azure.com` | The endpoint of the Azure OpenAI Service.                                                                       |
+| AZURE_API_VERSION    | `2023-05-15`                                  | API version of the Azure OpenAI Service.                                                                        |
+| AZURE_DEPLOYMENT_ID  |                                               | Deployment name of the model on the Azure OpenAI Service.                                                       |
+
 ## License
 
 This project uses the [MIT](/LICENSE) license.

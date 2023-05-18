@@ -12,10 +12,10 @@ export interface ChatSettingOption extends ChatSetting {
 
 export interface ChatSetting {
   apiType: ApiType;
-  apiKey: string;
-  apiHost: string;
-  azureApiVersion: string;
-  azureDeploymentId: string;
+  apiKey?: string;
+  apiHost?: string;
+  azureApiVersion?: string;
+  azureDeploymentId?: string;
   temperature: number;
   locale: string;
 }
