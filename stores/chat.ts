@@ -234,7 +234,6 @@ export const useChatStore = defineStore("chat", () => {
           try {
             const data = JSON.parse(line[i]);
             content += data.choices[0].delta.content ?? "";
-            console.log(content);
             await updateMessageContent(assistantMessageId, content);
             parsedCount++;
           } catch (e) {
