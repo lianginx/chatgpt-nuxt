@@ -2,14 +2,14 @@
 export default defineNuxtConfig({
   app: {},
   runtimeConfig: {
-    apiKey: process.env.OPENAI_API_KEY,
-    apiHost: process.env.AZURE_API_HOST,
-    azureApiVersion: process.env.AZURE_API_VERSION,
-    azureDevelopmentId: process.env.AZURE_DEPLOYMENT_ID,
+    apiKey: "",
+    apiHost: "",
+    azureApiVersion: "2023-05-15",
+    azureDeploymentId: "",
     public: {
-      useEnvironmentVariables: !!process.env.OPENAI_API_TYPE,
-      apiType: process.env.OPENAI_API_TYPE,
-      defaultTemperature: process.env.DEFAULT_TEMPERATURE,
+      useEnv: "no",
+      apiType: "openai",
+      defaultTemperature: "1",
     },
   },
   modules: ["@nuxtjs/i18n", "@nuxtjs/tailwindcss", "@pinia/nuxt", "nuxt-icon"],

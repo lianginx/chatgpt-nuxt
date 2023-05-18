@@ -1,71 +1,71 @@
 <template>
   <div class="flex flex-col p-6 space-y-6">
-    <template v-if="!useRuntimeConfig().public.useEnvironmentVariables">
-    <!-- API Type -->
-    <div>
-      <label>{{ $t("ChatSetting.apiType") }}</label>
-      <ul class="grid w-full gap-6 grid-cols-4">
-        <li v-for="apiType in apiTypes">
+    <template v-if="useRuntimeConfig().public.useEnv === 'no'">
+      <!-- API Type -->
+      <div>
+        <label>{{ $t("ChatSetting.apiType") }}</label>
+        <ul class="grid w-full gap-6 grid-cols-4">
+          <li v-for="apiType in apiTypes">
+            <input
+              type="radio"
+              v-model="setting.apiType"
+              :id="apiType.value"
+              name="apiType"
+              :value="apiType.value"
+              class="hidden peer"
+              required
+            />
+            <label
+              :for="apiType.value"
+              class="inline-flex items-center text-center justify-between w-full p-2 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:bg-blue-500 peer-checked:text-white hover:text-gray-600 hover:bg-gray-100"
+            >
+              {{ apiType.label }}
+            </label>
+          </li>
+        </ul>
+      </div>
+
+      <!-- API Key -->
+      <div>
+        <label>{{ $t("ChatSetting.apiKey.label") }}</label>
+        <input
+          type="password"
+          :placeholder="$t('ChatSetting.apiKey.placeholder')"
+          v-model.trim="setting.apiKey"
+        />
+      </div>
+
+      <template v-if="setting.apiType === 'azure'">
+        <!-- API Host -->
+        <div>
+          <label>{{ $t("ChatSetting.apiHost.label") }}</label>
           <input
-            type="radio"
-            v-model="setting.apiType"
-            :id="apiType.value"
-            name="apiType"
-            :value="apiType.value"
-            class="hidden peer"
-            required
+            type="text"
+            :placeholder="$t('ChatSetting.apiHost.placeholder')"
+            v-model.trim="setting.apiHost"
           />
-          <label
-            :for="apiType.value"
-            class="inline-flex items-center text-center justify-between w-full p-2 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:bg-blue-500 peer-checked:text-white hover:text-gray-600 hover:bg-gray-100"
-          >
-            {{ apiType.label }}
-          </label>
-        </li>
-      </ul>
-    </div>
+        </div>
 
-    <!-- API Key -->
-    <div>
-      <label>{{ $t("ChatSetting.apiKey.label") }}</label>
-      <input
-        type="password"
-        :placeholder="$t('ChatSetting.apiKey.placeholder')"
-        v-model.trim="setting.apiKey"
-      />
-    </div>
+        <!-- Azure API Version -->
+        <div>
+          <label>{{ $t("ChatSetting.azureApiVersion.label") }}</label>
+          <input
+            type="text"
+            :placeholder="$t('ChatSetting.azureApiVersion.placeholder')"
+            v-model.trim="setting.azureApiVersion"
+          />
+        </div>
 
-    <template v-if="setting.apiType === 'azure'">
-      <!-- API Host -->
-      <div>
-        <label>{{ $t("ChatSetting.apiHost.label") }}</label>
-        <input
-          type="text"
-          :placeholder="$t('ChatSetting.apiHost.placeholder')"
-          v-model.trim="setting.apiHost"
-        />
-      </div>
-
-      <!-- Azure API Version -->
-      <div>
-        <label>{{ $t("ChatSetting.azureApiVersion.label") }}</label>
-        <input
-          type="text"
-          :placeholder="$t('ChatSetting.azureApiVersion.placeholder')"
-          v-model.trim="setting.azureApiVersion"
-        />
-      </div>
-
-      <!-- Azure Deployment ID -->
-      <div>
-        <label>{{ $t("ChatSetting.azureDeploymentId.label") }}</label>
-        <input
-          type="text"
-          :placeholder="$t('ChatSetting.azureDeploymentId.placeholder')"
-          v-model.trim="setting.azureDeploymentId"
-        />
-      </div>
-    </template>
+        <!-- Azure Deployment ID -->
+        <div>
+          <label>{{ $t("ChatSetting.azureDeploymentId.label") }}</label>
+          <input
+            type="text"
+            :placeholder="$t('ChatSetting.azureDeploymentId.placeholder')"
+            v-model.trim="setting.azureDeploymentId"
+          />
+        </div>
+      </template>
     </template>
 
     <!-- temperature -->
@@ -122,18 +122,14 @@ const apiTypes = [
   { label: "Azure", value: "azure" },
 ];
 
-const useEnvironmentVariables = runtimeConfig.public.useEnvironmentVariables;
+const useEnv = runtimeConfig.public.useEnv === "yes";
 const setting = ref<ChatSettingOption>({
-  apiType: useEnvironmentVariables
-    ? (runtimeConfig.public.apiType as ApiType)
-    : "openai",
-  apiKey: useEnvironmentVariables ? undefined : "",
-  apiHost: useEnvironmentVariables ? undefined : "",
-  azureDeploymentId: useEnvironmentVariables ? undefined : "",
-  azureApiVersion: useEnvironmentVariables ? undefined : "2023-05-15",
-  temperature: useEnvironmentVariables
-    ? Number(runtimeConfig.public.defaultTemperature)
-    : 1,
+  apiType: useEnv ? (runtimeConfig.public.apiType as ApiType) : "openai",
+  apiKey: useEnv ? undefined : "",
+  apiHost: useEnv ? undefined : "",
+  azureDeploymentId: useEnv ? undefined : "",
+  azureApiVersion: useEnv ? undefined : "2023-05-15",
+  temperature: useEnv ? Number(runtimeConfig.public.defaultTemperature) : 1,
   locale: i18n.getBrowserLocale()!,
   type: "global",
 });
@@ -143,7 +139,7 @@ onMounted(() => {
 });
 
 async function save() {
-  if (!useEnvironmentVariables && !setting.value.apiKey!.trim()) return;
+  if (!useEnv && !setting.value.apiKey!.trim()) return;
   store.showSetting = false;
   await saveSetting(setting.value);
   i18n.setLocale(store.getLocale());
