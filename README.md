@@ -68,14 +68,15 @@ There are two ways to configure the application:
 
 If you want to set environment variables, please refer to `.env.example` and place a `.env` file in the root directory.
 
-| Environment Variable | Examples of expected value                    | Description                                                                                                     |
-| -------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| OPENAI_API_TYPE      | `openai` or `azure`                           | The API type.                                                                                                   |
-| OPENAI_API_KEY       |                                               | The API key used for authentication with OpenAI or Azure OpenAI Service.                                        |
-| DEFAULT_TEMPERATURE  | `0.0` - `2.0`                                 | Higher values will make the output more random, while lower values will make it more focused and deterministic. |
-| AZURE_API_HOST       | `https://YOUR_RESOURCE_NAME.openai.azure.com` | The endpoint of the Azure OpenAI Service.                                                                       |
-| AZURE_API_VERSION    | `2023-05-15`                                  | API version of the Azure OpenAI Service.                                                                        |
-| AZURE_DEPLOYMENT_ID  |                                               | Deployment name of the model on the Azure OpenAI Service.                                                       |
+| Environment Variable            | Examples of expected value                    | Description                                                                                                     |
+| ------------------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| NUXT_PUBLIC_USE_ENV             | `yes` or `no`                                 | Use environment variables or not.                                                                               |
+| NUXT_PUBLIC_API_TYPE            | `openai` or `azure`                           | The API type.                                                                                                   |
+| NUXT_API_KEY                    |                                               | The API key used for authentication with OpenAI or Azure OpenAI Service.                                        |
+| NUXT_PUBLIC_DEFAULT_TEMPERATURE | `0.0` - `2.0`                                 | Higher values will make the output more random, while lower values will make it more focused and deterministic. |
+| NUXT_API_HOST                   | `https://YOUR_RESOURCE_NAME.openai.azure.com` | The endpoint of the Azure OpenAI Service.                                                                       |
+| NUXT_AZURE_API_VERSION          | `2023-05-15`                                  | API version of the Azure OpenAI Service.                                                                        |
+| NUXT_AZURE_DEPLOYMENT_ID        |                                               | Deployment name of the model on the Azure OpenAI Service.                                                       |
 
 ## License
 

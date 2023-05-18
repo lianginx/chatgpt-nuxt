@@ -47,22 +47,18 @@ export default defineEventHandler(async (event) => {
 });
 
 async function hiOpenAPI(body: ApiRequest) {
-  const useEnvironmentVariables = runtimeConfig.public.useEnvironmentVariables;
+  const useEnv = runtimeConfig.public.useEnv === "yes";
 
-  const apiType = useEnvironmentVariables
-    ? runtimeConfig.public.apiType
-    : body.apiType;
-  const apiKey = useEnvironmentVariables
+  const apiType = useEnv ? runtimeConfig.public.apiType : body.apiType;
+  const apiKey = useEnv
     ? runtimeConfig.apiKey
     : aesCrypto({ message: body.cipherAPIKey, type: "de" });
-  const apiHost = useEnvironmentVariables
-    ? runtimeConfig.apiHost
-    : body.apiHost;
-  const azureApiVersion = useEnvironmentVariables
+  const apiHost = useEnv ? runtimeConfig.apiHost : body.apiHost;
+  const azureApiVersion = useEnv
     ? runtimeConfig.azureApiVersion
     : body.azureApiVersion;
-  const azureDeploymentId = useEnvironmentVariables
-    ? runtimeConfig.azureDevelopmentId
+  const azureDeploymentId = useEnv
+    ? runtimeConfig.azureDeploymentId
     : body.azureDeploymentId;
   const { model, request } = body;
 

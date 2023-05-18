@@ -68,14 +68,15 @@ docker-compose down  # 停止并删除
 
 如果要设置环境变量，请先参考 `.env.example` 并在根目录下创建 `.env` 文件。
 
-| 环境变量            | 预期值的示例                                  | 描述                                                      |
-| ------------------- | --------------------------------------------- | --------------------------------------------------------- |
-| OPENAI_API_TYPE     | `openai` 或 `azure`                           | API 类型。                                                |
-| OPENAI_API_KEY      |                                               | 用于身份验证 OpenAI 或 Azure OpenAI Service 的 API 密钥。 |
-| DEFAULT_TEMPERATURE | `0.0` - `2.0`                                 | 值越大，输出结果就越随机；值越小，则越聚焦和确定性。      |
-| AZURE_API_HOST      | `https://YOUR_RESOURCE_NAME.openai.azure.com` | Azure OpenAI Service 的终结点。                           |
-| AZURE_API_VERSION   | `2023-05-15`                                  | Azure OpenAI Service 的 API 版本。                        |
-| AZURE_DEPLOYMENT_ID |                                               | Azure OpenAI Service 上模型的部署名称。                   |
+| 环境变量                        | 预期值的示例                                  | 描述                                                      |
+| ------------------------------- | --------------------------------------------- | --------------------------------------------------------- |
+| NUXT_PUBLIC_USE_ENV             | `yes` 或 `no`                                 | 使用环境变量还是不使用？                                  |
+| NUXT_PUBLIC_API_TYPE            | `openai` 或 `azure`                           | API 类型。                                                |
+| NUXT_API_KEY                    |                                               | 用于身份验证 OpenAI 或 Azure OpenAI Service 的 API 密钥。 |
+| NUXT_PUBLIC_DEFAULT_TEMPERATURE | `0.0` - `2.0`                                 | 值越大，输出结果就越随机；值越小，则越聚焦和确定性。      |
+| NUXT_API_HOST                   | `https://YOUR_RESOURCE_NAME.openai.azure.com` | Azure OpenAI Service 的终结点。                           |
+| NUXT_AZURE_API_VERSION          | `2023-05-15`                                  | Azure OpenAI Service 的 API 版本。                        |
+| NUXT_AZURE_DEPLOYMENT_ID        |                                               | Azure OpenAI Service 上模型的部署名称。                   |
 
 ## 许可证
 

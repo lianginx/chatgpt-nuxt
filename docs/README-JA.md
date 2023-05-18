@@ -68,14 +68,15 @@ docker-compose down  # 停止＆削除
 
 環境変数を設定する場合は、`.env.example`を参考にして作成した`.env`ファイルをルートディレクトリに配置して下さい。
 
-| 環境変数            | 期待値の例                                    | 説明                                                                                                 |
-| ------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| OPENAI_API_TYPE     | `openai` または `azure`                       | API 種別                                                                                             |
-| OPENAI_API_KEY      |                                               | OpenAI または Azure Open AI Service との認証に使用する API キー                                      |
-| DEFAULT_TEMPERATURE | `0.0` - `2.0`                                 | 値を大きくすると、出力結果はよりランダムになり、値を小さくするとよりフォーカスされて決定的になります |
-| AZURE_API_HOST      | `https://YOUR_RESOURCE_NAME.openai.azure.com` | Azure OpenAI Service のエンドポイント                                                                |
-| AZURE_API_VERSION   | `2023-05-15`                                  | Azure OpenAI Service の API バージョン                                                               |
-| AZURE_DEPLOYMENT_ID |                                               | Azure OpenAI Service のモデルのデプロイ名                                                            |
+| 環境変数                        | 期待値の例                                    | 説明                                                                                                 |
+| ------------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| NUXT_PUBLIC_USE_ENV             | `yes` または `no`                             | 環境変数を使用するか否か                                                                             |
+| NUXT_PUBLIC_API_TYPE            | `openai` または `azure`                       | API 種別                                                                                             |
+| NUXT_API_KEY                    |                                               | OpenAI または Azure Open AI Service との認証に使用する API キー                                      |
+| NUXT_PUBLIC_DEFAULT_TEMPERATURE | `0.0` - `2.0`                                 | 値を大きくすると、出力結果はよりランダムになり、値を小さくするとよりフォーカスされて決定的になります |
+| NUXT_API_HOST                   | `https://YOUR_RESOURCE_NAME.openai.azure.com` | Azure OpenAI Service のエンドポイント                                                                |
+| NUXT_AZURE_API_VERSION          | `2023-05-15`                                  | Azure OpenAI Service の API バージョン                                                               |
+| NUXT_AZURE_DEPLOYMENT_ID        |                                               | Azure OpenAI Service のモデルのデプロイ名                                                            |
 
 ## ライセンス
 
