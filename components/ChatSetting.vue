@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col p-6 space-y-6">
+    <template v-if="!useRuntimeConfig().public.useEnvironmentVariables">
     <!-- API Type -->
     <div>
       <label>{{ $t("ChatSetting.apiType") }}</label>
@@ -65,6 +66,7 @@
         />
       </div>
     </template>
+    </template>
 
     <!-- temperature -->
     <div>
@@ -106,10 +108,11 @@
 </template>
 
 <script setup lang="ts">
-import { ChatSettingOption } from "@/types";
+import { ApiType, ChatSettingOption } from "@/types";
 import { LocaleObject } from "@nuxtjs/i18n/dist/runtime/composables";
 import { useChatStore } from "~/stores/chat";
 
+const runtimeConfig = useRuntimeConfig();
 const store = useChatStore();
 const i18n = useI18n();
 const availableLocales = i18n.locales.value as LocaleObject[];
@@ -119,13 +122,18 @@ const apiTypes = [
   { label: "Azure", value: "azure" },
 ];
 
+const useEnvironmentVariables = runtimeConfig.public.useEnvironmentVariables;
 const setting = ref<ChatSettingOption>({
-  apiType: "openai",
-  apiKey: "",
-  apiHost: "",
-  azureDeploymentId: "",
-  azureApiVersion: "2023-03-15-preview",
-  temperature: 1,
+  apiType: useEnvironmentVariables
+    ? (runtimeConfig.public.apiType as ApiType)
+    : "openai",
+  apiKey: useEnvironmentVariables ? undefined : "",
+  apiHost: useEnvironmentVariables ? undefined : "",
+  azureDeploymentId: useEnvironmentVariables ? undefined : "",
+  azureApiVersion: useEnvironmentVariables ? undefined : "2023-05-15",
+  temperature: useEnvironmentVariables
+    ? Number(runtimeConfig.public.defaultTemperature)
+    : 1,
   locale: i18n.getBrowserLocale()!,
   type: "global",
 });
@@ -135,7 +143,7 @@ onMounted(() => {
 });
 
 async function save() {
-  if (!setting.value.apiKey.trim()) return;
+  if (!useEnvironmentVariables && !setting.value.apiKey!.trim()) return;
   store.showSetting = false;
   await saveSetting(setting.value);
   i18n.setLocale(store.getLocale());
