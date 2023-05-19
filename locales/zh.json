@@ -22,7 +22,7 @@
       "placeholder": "请输入"
     },
     "apiHost": {
-      "label": "API 终点",
+      "label": "API Endpoint",
       "placeholder": "https://YOUR_RESOURCE_NAME.openai.azure.com/"
     },
     "azureDeploymentId": {
