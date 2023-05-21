@@ -5,7 +5,7 @@
       <span>{{ $t("CopyText.copyAll") }}</span>
     </div>
     <div class="icon" v-show="copyStatus">
-      <CheckOne class="text-blue-700" :size="size" />
+      <CheckOne class="text-blue-700 dark:text-blue-300" :size="size" />
       <span>{{ $t("CopyText.copySuccessful") }}</span>
     </div>
   </span>
@@ -49,6 +49,6 @@ async function copyToClipboardEx(content: string = porps.content) {
 
 <style scoped>
 .icon {
-  @apply flex items-center cursor-pointer text-xs space-x-0.5 text-slate-500;
+  @apply flex items-center cursor-pointer text-xs space-x-0.5 text-slate-500 dark:text-slate-300;
 }
 </style>

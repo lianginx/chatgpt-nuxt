@@ -1,8 +1,10 @@
 <template>
   <div
-    class="flex justify-center items-center z-10 w-full h-full bg-black bg-opacity-30"
+    class="flex justify-center items-center z-10 w-full h-full bg-black bg-opacity-30 dark:bg-gray-900 dark:bg-opacity-90"
   >
-    <div class="w-5/6 sm:w-3/6 bg-white rounded-lg">
+    <div
+      class="w-5/6 sm:w-3/6 bg-white dark:bg-gray-700 dark:text-slate-300 rounded-lg"
+    >
       <div class="flex justify-between p-3 sm:p-4 border-b border-slate-100">
         <div>{{ $t("HotKeyHelp.title") }}</div>
         <div class="cursor-pointer" @click="store.showHelp = false">X</div>

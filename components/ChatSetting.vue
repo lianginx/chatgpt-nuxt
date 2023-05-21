@@ -96,6 +96,16 @@
     </div>
 
     <!-- action buttons -->
+    <div>
+      <label class="space-x-3">
+        <span>{{ $t("ChatSetting.colorMode.label") }}</span>
+      </label>
+      <select v-model="setting.colorMode">
+        <option value="system">{{ $t("ChatSetting.colorMode.system") }}</option>
+        <option value="light">{{ $t("ChatSetting.colorMode.light") }}</option>
+        <option value="dark">{{ $t("ChatSetting.colorMode.dark") }}</option>
+      </select>
+    </div>
     <div class="space-x-3">
       <button class="main-button" @click="save">
         {{ $t("ChatSetting.save") }}
@@ -131,8 +141,11 @@ const setting = ref<ChatSettingOption>({
   azureApiVersion: useEnv ? undefined : "2023-05-15",
   temperature: useEnv ? Number(runtimeConfig.public.defaultTemperature) : 1,
   locale: i18n.getBrowserLocale()!,
+  colorMode: "system",
   type: "global",
 });
+
+const colorMode = useColorMode();
 
 onMounted(() => {
   setting.value = loadSetting() ?? setting.value;
@@ -143,6 +156,7 @@ async function save() {
   store.showSetting = false;
   await saveSetting(setting.value);
   i18n.setLocale(store.getLocale());
+  colorMode.preference = store.getColorMode();
   await store.openChat(store.chats[0]);
   await store.sendMessage({
     role: "user",
@@ -153,17 +167,17 @@ async function save() {
 
 <style scoped>
 label {
-  @apply block mb-2 text-sm font-medium text-gray-900;
+  @apply block mb-2 text-sm font-medium text-gray-900 dark:text-slate-300;
 }
 
 input[type="password"],
 input[type="text"],
 select {
-  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5;
+  @apply bg-gray-50 border border-gray-300 dark:border-gray-500 text-gray-900 dark:text-slate-300 dark:bg-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5;
 }
 
 input[type="range"] {
-  @apply w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer;
+  @apply w-full h-2 bg-gray-200 dark:bg-gray-500 rounded-lg appearance-none cursor-pointer;
 }
 
 button {
@@ -171,10 +185,10 @@ button {
 }
 
 .main-button {
-  @apply text-white bg-blue-700 hover:bg-blue-800;
+  @apply text-white dark:text-slate-300 bg-blue-700 hover:bg-blue-800;
 }
 
 .second-button {
-  @apply bg-white text-gray-900 hover:bg-gray-50 border shadow-sm;
+  @apply bg-white dark:bg-slate-400 text-gray-900 hover:bg-gray-50 dark:hover:bg-slate-300 border shadow-sm;
 }
 </style>

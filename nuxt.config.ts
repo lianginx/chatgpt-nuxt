@@ -12,7 +12,13 @@ export default defineNuxtConfig({
       defaultTemperature: "1",
     },
   },
-  modules: ["@nuxtjs/i18n", "@nuxtjs/tailwindcss", "@pinia/nuxt", "nuxt-icon"],
+  modules: [
+    "@nuxtjs/color-mode",
+    "@nuxtjs/i18n",
+    "@nuxtjs/tailwindcss",
+    "@pinia/nuxt",
+    "nuxt-icon",
+  ],
   css: ["highlight.js/styles/dark.css"],
   i18n: {
     locales: [
@@ -48,9 +54,13 @@ export default defineNuxtConfig({
   },
   tailwindcss: {
     config: {
+      darkMode: "class",
       content: [],
       plugins: [require("@tailwindcss/typography")],
     },
+  },
+  colorMode: {
+    classSuffix: "",
   },
   ssr: false,
 });

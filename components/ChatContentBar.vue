@@ -3,7 +3,9 @@
     <ChatTitleBar />
     <ChatMessageList class="flex-1" v-if="store.messages.length" />
     <ChatWelcome class="flex-1" v-else />
-    <div class="absolute sm:pb-2 bottom-0 left-0 right-0 bg-gradient-to-t from-white">
+    <div
+      class="absolute sm:pb-2 bottom-0 left-0 right-0 bg-gradient-to-t from-white dark:from-gray-700"
+    >
       <ChatStop v-show="store.talking" />
       <ChatSendBar />
     </div>

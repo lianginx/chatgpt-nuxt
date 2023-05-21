@@ -35,6 +35,12 @@
     },
     "temperature": "temperature",
     "language": "Language",
+    "colorMode": {
+      "label": "Color",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
     "save": "Save",
     "back": "Back",
     "initialMessage": "Hey! Can you hear me?"

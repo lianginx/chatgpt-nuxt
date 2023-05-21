@@ -6,8 +6,8 @@
         class="prose break-words px-3 py-2 rounded-lg text-sm sm:text-base overflow-x-auto"
         :class="
           item.role === 'user'
-            ? 'ml-auto bg-blue-500 text-white prose-invert'
-            : 'mr-auto bg-slate-100 text-slate-700'
+            ? 'ml-auto bg-blue-500 dark:bg-blue-700 text-white dark:text-slate-200 prose-invert'
+            : 'mr-auto bg-slate-100 dark:bg-slate-500 text-slate-700 dark:text-slate-200'
         "
         v-html="md.render(getContent(item))"
       />

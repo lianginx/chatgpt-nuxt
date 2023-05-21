@@ -1,7 +1,7 @@
 <template>
   <div class="relative m-4 mt-3 sm:mb-2 pointer-events-auto">
     <textarea
-      class="w-full max-h-60 p-1.5 pl-3 pr-10 resize-none border rounded-lg outline-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-40"
+      class="w-full max-h-60 p-1.5 pl-3 pr-10 resize-none border rounded-lg outline-blue-500 dark:bg-gray-700 dark:text-slate-300 focus:ring focus:ring-blue-200 focus:ring-opacity-40"
       rows="3"
       ref="textareaDom"
       v-model="store.messageContent"

@@ -35,6 +35,12 @@
     },
     "temperature": "temperature",
     "language": "语言",
+    "colorMode": {
+      "label": "配色",
+      "system": "系统",
+      "light": "浅色",
+      "dark": "深色"
+    },
     "save": "保存",
     "back": "返回",
     "initialMessage": "嘿！能听到我说话吗？"

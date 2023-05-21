@@ -35,6 +35,12 @@
     },
     "temperature": "temperature",
     "language": "言語",
+    "colorMode": {
+      "label": "配色",
+      "system": "システム",
+      "light": "ライト",
+      "dark": "ダーク"
+    },
     "save": "保存",
     "back": "戻る",
     "initialMessage": "こんにちは、私の声が聞こえますか？"
