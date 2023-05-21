@@ -5,8 +5,8 @@
     </div>
     <div
       :class="[
-        'group bar-btn flex justify-between',
-        { 'bg-slate-200': store.chat === item },
+        'group bar-btn flex justify-between dark:hover:text-gray-600',
+        { 'bg-slate-200 dark:bg-gray-700': store.chat === item },
       ]"
       v-for="item in store.chats"
       :key="item.id"

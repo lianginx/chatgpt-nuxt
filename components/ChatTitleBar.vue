@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex justify-between items-center bg-white h-14 sm:h-16 pl-2 sm:px-4 border-b"
+    class="flex justify-between items-center bg-white dark:bg-gray-700 dark:text-slate-300 h-14 sm:h-16 pl-2 sm:px-4 border-b"
   >
     <div class="flex items-center space-x-2">
-      <Message size="24" theme="filled" />
+      <Message size="24" />
       <input
         ref="titleInputDom"
         class="border px-2 py-1 rounded-md"
@@ -19,13 +19,19 @@
       </div>
     </div>
     <div class="flex items-center">
-      <div class="icon-btn" @click="store.showHelp = true">
+      <div
+        class="icon-btn dark:hover:text-gray-600"
+        @click="store.showHelp = true"
+      >
         <Help size="22" />
       </div>
-      <div class="icon-btn" @click="clearMessages">
+      <div class="icon-btn dark:hover:text-gray-600" @click="clearMessages">
         <Clear size="22" />
       </div>
-      <div class="icon-btn block sm:hidden" @click="store.showSetting = true">
+      <div
+        class="icon-btn block sm:hidden dark:hover:text-gray-600"
+        @click="store.showSetting = true"
+      >
         <SettingOne size="22" />
       </div>
     </div>

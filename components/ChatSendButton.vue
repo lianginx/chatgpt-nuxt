@@ -2,7 +2,11 @@
   <div>
     <button class="rounded-md cursor-pointer" :disabled="isTalking">
       <Telegram
-        :class="isTalking ? 'text-slate-300' : 'text-blue-600'"
+        :class="
+          isTalking
+            ? 'text-slate-300 dark:text-slate-400'
+            : 'text-blue-600 dark:text-blue-500'
+        "
         size="24"
       />
       <span class="sr-only">{{ $t("ChatSendButton.label") }}</span>

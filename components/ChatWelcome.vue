@@ -5,12 +5,12 @@
     <div class="sm:flex-1 space-y-4" v-for="item of examples">
       <div class="flex flex-col items-center space-y-2">
         <component class="text-slate-400" :is="item.icon" size="20" />
-        <div class="font-bold text-base">
+        <div class="font-bold text-base dark:text-slate-300">
           {{ $t(`ChatWelcome.${item.id}.title`) }}
         </div>
       </div>
       <div
-        class="flex justify-center items-center p-2 h-20 rounded bg-slate-100 hover:bg-slate-200 text-center cursor-pointer"
+        class="flex justify-center items-center p-2 h-20 rounded bg-slate-100 dark:bg-slate-800 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 text-center cursor-pointer"
         v-for="exa of ($tm(`ChatWelcome.${item.id}.examples`) as ChatMessageTemplate[])"
         @click="sendMessage(exa.message)"
       >

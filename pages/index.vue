@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex w-screen h-screen overflow-hidden text-slate-700 text-sm sm:text-base"
+    class="flex w-screen h-screen overflow-hidden dark:bg-gray-700 text-slate-700 text-sm sm:text-base"
   >
     <HotKeyHelp
       class="absolute"
@@ -34,12 +34,15 @@ useHead({
   ],
 });
 
+const colorMode = useColorMode();
+
 // 页面初始化
 
 onMounted(() => initPage());
 
 async function initPage() {
   i18n.setLocale(locale.value);
+  colorMode.preference = store.getColorMode();
   if (!loadSetting()) store.showSetting = true;
   await store.setNotActiveDbMessages();
   await store.getAllChats();

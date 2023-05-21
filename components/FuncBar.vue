@@ -1,7 +1,7 @@
 <template>
   <div class="pt-2 border-t">
     <div
-      class="bar-btn"
+      class="bar-btn dark:hover:text-gray-600"
       v-for="item in funcs"
       :key="item.type"
       @click="clickBtn(item.type)"

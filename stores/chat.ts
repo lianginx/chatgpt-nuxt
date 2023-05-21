@@ -262,6 +262,13 @@ export const useChatStore = defineStore("chat", () => {
     return (setting && setting.locale) ?? i18n.getBrowserLocale() ?? "en";
   }
 
+  // color mode
+
+  function getColorMode() {
+    const setting = loadSetting();
+    return (setting && setting.colorMode) ?? "system";
+  }
+
   return {
     showSetting,
     showHelp,
@@ -283,5 +290,6 @@ export const useChatStore = defineStore("chat", () => {
     appendMessage: createMessage,
     sendMessage,
     getLocale,
+    getColorMode,
   };
 });

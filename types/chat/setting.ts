@@ -2,6 +2,8 @@ export type ChatSettingType = "default" | "global" | "chat";
 
 export type ApiType = "openai" | "azure";
 
+export type ColorMode = "system" | "light" | "dark";
+
 export interface ChatSettingItem extends ChatSettingOption {
   id: number;
 }
@@ -18,4 +20,5 @@ export interface ChatSetting {
   azureDeploymentId?: string;
   temperature: number;
   locale: string;
+  colorMode: ColorMode;
 }
