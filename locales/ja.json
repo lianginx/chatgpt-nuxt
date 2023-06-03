@@ -25,13 +25,17 @@
       "label": "API エンドポイント",
       "placeholder": "https://YOUR_RESOURCE_NAME.openai.azure.com/"
     },
-    "azureDeploymentId": {
-      "label": "モデルのデプロイ名",
-      "placeholder": "入力してください"
+    "azureGpt35DeploymentId": {
+      "label": "GPT-3.5モデルのデプロイ名",
+      "placeholder": "gpt-35-turbo"
+    },
+    "azureGpt4DeploymentId": {
+      "label": "GPT-4モデルのデプロイ名",
+      "placeholder": "gpt-4"
     },
     "azureApiVersion": {
       "label": "Azure OpenAI Service の API バージョン",
-      "placeholder": "入力してください"
+      "placeholder": "2023-05-15"
     },
     "temperature": "temperature",
     "language": "言語",

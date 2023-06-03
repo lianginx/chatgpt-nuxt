@@ -4,8 +4,10 @@ import {
   ChatItem,
   ChatMessageExItem,
   ChatMessageExOption,
+  ChatModel,
   ChatOption,
 } from "@/types";
+import { ListModelsResponse, Model } from "openai";
 
 export const useChatStore = defineStore("chat", () => {
   const decoder = new TextDecoder("utf-8");
@@ -17,6 +19,8 @@ export const useChatStore = defineStore("chat", () => {
 
   const showSetting = ref(false);
   const showHelp = ref(false);
+
+  const models = ref<Model[]>([]);
 
   const chats = ref<ChatItem[]>([]);
   const chat = ref<ChatItem>();
@@ -46,12 +50,13 @@ export const useChatStore = defineStore("chat", () => {
     // 没有则创建
     if (!chats.value.length) {
       await createChat();
-    } else {
+    } else if (!chat.value) {
       await openChat(chats.value[0]);
     }
   }
 
   async function createChat(item?: ChatOption) {
+    chat.value = undefined;
     const chatItem: ChatOption = item ?? { name: "New Chat", order: 0 };
     await db.chat.put({ ...chatItem });
 
@@ -75,6 +80,61 @@ export const useChatStore = defineStore("chat", () => {
 
   async function reChatName(chatId: number, name: string) {
     await db.chat.update(chatId, { name });
+    await getAllChats();
+    const chat = chats.value.find((item) => item.id === chatId);
+    if (chat) openChat(chat);
+  }
+
+  // model
+
+  async function getAvailableModels() {
+    const setting = loadSetting();
+    if (!setting) {
+      showSetting.value = true;
+      return;
+    }
+
+    controller = new AbortController();
+    try {
+      const response = await fetch("/api/chat", {
+        method: "post",
+        body: JSON.stringify({
+          apiType: setting.apiType,
+          cipherAPIKey: setting.apiKey,
+          apiHost: setting.apiHost,
+          azureApiVersion: setting.azureApiVersion,
+          azureGpt35DeploymentId: setting.azureGpt35DeploymentId,
+          azureGpt4DeploymentId: setting.azureGpt4DeploymentId,
+          model: "models",
+          request: {},
+        } as ApiRequest),
+        signal: controller.signal,
+      });
+      const listModelsResponse: ListModelsResponse = await response.json();
+      models.value = listModelsResponse.data;
+    } catch (e: any) {
+      console.error(e);
+    }
+  }
+
+  async function isGpt4Supported() {
+    if (!models.value.length) {
+      await getAvailableModels();
+    }
+    return models.value.findIndex((model) => model.id === "gpt-4") > -1;
+  }
+
+  function getChatModelNameById(id: ChatModel) {
+    switch (id) {
+      case "gpt-3.5-turbo":
+        return "GPT-3.5";
+      case "gpt-4":
+        return "GPT-4";
+    }
+  }
+
+  async function changeChatModel(chatId: number, model: ChatModel) {
+    await db.chat.update(chatId, { model });
     await getAllChats();
     const chat = chats.value.find((item) => item.id === chatId);
     if (chat) openChat(chat);
@@ -186,13 +246,11 @@ export const useChatStore = defineStore("chat", () => {
           cipherAPIKey: setting.apiKey,
           apiHost: setting.apiHost,
           azureApiVersion: setting.azureApiVersion,
-          azureDeploymentId: setting.azureDeploymentId,
+          azureGpt35DeploymentId: setting.azureGpt35DeploymentId,
+          azureGpt4DeploymentId: setting.azureGpt4DeploymentId,
           model: "chat",
           request: {
-            model:
-              setting.apiType === "openai"
-                ? "gpt-3.5-turbo"
-                : setting.azureDeploymentId,
+            model: chat.value?.model ?? "gpt-3.5-turbo",
             messages: standardList.value,
             temperature: setting.temperature,
             stream: true,
@@ -281,6 +339,10 @@ export const useChatStore = defineStore("chat", () => {
     stop,
     openChat,
     reChatName,
+    getAvailableModels,
+    isGpt4Supported,
+    getChatModelNameById,
+    changeChatModel,
     setNotActiveDbMessages,
     getChatMessages,
     getAllChats,

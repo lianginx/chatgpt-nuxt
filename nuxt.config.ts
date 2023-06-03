@@ -5,7 +5,8 @@ export default defineNuxtConfig({
     apiKey: "",
     apiHost: "",
     azureApiVersion: "2023-05-15",
-    azureDeploymentId: "",
+    azureGpt35DeploymentId: "",
+    azureGpt4DeploymentId: "",
     public: {
       useEnv: "no",
       apiType: "openai",

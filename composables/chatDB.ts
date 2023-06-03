@@ -15,7 +15,14 @@ import {
 const databaseName = "ChatGPT";
 const lastVersion = 2;
 
-const chat = ["++id", "promptId", "settingId", "name", "order"].toString();
+const chat = [
+  "++id",
+  "promptId",
+  "settingId",
+  "name",
+  "model",
+  "order",
+].toString();
 const message = [
   "++id",
   "chatId",

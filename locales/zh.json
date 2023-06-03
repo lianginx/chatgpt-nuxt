@@ -25,13 +25,17 @@
       "label": "API Endpoint",
       "placeholder": "https://YOUR_RESOURCE_NAME.openai.azure.com/"
     },
-    "azureDeploymentId": {
-      "label": "模型的部署名称",
-      "placeholder": "请输入"
+    "azureGpt35DeploymentId": {
+      "label": "GPT-3.5模型的部署名称",
+      "placeholder": "gpt-35-turbo"
+    },
+    "azureGpt4DeploymentId": {
+      "label": "GPT-4模型的部署名称",
+      "placeholder": "gpt-4"
     },
     "azureApiVersion": {
       "label": "Azure OpenAI Service 的 API 版本",
-      "placeholder": "请输入"
+      "placeholder": "2023-05-15"
     },
     "temperature": "temperature",
     "language": "语言",
