@@ -29,7 +29,7 @@ yarn
 
 ## 开发服务器
 
-启动开发服务器并在 http://localhost:3000 上查看它：
+启动开发服务器并在 <http://localhost:3000> 上查看它：
 
 ```bash
 npm run dev

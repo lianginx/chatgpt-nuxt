@@ -29,7 +29,7 @@ yarn
 
 ## Development Server
 
-Launch the development server and view it at http://localhost:3000:
+Launch the development server and view it at <http://localhost:3000>:
 
 ```bash
 npm run dev
