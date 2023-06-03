@@ -56,13 +56,23 @@
           />
         </div>
 
-        <!-- Azure Deployment ID -->
+        <!-- Azure Deployment ID (GPT-3.5) -->
         <div>
-          <label>{{ $t("ChatSetting.azureDeploymentId.label") }}</label>
+          <label>{{ $t("ChatSetting.azureGpt35DeploymentId.label") }}</label>
           <input
             type="text"
-            :placeholder="$t('ChatSetting.azureDeploymentId.placeholder')"
-            v-model.trim="setting.azureDeploymentId"
+            :placeholder="$t('ChatSetting.azureGpt35DeploymentId.placeholder')"
+            v-model.trim="setting.azureGpt35DeploymentId"
+          />
+        </div>
+
+        <!-- Azure Deployment ID (GPT-4) -->
+        <div>
+          <label>{{ $t("ChatSetting.azureGpt4DeploymentId.label") }}</label>
+          <input
+            type="text"
+            :placeholder="$t('ChatSetting.azureGpt4DeploymentId.placeholder')"
+            v-model.trim="setting.azureGpt4DeploymentId"
           />
         </div>
       </template>
@@ -137,7 +147,8 @@ const setting = ref<ChatSettingOption>({
   apiType: useEnv ? (runtimeConfig.public.apiType as ApiType) : "openai",
   apiKey: useEnv ? undefined : "",
   apiHost: useEnv ? undefined : "",
-  azureDeploymentId: useEnv ? undefined : "",
+  azureGpt35DeploymentId: useEnv ? undefined : "",
+  azureGpt4DeploymentId: useEnv ? undefined : "",
   azureApiVersion: useEnv ? undefined : "2023-05-15",
   temperature: useEnv ? Number(runtimeConfig.public.defaultTemperature) : 1,
   locale: i18n.getBrowserLocale()!,
@@ -157,6 +168,7 @@ async function save() {
   await saveSetting(setting.value);
   i18n.setLocale(store.getLocale());
   colorMode.preference = store.getColorMode();
+  await store.getAvailableModels();
   await store.openChat(store.chats[0]);
   await store.sendMessage({
     role: "user",

@@ -73,13 +73,11 @@ async function generateChatTitle(content: string) {
       cipherAPIKey: setting.apiKey,
       apiHost: setting.apiHost,
       azureApiVersion: setting.azureApiVersion,
-      azureDeploymentId: setting.azureDeploymentId,
+      azureGpt35DeploymentId: setting.azureGpt35DeploymentId,
+      azureGpt4DeploymentId: setting.azureGpt4DeploymentId,
       model: "chat",
       request: {
-        model:
-          setting.apiType === "openai"
-            ? "gpt-3.5-turbo"
-            : setting.azureDeploymentId,
+        model: "gpt-3.5-turbo",
         messages: [
           {
             role: "user",

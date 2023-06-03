@@ -7,7 +7,7 @@ import {
 import { OpenAIApi, Configuration } from "openai";
 import { aesCrypto } from "@/server/api/crypto";
 import { AxiosRequestConfig } from "axios";
-import { ApiRequest } from "@/types";
+import { ApiRequest, ChatModel } from "@/types";
 
 const runtimeConfig = useRuntimeConfig();
 
@@ -57,10 +57,31 @@ async function hiOpenAPI(body: ApiRequest) {
   const azureApiVersion = useEnv
     ? runtimeConfig.azureApiVersion
     : body.azureApiVersion;
-  const azureDeploymentId = useEnv
-    ? runtimeConfig.azureDeploymentId
-    : body.azureDeploymentId;
+  const azureGpt35DeploymentId = useEnv
+    ? runtimeConfig.azureGpt35DeploymentId
+    : body.azureGpt35DeploymentId;
+  const azureGpt4DeploymentId = useEnv
+    ? runtimeConfig.azureGpt4DeploymentId
+    : body.azureGpt4DeploymentId;
+
   const { model, request } = body;
+
+  // Identify the model ID of the Azure OpenAI Service from the OpenAI model name
+  let azureDeploymentId = "";
+  if (model === "chat") {
+    switch ((request as CreateChatCompletionRequest).model as ChatModel) {
+      case "gpt-3.5-turbo":
+        azureDeploymentId = azureGpt35DeploymentId;
+        break;
+      case "gpt-4":
+        azureDeploymentId = azureGpt4DeploymentId;
+        break;
+    }
+  } else if (model === "text") {
+    // TODO: Support completion model
+  } else if (model === "img") {
+    // TODO: Support DALL-E model
+  }
 
   const azureOptions =
     apiType === "azure"
@@ -94,6 +115,57 @@ async function hiOpenAPI(body: ApiRequest) {
   };
 
   switch (model) {
+    case "models":
+      switch (apiType) {
+        // Fetch available models from OpenAI API
+        case "openai":
+          return openai.listModels();
+
+        // Generate response compatible with the list of models response from the OpenAI API.
+        case "azure":
+          const gpt35ModelData = {
+            id: "gpt-3.5-turbo",
+            object: "model",
+            owned_by: "",
+            permission: [],
+          };
+          const gpt4ModelData = {
+            id: "gpt-4",
+            object: "model",
+            owned_by: "",
+            permission: [],
+          };
+          const availableModels = [gpt35ModelData];
+          if (azureGpt4DeploymentId) {
+            availableModels.push(gpt4ModelData);
+          }
+
+          // Generate response compatible with openai.ListModelsResponse
+          const responseData = {
+            data: availableModels,
+            object: "list",
+          };
+
+          // Generate response compatible with AxiosResponse
+          return {
+            data: responseData,
+            status: 200,
+            statusText: "OK",
+            config: {},
+            request: {},
+          };
+
+        // Unknown API Type
+        default:
+          // Generate error response compatible with AxiosResponse
+          return {
+            data: {},
+            status: 400,
+            statusText: "Bad Request",
+            config: {},
+            request: {},
+          };
+      }
     case "chat":
       return openai.createChatCompletion(
         request as CreateChatCompletionRequest,

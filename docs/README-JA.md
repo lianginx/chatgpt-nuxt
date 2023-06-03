@@ -4,8 +4,18 @@
 
 [ENGLISH](/README.md) | [简体中文](/docs/README-CN.md) | 日本語
 
-OpenAI の[ChatGPT](https://openai.com/blog/chatgpt)用に[Nuxt 3](https://nuxt.com/)で実装したフロントエンドアプリケーションです。  
-[OpenAI API](https://openai.com/blog/openai-api)はもちろん、[Azure Open AI Service API](https://learn.microsoft.com/ja-jp/azure/cognitive-services/openai/reference)もサポートしています。
+OpenAI 社の [ChatGPT](https://openai.com/blog/chatgpt) の API を使用するために [Nuxt 3](https://nuxt.com/) で実装したフロントエンドアプリケーションです。
+
+## 対応 API
+
+- [OpenAI API](https://openai.com/blog/openai-api)
+- [Azure Open AI Service API](https://learn.microsoft.com/ja-jp/azure/cognitive-services/openai/reference)
+
+## 対応モデル
+
+- Chat completion
+  - gpt-4
+  - gpt-3.5-turbo
 
 ## セットアップ
 
@@ -66,17 +76,7 @@ docker-compose down  # 停止＆削除
 - アプリケーション上の設定画面で設定する
 - あらかじめ環境変数に設定を定義しておく
 
-環境変数を設定する場合は、`.env.example`を参考にして作成した`.env`ファイルをルートディレクトリに配置して下さい。
-
-| 環境変数                        | 期待値の例                                    | 説明                                                                                                 |
-| ------------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| NUXT_PUBLIC_USE_ENV             | `yes` または `no`                             | 環境変数を使用するか否か                                                                             |
-| NUXT_PUBLIC_API_TYPE            | `openai` または `azure`                       | API 種別                                                                                             |
-| NUXT_API_KEY                    |                                               | OpenAI または Azure Open AI Service との認証に使用する API キー                                      |
-| NUXT_PUBLIC_DEFAULT_TEMPERATURE | `0.0` - `2.0`                                 | 値を大きくすると、出力結果はよりランダムになり、値を小さくするとよりフォーカスされて決定的になります |
-| NUXT_API_HOST                   | `https://YOUR_RESOURCE_NAME.openai.azure.com` | Azure OpenAI Service のエンドポイント                                                                |
-| NUXT_AZURE_API_VERSION          | `2023-05-15`                                  | Azure OpenAI Service の API バージョン                                                               |
-| NUXT_AZURE_DEPLOYMENT_ID        |                                               | Azure OpenAI Service のモデルのデプロイ名                                                            |
+環境変数を設定する場合は、[`.env.example`](/.env.example) を参考にして作成した `.env` ファイルをルートディレクトリに配置して下さい。
 
 ## ライセンス
 

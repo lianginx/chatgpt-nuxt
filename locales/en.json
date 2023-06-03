@@ -25,13 +25,17 @@
       "label": "API Endpoint",
       "placeholder": "https://YOUR_RESOURCE_NAME.openai.azure.com/"
     },
-    "azureDeploymentId": {
-      "label": "Deployment name of the model",
-      "placeholder": "Pleas input."
+    "azureGpt35DeploymentId": {
+      "label": "Deployment name of the GPT-3.5 model",
+      "placeholder": "gpt-35-turbo"
+    },
+    "azureGpt4DeploymentId": {
+      "label": "Deployment name of the GPT-4 model",
+      "placeholder": "gpt-4"
     },
     "azureApiVersion": {
       "label": "API version of Azure OpenAI Service",
-      "placeholder": "Pleas input."
+      "placeholder": "2023-05-15"
     },
     "temperature": "temperature",
     "language": "Language",

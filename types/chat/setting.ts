@@ -17,7 +17,8 @@ export interface ChatSetting {
   apiKey?: string;
   apiHost?: string;
   azureApiVersion?: string;
-  azureDeploymentId?: string;
+  azureGpt35DeploymentId?: string;
+  azureGpt4DeploymentId?: string;
   temperature: number;
   locale: string;
   colorMode: ColorMode;

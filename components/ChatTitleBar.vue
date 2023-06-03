@@ -14,9 +14,14 @@
         @focusout="exitEditing"
         @keydown.enter="exitEditing"
       />
-      <div class="w-full text-lg" v-else @dblclick="enterEditing">
+      <div class="max-w-full text-lg" v-else @dblclick="enterEditing">
         {{ title }}
       </div>
+      <span
+        class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-600 px-2 py-1 text-xs font-medium text-gray-600 dark:text-slate-300 ring-1 ring-inset ring-gray-500/10"
+      >
+        {{ model }}
+      </span>
     </div>
     <div class="flex items-center">
       <div
@@ -52,6 +57,10 @@ const clearConfirmMessage = i18n.t("ChatTitleBar.clearMessages.confirm");
 
 const title = computed(
   () => store.chat?.name ?? i18n.t("ChatTitleBar.initialTitle")
+);
+
+const model = computed(() =>
+  store.getChatModelNameById(store.chat?.model ?? "gpt-3.5-turbo")
 );
 
 function enterEditing() {
