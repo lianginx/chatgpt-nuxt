@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col p-6 space-y-6">
+  <div class="flex flex-col p-6 space-y-6 overflow-y-scroll">
     <template v-if="useRuntimeConfig().public.useEnv === 'no'">
       <!-- API Type -->
       <div>
