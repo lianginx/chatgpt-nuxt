@@ -7,7 +7,7 @@ import {
   ChatModel,
   ChatOption,
 } from "@/types";
-import { ListModelsResponse, Model } from "openai";
+import { ImagesResponse, ListModelsResponse, Model } from "openai";
 
 export const useChatStore = defineStore("chat", () => {
   const decoder = new TextDecoder("utf-8");
@@ -61,6 +61,17 @@ export const useChatStore = defineStore("chat", () => {
     await db.chat.put({ ...chatItem });
 
     // 加载列表并打开第一个
+    await getAllChats();
+  }
+
+  async function createImageChat(item?: ChatOption) {
+    chat.value = undefined;
+    const chatItem: ChatOption = item ?? {
+      name: "New Image",
+      model: "dall-e",
+      order: 0,
+    };
+    await db.chat.put({ ...chatItem });
     await getAllChats();
   }
 
@@ -130,6 +141,8 @@ export const useChatStore = defineStore("chat", () => {
         return "GPT-3.5";
       case "gpt-4":
         return "GPT-4";
+      case "dall-e":
+        return "DALL·E";
     }
   }
 
@@ -313,6 +326,79 @@ export const useChatStore = defineStore("chat", () => {
     }
   }
 
+  async function sendImageRequestMessage(message: ChatMessageExOption) {
+    if (talking.value) return;
+    if (!message?.content.trim()) return;
+
+    const chatId = message.chatId ?? chat.value?.id;
+
+    if (!chatId) return;
+
+    const setting = loadSetting();
+    if (!setting) {
+      showSetting.value = true;
+      return;
+    }
+
+    clearSendMessageContent();
+    startTalking(chatId);
+
+    await createMessage(message);
+    const assistantMessageId = await createMessage({
+      role: "assistant",
+      content: "",
+      chatId,
+    });
+
+    controller = new AbortController();
+
+    try {
+      console.log(standardList.value);
+
+      const response = await fetch("/api/chat", {
+        method: "post",
+        body: JSON.stringify({
+          apiType: setting.apiType,
+          cipherAPIKey: setting.apiKey,
+          apiHost: setting.apiHost,
+          azureApiVersion: setting.azureApiVersion,
+          azureGpt35DeploymentId: setting.azureGpt35DeploymentId,
+          azureGpt4DeploymentId: setting.azureGpt4DeploymentId,
+          model: "img",
+          request: {
+            prompt: message.content,
+            n: 1, // TODO: Using the specified number provided by the user.
+            size: "256x256", // TODO: Using the specified size provided by the user.
+          },
+        } as ApiRequest),
+        signal: controller.signal,
+      });
+
+      if (response.status !== 200) {
+        const error = response.statusText;
+        return await makeErrorMessage(assistantMessageId, error);
+      }
+
+      const imagesResponse: ImagesResponse = await response.json();
+      const imagesResponseDataInner = imagesResponse.data;
+
+      let content = "";
+      imagesResponseDataInner.forEach((img) => {
+        content += `![image](${img.url}) `;
+      });
+      await updateMessageContent(assistantMessageId, content);
+    } catch (e: any) {
+      await makeErrorMessage(
+        assistantMessageId,
+        `\n\n**${
+          e.name === "AbortError" ? i18n.t("ChatStop.message") : e.message
+        }**`
+      );
+    } finally {
+      endTalking(chatId);
+    }
+  }
+
   // locale
 
   function getLocale() {
@@ -347,10 +433,12 @@ export const useChatStore = defineStore("chat", () => {
     getChatMessages,
     getAllChats,
     createChat,
+    createImageChat,
     clearMessages,
     removeChat,
     appendMessage: createMessage,
     sendMessage,
+    sendImageRequestMessage,
     getLocale,
     getColorMode,
   };

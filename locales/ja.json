@@ -7,7 +7,8 @@
     "placeholder": "入力してください"
   },
   "ChatList": {
-    "conversations": "会話"
+    "conversations": "会話",
+    "images": "画像"
   },
   "ChatSendBar": {
     "placeholder": "メッセージを入力して [Enter] で送信、 [Shift] + [Enter] で改行します。"
@@ -166,6 +167,7 @@
   },
   "FuncBar": {
     "chat": "新規チャット",
+    "image": "新規イメージ",
     "setting": "設定",
     "github": "プロジェクト"
   },

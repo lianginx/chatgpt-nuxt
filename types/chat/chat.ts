@@ -1,6 +1,6 @@
 import { ChatPromptCategoryItem, ChatSettingItem } from "@/types";
 
-export type ChatModel = "gpt-3.5-turbo" | "gpt-4";
+export type ChatModel = "gpt-3.5-turbo" | "gpt-4" | "dall-e";
 
 export interface ChatItem extends ChatOption {
   id: number;

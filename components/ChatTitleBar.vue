@@ -3,7 +3,8 @@
     class="flex justify-between items-center bg-white dark:bg-gray-700 dark:text-slate-300 h-14 sm:h-16 pl-2 sm:px-4 border-b"
   >
     <div class="flex items-center space-x-2">
-      <Message size="24" />
+      <Picture v-if="store.chat?.model === 'dall-e'" size="24" />
+      <Message v-else size="24" />
       <input
         ref="titleInputDom"
         class="border px-2 py-1 rounded-md"
@@ -44,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { Message, Clear, SettingOne, Help } from "@icon-park/vue-next";
+import { Picture, Message, Clear, SettingOne, Help } from "@icon-park/vue-next";
 import { useChatStore } from "@/stores/chat";
 import { ChatItem } from "@/types";
 

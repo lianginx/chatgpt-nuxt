@@ -19,6 +19,7 @@ import { useChatStore } from "@/stores/chat";
 const store = useChatStore();
 const funcs = [
   { type: "chat", icon: Plus },
+  { type: "image", icon: Plus },
   { type: "setting", icon: Setting },
   { type: "github", icon: Github },
 ];
@@ -26,6 +27,8 @@ const funcs = [
 async function clickBtn(type: string) {
   if (type === "chat") {
     store.createChat();
+  } else if (type === "image") {
+    store.createImageChat();
   } else if (type === "setting") {
     store.showSetting = true;
   } else if (type === "github") {

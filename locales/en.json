@@ -7,7 +7,8 @@
     "placeholder": "Pleas input."
   },
   "ChatList": {
-    "conversations": "Conversations"
+    "conversations": "Conversations",
+    "images": "Images"
   },
   "ChatSendBar": {
     "placeholder": "Type a message and press [Enter] to send, press [Shift]+[Enter] to start a new line."
@@ -166,6 +167,7 @@
   },
   "FuncBar": {
     "chat": "New Chat",
+    "image": "New Image",
     "setting": "Setting",
     "github": "Project"
   },

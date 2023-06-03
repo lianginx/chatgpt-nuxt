@@ -4,7 +4,7 @@
 
 [ENGLISH](/README.md) | 简体中文 | [日本語](/docs/README-JA.md)
 
-这是一个使用[Nuxt 3](https://nuxt.com/)实现的前端应用程序，用于 OpenAI 的[ChatGPT](https://openai.com/blog/chatgpt) API。
+这是一个使用[Nuxt 3](https://nuxt.com/)实现的前端应用程序，用于 OpenAI 的 [ChatGPT](https://openai.com/blog/chatgpt) 和 [DALL·E](https://openai.com/dall-e-2) API。
 
 ## 支持的 API
 
@@ -16,6 +16,8 @@
 - Chat completion
   - gpt-4
   - gpt-3.5-turbo
+- Image generation
+  - DALL·E
 
 ## 设置
 

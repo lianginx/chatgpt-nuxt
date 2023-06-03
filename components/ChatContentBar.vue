@@ -3,8 +3,10 @@
     <ChatTitleBar />
     <ChatMessageList class="flex-1" v-if="store.messages.length" />
     <template v-else>
-      <ChatModelSelector v-if="isGpt4Supported" />
-      <ChatWelcome class="flex-1" />
+      <template v-if="store.chat?.model !== 'dall-e'">
+        <ChatModelSelector v-if="isGpt4Supported" />
+        <ChatWelcome class="flex-1" />
+      </template>
     </template>
     <div
       class="absolute sm:pb-2 bottom-0 left-0 right-0 bg-gradient-to-t from-white dark:from-gray-700"

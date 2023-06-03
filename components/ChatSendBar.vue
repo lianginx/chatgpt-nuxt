@@ -44,11 +44,19 @@ watch(
 async function sendMessage() {
   if (!store.messageContent.trim()) return;
 
-  await store.sendMessage({
-    role: "user",
-    content: store.messageContent,
-    chatId: store.chat?.id,
-  });
+  if (store.chat?.model === "dall-e") {
+    await store.sendImageRequestMessage({
+      role: "user",
+      content: store.messageContent,
+      chatId: store.chat?.id,
+    });
+  } else {
+    await store.sendMessage({
+      role: "user",
+      content: store.messageContent,
+      chatId: store.chat?.id,
+    });
+  }
 }
 
 function enterInput(event: KeyboardEvent) {
