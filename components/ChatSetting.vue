@@ -168,12 +168,12 @@ onMounted(() => {
 
 async function save() {
   if (!useEnv && !setting.value.apiKey!.trim()) return;
-  store.showSetting = false;
   await saveSetting(setting.value);
   i18n.setLocale(store.getLocale());
   colorMode.preference = store.getColorMode();
   await store.getAvailableModels();
   await store.openChat(store.chats[0]);
+  store.showSetting = false;
   await store.sendMessage({
     role: "user",
     content: i18n.t("ChatSetting.initialMessage"),
