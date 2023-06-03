@@ -4,25 +4,29 @@
       <!-- API Type -->
       <div>
         <label>{{ $t("ChatSetting.apiType") }}</label>
-        <ul class="grid w-full gap-6 grid-cols-4">
-          <li v-for="apiType in apiTypes">
+        <div
+          class="inline-flex p-1 pr-0 max-w-fit h-fit bg-gray-100 dark:bg-gray-600 rounded-lg overflow-hidden"
+        >
+          <label
+            v-for="apiType in apiTypes"
+            :for="apiType.value"
+            class="radio-switch block mb-0 px-4 py-1 w-24 rounded-lg cursor-pointer text-center dark:text-slate-300 hover:bg-gray-400 hover:text-white dark:hover:bg-gray-700 dark:hover:text-slate-300 mr-1"
+            :class="
+              setting.apiType === apiType.value
+                ? 'bg-gray-500 dark:bg-gray-800 text-white dark:text-slate-300'
+                : ''
+            "
+          >
             <input
               type="radio"
+              class="hidden"
               v-model="setting.apiType"
               :id="apiType.value"
-              name="apiType"
               :value="apiType.value"
-              class="hidden peer"
-              required
             />
-            <label
-              :for="apiType.value"
-              class="inline-flex items-center text-center justify-between w-full p-2 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:bg-blue-500 peer-checked:text-white hover:text-gray-600 hover:bg-gray-100"
-            >
-              {{ apiType.label }}
-            </label>
-          </li>
-        </ul>
+            {{ apiType.label }}
+          </label>
+        </div>
       </div>
 
       <!-- API Key -->
@@ -178,7 +182,7 @@ async function save() {
 </script>
 
 <style scoped>
-label {
+label:not(.radio-switch) {
   @apply block mb-2 text-sm font-medium text-gray-900 dark:text-slate-300;
 }
 
