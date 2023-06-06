@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { useChatStore } from "@/stores/chat";
-import { ApiRequest } from "@/types";
+import { CreateChatCompletionRequest } from "openai";
 import hotkeys from "hotkeys-js";
 
 const store = useChatStore();
@@ -74,30 +74,30 @@ watch(
 async function generateChatTitle(content: string) {
   const setting = loadSetting();
   if (!setting) return "";
+  const headers = {
+    "x-api-type": setting.apiType,
+    "x-cipher-api-key": setting.apiKey ?? "",
+    "x-api-host": setting.apiHost ?? "",
+    "x-azure-api-version": setting.azureApiVersion ?? "",
+    "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
+    "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
+  };
 
-  const complete = await $fetch("/api/chat", {
+  const complete = await $fetch("/api/chat/completions", {
     method: "post",
+    headers,
     body: JSON.stringify({
-      apiType: setting.apiType,
-      cipherAPIKey: setting.apiKey,
-      apiHost: setting.apiHost,
-      azureApiVersion: setting.azureApiVersion,
-      azureGpt35DeploymentId: setting.azureGpt35DeploymentId,
-      azureGpt4DeploymentId: setting.azureGpt4DeploymentId,
-      model: "chat",
-      request: {
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "user",
-            content: `"""\n${content}\n"""\n${i18n.t("titlePrompt")}`,
-          },
-        ],
-      },
-    } as ApiRequest),
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content: `"""\n${content}\n"""\n${i18n.t("titlePrompt")}`,
+        },
+      ],
+    } as CreateChatCompletionRequest),
   });
 
-  return complete.choices[0].message.content.trim().replace(/\。$/, ""); // 移除末尾的句号
+  return complete.choices[0].message!.content.trim().replace(/\。$/, ""); // 移除末尾的句号
 }
 
 // 注册全局快捷键
