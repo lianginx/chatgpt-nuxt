@@ -1,6 +1,6 @@
 <template>
   <div
-    class="hidden sm:flex flex-col sm:visible max-w-[1/5] sm:w-1/5 overflow-hidden p-3 bg-slate-100 dark:bg-gray-900 dark:text-slate-300 select-none"
+    class="sm:flex flex-col w-full sm:w-[300px] overflow-hidden p-3 bg-slate-100 dark:bg-gray-900 dark:text-slate-300 select-none"
   >
     <LogoBar />
     <ChatList />
