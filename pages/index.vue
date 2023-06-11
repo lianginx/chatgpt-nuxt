@@ -6,9 +6,11 @@
       class="absolute"
       :class="store.showHelp ? 'visible' : 'invisible'"
     />
-    <ChatSideBar />
-    <ChatSetting class="flex-1" v-if="store.showSetting" />
-    <ChatContentBar class="flex-1" v-else />
+    <ChatSideBar id="sidebar" class="sm:visible" />
+    <template id="main" class="hidden sm:visible flex w-screen h-screen">
+      <ChatSetting class="flex-1" v-if="store.showSetting" />
+      <ChatContentBar class="flex-1" v-else />
+    </template>
   </div>
 </template>
 
@@ -43,6 +45,13 @@ onMounted(() => initPage());
 async function initPage() {
   i18n.setLocale(locale.value);
   colorMode.preference = store.getColorMode();
+
+  const clientWidth = document.body.clientWidth;
+  if (clientWidth >= 640) {
+    const mainContent = document.getElementById("main");
+    mainContent?.classList.remove("hidden");
+  }
+
   if (!loadSetting()) store.showSetting = true;
   await store.setNotActiveDbMessages();
   await store.getAllChats();
