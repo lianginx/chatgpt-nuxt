@@ -102,7 +102,7 @@ function createAxiosInstance() {
 
   function onResponseError(error: any) {
     logger("onResponseError", error);
-    return error;
+    return error.response;
   }
 
   const axiosInstance = axios.create(axiosRequestConfig);
