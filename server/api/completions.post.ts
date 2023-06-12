@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     setResStatus(event, response.status, response.statusText);
     return response.data;
   } catch (e: any) {
-    await errorHandler(event, e);
+    return await errorHandler(event, e);
   }
 });
 

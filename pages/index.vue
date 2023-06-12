@@ -58,7 +58,7 @@ watch(
     const chatId = store.chat.id;
     const title = await generateChatTitle(newValue[0].content);
 
-    store.reChatName(chatId, title);
+    if (title) store.reChatName(chatId, title);
   }
 );
 
@@ -74,21 +74,24 @@ async function generateChatTitle(content: string) {
     "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
   };
 
-  const complete = await $fetch("/api/chat/completions", {
-    method: "post",
-    headers,
-    body: JSON.stringify({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "user",
-          content: `"""\n${content}\n"""\n${i18n.t("titlePrompt")}`,
-        },
-      ],
-    } as CreateChatCompletionRequest),
-  });
-
-  return complete.choices[0].message!.content.trim().replace(/\。$/, ""); // 移除末尾的句号
+  try {
+    const complete = await $fetch("/api/chat/completions", {
+      method: "post",
+      headers,
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "user",
+            content: `"""\n${content}\n"""\n${i18n.t("titlePrompt")}`,
+          },
+        ],
+      } as CreateChatCompletionRequest),
+    });
+    return complete.choices[0].message!.content.trim().replace(/\。$/, ""); // 移除末尾的句号
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 // 注册全局快捷键

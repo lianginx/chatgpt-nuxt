@@ -248,17 +248,20 @@ export const useChatStore = defineStore("chat", () => {
       };
 
       // 发送请求
-      const { status, body } = await fetch("/api/chat/completions", {
-        method: "post",
-        headers,
-        body: JSON.stringify({
-          model: chat.value?.model ?? "gpt-3.5-turbo",
-          messages: standardList.value,
-          temperature: setting.temperature,
-          stream: true,
-        } as ApiRequest),
-        signal: controller.signal,
-      });
+      const { status, statusText, body } = await fetch(
+        "/api/chat/completions",
+        {
+          method: "post",
+          headers,
+          body: JSON.stringify({
+            model: chat.value?.model ?? "gpt-3.5-turbo",
+            messages: standardList.value,
+            temperature: setting.temperature,
+            stream: true,
+          } as ApiRequest),
+          signal: controller.signal,
+        }
+      );
 
       // 读取 Stream
       let content = "";
@@ -278,6 +281,7 @@ export const useChatStore = defineStore("chat", () => {
         // 处理服务端返回的异常消息并终止读取
         if (status !== 200) {
           const error = JSON.parse(text);
+          content += `${status}: ${statusText}\n`;
           content += error.error?.message ?? error.message;
           return await makeErrorMessage(assistantMessageId, content);
         }
