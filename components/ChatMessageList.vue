@@ -5,7 +5,7 @@
       :key="item.id"
       :item="item"
     />
-    <div class="h-32"></div>
+    <div class="h-32" />
   </div>
 </template>
 
