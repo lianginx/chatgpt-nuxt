@@ -360,21 +360,22 @@ export const useChatStore = defineStore("chat", () => {
     try {
       console.log(standardList.value);
 
-      const response = await fetch("/api/chat", {
+      const headers = {
+        "x-api-type": setting.apiType,
+        "x-cipher-api-key": setting.apiKey ?? "",
+        "x-api-host": setting.apiHost ?? "",
+        "x-azure-api-version": setting.azureApiVersion ?? "",
+        "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
+        "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
+      };
+
+      const response = await fetch("/api/images/generations", {
         method: "post",
+        headers,
         body: JSON.stringify({
-          apiType: setting.apiType,
-          cipherAPIKey: setting.apiKey,
-          apiHost: setting.apiHost,
-          azureApiVersion: setting.azureApiVersion,
-          azureGpt35DeploymentId: setting.azureGpt35DeploymentId,
-          azureGpt4DeploymentId: setting.azureGpt4DeploymentId,
-          model: "img",
-          request: {
-            prompt: message.content,
-            n: 1, // TODO: Using the specified number provided by the user.
-            size: "256x256", // TODO: Using the specified size provided by the user.
-          },
+          prompt: message.content,
+          n: 1, // TODO: Using the specified number provided by the user.
+          size: "256x256", // TODO: Using the specified size provided by the user.
         } as ApiRequest),
         signal: controller.signal,
       });
