@@ -27,10 +27,13 @@ const funcs = [
 async function clickBtn(type: string) {
   if (type === "chat") {
     store.createChat();
+    toggleSideBar();
   } else if (type === "image") {
     store.createImageChat();
+    toggleSideBar();
   } else if (type === "setting") {
     store.showSetting = true;
+    toggleSideBar();
   } else if (type === "github") {
     open("https://github.com/lianginx/chatgpt-nuxt", "_blank");
   }

@@ -68,6 +68,7 @@ const store = useChatStore();
 async function openChat(item: ChatItem) {
   store.$patch({ showSetting: false, chat: item });
   await store.getChatMessages(item.id);
+  toggleSideBar();
 }
 </script>
 

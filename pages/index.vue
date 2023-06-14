@@ -6,15 +6,17 @@
       class="absolute"
       :class="store.showHelp ? 'visible' : 'invisible'"
     />
-    <ChatSideBar />
-    <ChatSetting class="flex-1" v-if="store.showSetting" />
-    <ChatContentBar class="flex-1" v-else />
+    <ChatSideBar id="sidebar" class="sm:visible" />
+    <template id="main" class="hidden sm:visible flex w-screen h-screen">
+      <ChatSetting class="flex-1" v-if="store.showSetting" />
+      <ChatContentBar class="flex-1" v-else />
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useChatStore } from "@/stores/chat";
-import { ApiRequest } from "@/types";
+import { CreateChatCompletionRequest } from "openai";
 import hotkeys from "hotkeys-js";
 
 const store = useChatStore();
@@ -43,6 +45,13 @@ onMounted(() => initPage());
 async function initPage() {
   i18n.setLocale(locale.value);
   colorMode.preference = store.getColorMode();
+
+  const clientWidth = document.body.clientWidth;
+  if (clientWidth >= 640) {
+    const mainContent = document.getElementById("main");
+    mainContent?.classList.remove("hidden");
+  }
+
   if (!loadSetting()) store.showSetting = true;
   await store.setNotActiveDbMessages();
   await store.getAllChats();
@@ -58,25 +67,27 @@ watch(
     const chatId = store.chat.id;
     const title = await generateChatTitle(newValue[0].content);
 
-    store.reChatName(chatId, title);
+    if (title) store.reChatName(chatId, title);
   }
 );
 
 async function generateChatTitle(content: string) {
   const setting = loadSetting();
   if (!setting) return "";
+  const headers = {
+    "x-api-type": setting.apiType,
+    "x-cipher-api-key": setting.apiKey ?? "",
+    "x-api-host": setting.apiHost ?? "",
+    "x-azure-api-version": setting.azureApiVersion ?? "",
+    "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
+    "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
+  };
 
-  const complete = await $fetch("/api/chat", {
-    method: "post",
-    body: JSON.stringify({
-      apiType: setting.apiType,
-      cipherAPIKey: setting.apiKey,
-      apiHost: setting.apiHost,
-      azureApiVersion: setting.azureApiVersion,
-      azureGpt35DeploymentId: setting.azureGpt35DeploymentId,
-      azureGpt4DeploymentId: setting.azureGpt4DeploymentId,
-      model: "chat",
-      request: {
+  try {
+    const complete = await $fetch("/api/chat/completions", {
+      method: "post",
+      headers,
+      body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [
           {
@@ -84,11 +95,12 @@ async function generateChatTitle(content: string) {
             content: `"""\n${content}\n"""\n${i18n.t("titlePrompt")}`,
           },
         ],
-      },
-    } as ApiRequest),
-  });
-
-  return complete.choices[0].message.content.trim().replace(/\。$/, ""); // 移除末尾的句号
+      } as CreateChatCompletionRequest),
+    });
+    return complete.choices[0].message!.content.trim().replace(/\。$/, ""); // 移除末尾的句号
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 // 注册全局快捷键

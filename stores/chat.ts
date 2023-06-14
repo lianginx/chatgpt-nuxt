@@ -107,18 +107,18 @@ export const useChatStore = defineStore("chat", () => {
 
     controller = new AbortController();
     try {
-      const response = await fetch("/api/chat", {
-        method: "post",
-        body: JSON.stringify({
-          apiType: setting.apiType,
-          cipherAPIKey: setting.apiKey,
-          apiHost: setting.apiHost,
-          azureApiVersion: setting.azureApiVersion,
-          azureGpt35DeploymentId: setting.azureGpt35DeploymentId,
-          azureGpt4DeploymentId: setting.azureGpt4DeploymentId,
-          model: "models",
-          request: {},
-        } as ApiRequest),
+      const headers = {
+        "x-api-type": setting.apiType,
+        "x-cipher-api-key": setting.apiKey ?? "",
+        "x-api-host": setting.apiHost ?? "",
+        "x-azure-api-version": setting.azureApiVersion ?? "",
+        "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
+        "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
+      };
+
+      const response = await fetch("/api/models", {
+        method: "get",
+        headers,
         signal: controller.signal,
       });
       const listModelsResponse: ListModelsResponse = await response.json();
@@ -251,26 +251,30 @@ export const useChatStore = defineStore("chat", () => {
       // 打印标准列表
       console.log(standardList.value);
 
+      const headers = {
+        "x-api-type": setting.apiType,
+        "x-cipher-api-key": setting.apiKey ?? "",
+        "x-api-host": setting.apiHost ?? "",
+        "x-azure-api-version": setting.azureApiVersion ?? "",
+        "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
+        "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
+      };
+
       // 发送请求
-      const { status, body } = await fetch("/api/chat", {
-        method: "post",
-        body: JSON.stringify({
-          apiType: setting.apiType,
-          cipherAPIKey: setting.apiKey,
-          apiHost: setting.apiHost,
-          azureApiVersion: setting.azureApiVersion,
-          azureGpt35DeploymentId: setting.azureGpt35DeploymentId,
-          azureGpt4DeploymentId: setting.azureGpt4DeploymentId,
-          model: "chat",
-          request: {
+      const { status, statusText, body } = await fetch(
+        "/api/chat/completions",
+        {
+          method: "post",
+          headers,
+          body: JSON.stringify({
             model: chat.value?.model ?? "gpt-3.5-turbo",
             messages: standardList.value,
             temperature: setting.temperature,
             stream: true,
-          },
-        } as ApiRequest),
-        signal: controller.signal,
-      });
+          } as ApiRequest),
+          signal: controller.signal,
+        }
+      );
 
       // 读取 Stream
       let content = "";
@@ -290,6 +294,7 @@ export const useChatStore = defineStore("chat", () => {
         // 处理服务端返回的异常消息并终止读取
         if (status !== 200) {
           const error = JSON.parse(text);
+          content += `${status}: ${statusText}\n`;
           content += error.error?.message ?? error.message;
           return await makeErrorMessage(assistantMessageId, content);
         }
