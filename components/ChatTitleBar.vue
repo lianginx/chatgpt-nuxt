@@ -2,14 +2,14 @@
   <div
     class="flex justify-between items-center bg-white dark:bg-gray-700 dark:text-slate-300 h-14 sm:h-16 pl-2 sm:px-4 border-b"
   >
-    <div class="flex items-center space-x-2">
+    <div class="grow inline-flex items-center space-x-2">
       <div
-        class="icon-btn block sm:hidden dark:hover:text-gray-600"
+        class="icon-btn flex-none block sm:hidden dark:hover:text-gray-600"
         @click="toggleSideBar()"
       >
         <HamburgerButton size="22" />
       </div>
-      <div class="hidden sm:block">
+      <div class="flex-none hidden sm:block">
         <Message size="24" />
       </div>
       <input
@@ -22,16 +22,21 @@
         @focusout="exitEditing"
         @keydown.enter="exitEditing"
       />
-      <div class="max-w-full text-lg" v-else @dblclick="enterEditing">
-        {{ title }}
+      <div v-else class="grow flex inline-flex w-1">
+        <div
+          class="overflow-hidden whitespace-nowrap text-lg text-ellipsis"
+          @dblclick="enterEditing"
+        >
+          {{ title }}
+        </div>
+        <span
+          class="w-fit whitespace-nowrap inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-600 px-2 py-1 mx-2 text-xs font-medium text-gray-600 dark:text-slate-300 ring-1 ring-inset ring-gray-500/10"
+        >
+          {{ model }}
+        </span>
       </div>
-      <span
-        class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-600 px-2 py-1 text-xs font-medium text-gray-600 dark:text-slate-300 ring-1 ring-inset ring-gray-500/10"
-      >
-        {{ model }}
-      </span>
     </div>
-    <div class="flex items-center">
+    <div class="flex-none inline-flex items-center">
       <div
         class="icon-btn hidden sm:block dark:hover:text-gray-600"
         @click="store.showHelp = true"
