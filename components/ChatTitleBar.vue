@@ -52,7 +52,13 @@
 </template>
 
 <script setup lang="ts">
-import { HamburgerButton, Message, Clear, Help } from "@icon-park/vue-next";
+import {
+  HamburgerButton,
+  Picture,
+  Message,
+  Clear,
+  Help,
+} from "@icon-park/vue-next";
 import { useChatStore } from "@/stores/chat";
 import { ChatItem } from "@/types";
 
