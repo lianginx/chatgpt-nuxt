@@ -19,6 +19,7 @@ export interface ChatSetting {
   azureApiVersion?: string;
   azureGpt35DeploymentId?: string;
   azureGpt4DeploymentId?: string;
+  azureDalleDeploymentId?: string;
   temperature: number;
   locale: string;
   colorMode: ColorMode;

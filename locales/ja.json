@@ -36,6 +36,10 @@
       "label": "GPT-4モデルのデプロイ名",
       "placeholder": "gpt-4"
     },
+    "azureDalleDeploymentId": {
+      "label": "DALL·Eモデルのデプロイ名",
+      "placeholder": "dalle"
+    },
     "azureApiVersion": {
       "label": "Azure OpenAI Service の API バージョン",
       "placeholder": "2023-05-15"

@@ -29,6 +29,9 @@ function createOpenAIConfiguration(
   const azureGpt4DeploymentId = useEnv
     ? runtimeConfig.azureGpt4DeploymentId
     : headers["x-azure-gpt4-deployment-id"]!;
+  const azureDalleDeploymentId = useEnv
+    ? runtimeConfig.azureDalleDeploymentId
+    : headers["x-azure-dalle-deployment-id"]!;
 
   // Identify the model ID of the Azure OpenAI Service from the OpenAI model name
   let azureDeploymentId = "";
@@ -44,7 +47,7 @@ function createOpenAIConfiguration(
   } else if (model === "text") {
     // TODO: Support completion model
   } else if (model === "img") {
-    // TODO: Support DALL-E model
+    azureDeploymentId = azureDalleDeploymentId;
   }
 
   const azureOptions =

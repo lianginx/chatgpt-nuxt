@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     azureApiVersion: "2023-05-15",
     azureGpt35DeploymentId: "",
     azureGpt4DeploymentId: "",
+    azureDalleDeploymentId: "",
     public: {
       useEnv: "no",
       apiType: "openai",
