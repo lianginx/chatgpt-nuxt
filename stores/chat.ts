@@ -107,18 +107,9 @@ export const useChatStore = defineStore("chat", () => {
 
     controller = new AbortController();
     try {
-      const headers = {
-        "x-api-type": setting.apiType,
-        "x-cipher-api-key": setting.apiKey ?? "",
-        "x-api-host": setting.apiHost ?? "",
-        "x-azure-api-version": setting.azureApiVersion ?? "",
-        "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
-        "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
-      };
-
       const response = await fetch("/api/models", {
         method: "get",
-        headers,
+        headers: getHeaders(setting),
         signal: controller.signal,
       });
       const listModelsResponse: ListModelsResponse = await response.json();
@@ -251,21 +242,12 @@ export const useChatStore = defineStore("chat", () => {
       // 打印标准列表
       console.log(standardList.value);
 
-      const headers = {
-        "x-api-type": setting.apiType,
-        "x-cipher-api-key": setting.apiKey ?? "",
-        "x-api-host": setting.apiHost ?? "",
-        "x-azure-api-version": setting.azureApiVersion ?? "",
-        "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
-        "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
-      };
-
       // 发送请求
       const { status, statusText, body } = await fetch(
         "/api/chat/completions",
         {
           method: "post",
-          headers,
+          headers: getHeaders(setting),
           body: JSON.stringify({
             model: chat.value?.model ?? "gpt-3.5-turbo",
             messages: standardList.value,
@@ -359,19 +341,9 @@ export const useChatStore = defineStore("chat", () => {
 
     try {
       console.log(standardList.value);
-
-      const headers = {
-        "x-api-type": setting.apiType,
-        "x-cipher-api-key": setting.apiKey ?? "",
-        "x-api-host": setting.apiHost ?? "",
-        "x-azure-api-version": setting.azureApiVersion ?? "",
-        "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
-        "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
-      };
-
       const response = await fetch("/api/images/generations", {
         method: "post",
-        headers,
+        headers: getHeaders(setting),
         body: JSON.stringify({
           prompt: message.content,
           n: 1, // TODO: Using the specified number provided by the user.
@@ -419,6 +391,20 @@ export const useChatStore = defineStore("chat", () => {
     return (setting && setting.colorMode) ?? "system";
   }
 
+  // headers
+
+  function getHeaders(setting: ChatSettingItem) {
+    return {
+      "x-api-type": setting.apiType,
+      "x-cipher-api-key": setting.apiKey ?? "",
+      "x-api-host": setting.apiHost ?? "",
+      "x-azure-api-version": setting.azureApiVersion ?? "",
+      "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
+      "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
+      "x-azure-dalle-deployment-id": setting.azureDalleDeploymentId ?? "",
+    };
+  }
+
   return {
     showSetting,
     showHelp,
@@ -447,5 +433,6 @@ export const useChatStore = defineStore("chat", () => {
     sendImageRequestMessage,
     getLocale,
     getColorMode,
+    getHeaders,
   };
 });
