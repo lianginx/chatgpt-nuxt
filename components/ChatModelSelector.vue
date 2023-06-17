@@ -1,6 +1,6 @@
 <template>
   <div
-    class="inline-flex m-2 mx-auto p-1 pr-0 max-w-fit bg-gray-100 dark:bg-gray-600 rounded-lg overflow-hidden"
+    class="inline-flex m-4 mx-auto p-1 pr-0 max-w-fit bg-gray-100 dark:bg-gray-600 rounded-lg overflow-hidden"
   >
     <label
       v-for="chatModel in chatModels"
