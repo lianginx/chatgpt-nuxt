@@ -2,7 +2,7 @@
   <div class="relative m-4 mt-3 sm:mb-2 pointer-events-auto">
     <!-- only DALL-E -->
     <template v-if="store.chat?.model === 'dall-e'">
-      <div class="grid grid-cols-2 m-2">
+      <div class="grid grid-cols-2 p-2 bg-white dark:bg-gray-700">
         <!-- Number of images -->
         <div class="mx-auto">
           <label class="space-x-3">

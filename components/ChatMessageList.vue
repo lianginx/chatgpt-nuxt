@@ -5,7 +5,7 @@
       :key="item.id"
       :item="item"
     />
-    <div class="h-32" />
+    <div :class="store.chat?.model === 'dall-e' ? 'h-40' : 'h-32'" />
   </div>
 </template>
 
