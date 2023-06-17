@@ -10,6 +10,8 @@ import {
   ImageSize,
 } from "@/types";
 import {
+  CreateChatCompletionRequest,
+  CreateChatCompletionResponse,
   CreateImageRequest,
   ImagesResponse,
   ListModelsResponse,
@@ -349,8 +351,48 @@ export const useChatStore = defineStore("chat", () => {
 
     controller = new AbortController();
 
-    const prompt = message.content;
+    let prompt = message.content;
 
+    // Prompt translation request
+    try {
+      const translationPrompt = `
+        You are a translation program.
+        Below, define process to be executed, and the output constraints.
+
+        # Process
+        1. Identify the language of {input}.
+        2. If the language is English, assign {input} as it is to {output}.
+        3. If the language is not English, translate {input} to English and assign the result to {output}.
+
+        # Output Constraints
+        - Output only {output}.
+        - Do not add any explanatory text.
+        `;
+      const response = await fetch("/api/chat/completions", {
+        method: "post",
+        headers: getHeaders(setting),
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [
+            {
+              role: "system",
+              content: trimPrompt(translationPrompt),
+            },
+            {
+              role: "user",
+              content: prompt,
+            },
+          ],
+        } as CreateChatCompletionRequest),
+      });
+      const translateResponse: CreateChatCompletionResponse =
+        await response.json();
+      prompt = translateResponse.choices[0].message!.content;
+    } catch (error) {
+      console.error(error);
+    }
+
+    // Image generation request
     try {
       console.log(standardList.value);
       const response = await fetch("/api/images/generations", {
