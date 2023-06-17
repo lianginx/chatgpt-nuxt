@@ -11,7 +11,9 @@
     "images": "画像"
   },
   "ChatSendBar": {
-    "placeholder": "メッセージを入力して [Enter] で送信、 [Shift] + [Enter] で改行します。"
+    "placeholder": "メッセージを入力して [Enter] で送信、 [Shift] + [Enter] で改行します。",
+    "imageN": "枚数",
+    "imageSize": "サイズ"
   },
   "ChatSendButton": {
     "label": "送信"

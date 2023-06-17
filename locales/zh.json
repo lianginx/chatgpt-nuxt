@@ -11,7 +11,9 @@
     "images": "图片"
   },
   "ChatSendBar": {
-    "placeholder": "输入消息，Enter 发送，Shift + Enter 换行"
+    "placeholder": "输入消息，Enter 发送，Shift + Enter 换行",
+    "imageN": "图片数量",
+    "imageSize": "图片大小"
   },
   "ChatSendButton": {
     "label": "发送"

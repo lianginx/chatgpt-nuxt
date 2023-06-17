@@ -6,8 +6,15 @@ import {
   ChatMessageExOption,
   ChatModel,
   ChatOption,
+  ChatSettingItem,
+  ImageSize,
 } from "@/types";
-import { ImagesResponse, ListModelsResponse, Model } from "openai";
+import {
+  CreateImageRequest,
+  ImagesResponse,
+  ListModelsResponse,
+  Model,
+} from "openai";
 
 export const useChatStore = defineStore("chat", () => {
   const decoder = new TextDecoder("utf-8");
@@ -27,6 +34,9 @@ export const useChatStore = defineStore("chat", () => {
   const messages = ref<ChatMessageExItem[]>([]);
   const messageContent = ref("");
   const talkingChats = ref(new Set<number>([]));
+
+  const imageN = ref(1);
+  const imageSize = ref<ImageSize>("256x256");
 
   // talking
 
@@ -339,16 +349,18 @@ export const useChatStore = defineStore("chat", () => {
 
     controller = new AbortController();
 
+    const prompt = message.content;
+
     try {
       console.log(standardList.value);
       const response = await fetch("/api/images/generations", {
         method: "post",
         headers: getHeaders(setting),
         body: JSON.stringify({
-          prompt: message.content,
-          n: 1, // TODO: Using the specified number provided by the user.
-          size: "256x256", // TODO: Using the specified size provided by the user.
-        } as ApiRequest),
+          prompt,
+          n: message.imageN,
+          size: message.imageSize,
+        } as CreateImageRequest),
         signal: controller.signal,
       });
 
@@ -412,6 +424,8 @@ export const useChatStore = defineStore("chat", () => {
     chat,
     messages,
     messageContent,
+    imageN,
+    imageSize,
     talking,
     standardList,
     stop,

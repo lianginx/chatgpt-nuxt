@@ -1,5 +1,35 @@
 <template>
   <div class="relative m-4 mt-3 sm:mb-2 pointer-events-auto">
+    <!-- only DALL-E -->
+    <template v-if="store.chat?.model === 'dall-e'">
+      <div class="grid grid-cols-2 m-2">
+        <!-- Number of images -->
+        <div class="mx-auto">
+          <label class="space-x-3">
+            <span>{{ $t("ChatSendBar.imageN") }}: </span>
+          </label>
+          <select v-model="store.imageN">
+            <option v-for="n in 10" :value="n">
+              {{ n }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Size of image -->
+        <div class="mx-auto">
+          <label class="space-x-3">
+            <span>{{ $t("ChatSendBar.imageSize") }}: </span>
+          </label>
+          <select v-model="store.imageSize">
+            <option v-for="imageSize in imageSizes" :value="imageSize.value">
+              {{ imageSize.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </template>
+
+    <!-- Chat -->
     <textarea
       class="w-full max-h-60 p-1.5 pl-3 pr-10 resize-none border rounded-lg outline-blue-500 dark:bg-gray-700 dark:text-slate-300 focus:ring focus:ring-blue-200 focus:ring-opacity-40"
       rows="3"
@@ -20,10 +50,17 @@
 
 <script setup lang="ts">
 import { useChatStore } from "@/stores/chat";
+import { ImageSize } from "~/types";
 
 const store = useChatStore();
 const composing = ref(false);
 const textareaDom = ref<HTMLTextAreaElement>();
+
+const imageSizes: { label: string; value: ImageSize }[] = [
+  { label: "256 x 256 pixel", value: "256x256" },
+  { label: "512 x 512 pixel", value: "512x512" },
+  { label: "1024 x 1024 pixel", value: "1024x1024" },
+];
 
 defineProps({
   placeholder: {
@@ -49,6 +86,8 @@ async function sendMessage() {
       role: "user",
       content: store.messageContent,
       chatId: store.chat?.id,
+      imageN: store.imageN,
+      imageSize: store.imageSize,
     });
   } else {
     await store.sendMessage({
@@ -97,4 +136,12 @@ function enterInput(event: KeyboardEvent) {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+label {
+  @apply mb-2 text-sm font-medium text-gray-900 dark:text-slate-300;
+}
+
+select {
+  @apply border border-gray-300 dark:border-gray-500 text-gray-900 dark:text-slate-300 dark:bg-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5;
+}
+</style>
