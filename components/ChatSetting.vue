@@ -183,7 +183,14 @@ async function save() {
   i18n.setLocale(store.getLocale());
   colorMode.preference = store.getColorMode();
   await store.getAvailableModels();
-  await store.openChat(store.chats[0]);
+
+  // Open chat (not DALL-E chat)
+  await store.openChat(
+    store.chats.filter((chat) => {
+      return chat.model !== "dall-e";
+    })[0]
+  );
+
   store.showSetting = false;
   await store.sendMessage({
     role: "user",
