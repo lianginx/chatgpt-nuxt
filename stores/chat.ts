@@ -61,6 +61,7 @@ export const useChatStore = defineStore("chat", () => {
 
     // 没有则创建
     if (!chats.value.length) {
+      await createImageChat();
       await createChat();
     } else if (!chat.value) {
       await openChat(chats.value[0]);
@@ -88,6 +89,7 @@ export const useChatStore = defineStore("chat", () => {
   }
 
   async function openChat(item: ChatItem) {
+    console.log(item);
     chat.value = item;
     await getChatMessages(item.id);
   }
