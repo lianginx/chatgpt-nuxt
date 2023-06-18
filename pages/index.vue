@@ -147,4 +147,10 @@ hotkeys("option+w", (e) => {
 });
 </script>
 
-<style></style>
+<style>
+/* for Mobile height issue */
+.h-screen {
+  height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+  height: 100dvh;
+}
+</style>
