@@ -6,8 +6,17 @@ import {
   ChatMessageExOption,
   ChatModel,
   ChatOption,
+  ChatSettingItem,
+  ImageSize,
 } from "@/types";
-import { ListModelsResponse, Model } from "openai";
+import {
+  CreateChatCompletionRequest,
+  CreateChatCompletionResponse,
+  CreateImageRequest,
+  ImagesResponse,
+  ListModelsResponse,
+  Model,
+} from "openai";
 
 export const useChatStore = defineStore("chat", () => {
   const decoder = new TextDecoder("utf-8");
@@ -27,6 +36,9 @@ export const useChatStore = defineStore("chat", () => {
   const messages = ref<ChatMessageExItem[]>([]);
   const messageContent = ref("");
   const talkingChats = ref(new Set<number>([]));
+
+  const imageN = ref(1);
+  const imageSize = ref<ImageSize>("256x256");
 
   // talking
 
@@ -49,6 +61,7 @@ export const useChatStore = defineStore("chat", () => {
 
     // 没有则创建
     if (!chats.value.length) {
+      await createImageChat();
       await createChat();
     } else if (!chat.value) {
       await openChat(chats.value[0]);
@@ -64,7 +77,19 @@ export const useChatStore = defineStore("chat", () => {
     await getAllChats();
   }
 
+  async function createImageChat(item?: ChatOption) {
+    chat.value = undefined;
+    const chatItem: ChatOption = item ?? {
+      name: "New Image",
+      model: "dall-e",
+      order: 0,
+    };
+    await db.chat.put({ ...chatItem });
+    await getAllChats();
+  }
+
   async function openChat(item: ChatItem) {
+    console.log(item);
     chat.value = item;
     await getChatMessages(item.id);
   }
@@ -96,18 +121,9 @@ export const useChatStore = defineStore("chat", () => {
 
     controller = new AbortController();
     try {
-      const headers = {
-        "x-api-type": setting.apiType,
-        "x-cipher-api-key": setting.apiKey ?? "",
-        "x-api-host": setting.apiHost ?? "",
-        "x-azure-api-version": setting.azureApiVersion ?? "",
-        "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
-        "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
-      };
-
       const response = await fetch("/api/models", {
         method: "get",
-        headers,
+        headers: getHeaders(setting),
         signal: controller.signal,
       });
       const listModelsResponse: ListModelsResponse = await response.json();
@@ -130,6 +146,8 @@ export const useChatStore = defineStore("chat", () => {
         return "GPT-3.5";
       case "gpt-4":
         return "GPT-4";
+      case "dall-e":
+        return "DALL·E";
     }
   }
 
@@ -238,21 +256,12 @@ export const useChatStore = defineStore("chat", () => {
       // 打印标准列表
       console.log(standardList.value);
 
-      const headers = {
-        "x-api-type": setting.apiType,
-        "x-cipher-api-key": setting.apiKey ?? "",
-        "x-api-host": setting.apiHost ?? "",
-        "x-azure-api-version": setting.azureApiVersion ?? "",
-        "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
-        "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
-      };
-
       // 发送请求
       const { status, statusText, body } = await fetch(
         "/api/chat/completions",
         {
           method: "post",
-          headers,
+          headers: getHeaders(setting),
           body: JSON.stringify({
             model: chat.value?.model ?? "gpt-3.5-turbo",
             messages: standardList.value,
@@ -318,6 +327,112 @@ export const useChatStore = defineStore("chat", () => {
     }
   }
 
+  async function sendImageRequestMessage(message: ChatMessageExOption) {
+    if (talking.value) return;
+    if (!message?.content.trim()) return;
+
+    const chatId = message.chatId ?? chat.value?.id;
+
+    if (!chatId) return;
+
+    const setting = loadSetting();
+    if (!setting) {
+      showSetting.value = true;
+      return;
+    }
+
+    clearSendMessageContent();
+    startTalking(chatId);
+
+    await createMessage(message);
+    const assistantMessageId = await createMessage({
+      role: "assistant",
+      content: "",
+      chatId,
+    });
+
+    controller = new AbortController();
+
+    let prompt = message.content;
+
+    // Prompt translation request
+    try {
+      const translationPrompt = `
+        You are a translation program.
+        Below, define process to be executed, and the output constraints.
+
+        # Process
+        1. Identify the language of {input}.
+        2. If the language is English, assign {input} as it is to {output}.
+        3. If the language is not English, translate {input} to English and assign the result to {output}.
+
+        # Output Constraints
+        - Output only {output}.
+        - Do not add any explanatory text.
+        `;
+      const response = await fetch("/api/chat/completions", {
+        method: "post",
+        headers: getHeaders(setting),
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [
+            {
+              role: "system",
+              content: trimPrompt(translationPrompt),
+            },
+            {
+              role: "user",
+              content: prompt,
+            },
+          ],
+        } as CreateChatCompletionRequest),
+      });
+      const translateResponse: CreateChatCompletionResponse =
+        await response.json();
+      prompt = translateResponse.choices[0].message!.content;
+    } catch (error) {
+      console.error(error);
+    }
+
+    // Image generation request
+    try {
+      console.log(standardList.value);
+      const response = await fetch("/api/images/generations", {
+        method: "post",
+        headers: getHeaders(setting),
+        body: JSON.stringify({
+          prompt,
+          n: message.imageN,
+          size: message.imageSize,
+        } as CreateImageRequest),
+        signal: controller.signal,
+      });
+
+      if (response.status !== 200) {
+        const error = response.statusText;
+        return await makeErrorMessage(assistantMessageId, error);
+      }
+
+      const imagesResponse: ImagesResponse = await response.json();
+      const imagesResponseDataInner = imagesResponse.data;
+
+      let content = "";
+      imagesResponseDataInner.forEach((img) => {
+        content += `![image](${img.url}) `;
+      });
+      await updateMessageContent(assistantMessageId, content);
+    } catch (e: any) {
+      await makeErrorMessage(
+        assistantMessageId,
+        `\n\n**${
+          e.name === "AbortError" ? i18n.t("ChatStop.message") : e.message
+        }**`
+      );
+    } finally {
+      endTalking(chatId);
+    }
+  }
+
   // locale
 
   function getLocale() {
@@ -332,6 +447,20 @@ export const useChatStore = defineStore("chat", () => {
     return (setting && setting.colorMode) ?? "system";
   }
 
+  // headers
+
+  function getHeaders(setting: ChatSettingItem) {
+    return {
+      "x-api-type": setting.apiType,
+      "x-cipher-api-key": setting.apiKey ?? "",
+      "x-api-host": setting.apiHost ?? "",
+      "x-azure-api-version": setting.azureApiVersion ?? "",
+      "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
+      "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
+      "x-azure-dalle-deployment-id": setting.azureDalleDeploymentId ?? "",
+    };
+  }
+
   return {
     showSetting,
     showHelp,
@@ -339,6 +468,8 @@ export const useChatStore = defineStore("chat", () => {
     chat,
     messages,
     messageContent,
+    imageN,
+    imageSize,
     talking,
     standardList,
     stop,
@@ -352,11 +483,14 @@ export const useChatStore = defineStore("chat", () => {
     getChatMessages,
     getAllChats,
     createChat,
+    createImageChat,
     clearMessages,
     removeChat,
     appendMessage: createMessage,
     sendMessage,
+    sendImageRequestMessage,
     getLocale,
     getColorMode,
+    getHeaders,
   };
 });

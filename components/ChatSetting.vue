@@ -79,6 +79,16 @@
             v-model.trim="setting.azureGpt4DeploymentId"
           />
         </div>
+
+        <!-- Azure Deployment ID (DALL-E) -->
+        <div>
+          <label>{{ $t("ChatSetting.azureDalleDeploymentId.label") }}</label>
+          <input
+            type="text"
+            :placeholder="$t('ChatSetting.azureDalleDeploymentId.placeholder')"
+            v-model.trim="setting.azureDalleDeploymentId"
+          />
+        </div>
       </template>
     </template>
 
@@ -153,6 +163,7 @@ const setting = ref<ChatSettingOption>({
   apiHost: useEnv ? undefined : "",
   azureGpt35DeploymentId: useEnv ? undefined : "",
   azureGpt4DeploymentId: useEnv ? undefined : "",
+  azureDalleDeploymentId: useEnv ? undefined : "",
   azureApiVersion: useEnv ? undefined : "2023-05-15",
   temperature: useEnv ? Number(runtimeConfig.public.defaultTemperature) : 1,
   locale: i18n.getBrowserLocale()!,
@@ -172,7 +183,14 @@ async function save() {
   i18n.setLocale(store.getLocale());
   colorMode.preference = store.getColorMode();
   await store.getAvailableModels();
-  await store.openChat(store.chats[0]);
+
+  // Open chat (not DALL-E chat)
+  await store.openChat(
+    store.chats.filter((chat) => {
+      return chat.model !== "dall-e";
+    })[0]
+  );
+
   store.showSetting = false;
   await store.sendMessage({
     role: "user",

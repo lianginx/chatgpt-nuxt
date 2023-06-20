@@ -1,4 +1,4 @@
-import { ChatItem } from "@/types";
+import { ChatItem, ImageSize } from "@/types";
 
 export type ChatRole = "user" | "assistant" | "system";
 
@@ -18,4 +18,6 @@ export interface ChatMessageExOption extends ChatMessage {
 export interface ChatMessage {
   role: ChatRole;
   content: string;
+  imageN?: number;
+  imageSize?: ImageSize;
 }

@@ -7,10 +7,13 @@
     "placeholder": "入力してください"
   },
   "ChatList": {
-    "conversations": "会話"
+    "conversations": "会話",
+    "images": "画像"
   },
   "ChatSendBar": {
-    "placeholder": "メッセージを入力して [Enter] で送信、 [Shift] + [Enter] で改行します。"
+    "placeholder": "メッセージを入力して [Enter] で送信、 [Shift] + [Enter] で改行します。",
+    "imageN": "枚数",
+    "imageSize": "サイズ"
   },
   "ChatSendButton": {
     "label": "送信"
@@ -32,6 +35,10 @@
     "azureGpt4DeploymentId": {
       "label": "GPT-4モデルのデプロイ名",
       "placeholder": "gpt-4"
+    },
+    "azureDalleDeploymentId": {
+      "label": "DALL·Eモデルのデプロイ名",
+      "placeholder": "dalle"
     },
     "azureApiVersion": {
       "label": "Azure OpenAI Service の API バージョン",
@@ -166,6 +173,7 @@
   },
   "FuncBar": {
     "chat": "新規チャット",
+    "image": "新規イメージ",
     "setting": "設定",
     "github": "プロジェクト"
   },

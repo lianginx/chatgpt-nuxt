@@ -4,7 +4,7 @@
 
 [ENGLISH](/README.md) | [简体中文](/docs/README-CN.md) | 日本語
 
-OpenAI 社の [ChatGPT](https://openai.com/blog/chatgpt) の API を使用するために [Nuxt 3](https://nuxt.com/) で実装したフロントエンドアプリケーションです。
+OpenAI 社の [ChatGPT](https://openai.com/blog/chatgpt) および [DALL·E](https://openai.com/dall-e-2) の API を使用するために [Nuxt 3](https://nuxt.com/) で実装したフロントエンドアプリケーションです。
 
 ## 対応 API
 
@@ -16,6 +16,8 @@ OpenAI 社の [ChatGPT](https://openai.com/blog/chatgpt) の API を使用する
 - Chat completion
   - gpt-4
   - gpt-3.5-turbo
+- Image generation
+  - DALL·E
 
 ## セットアップ
 

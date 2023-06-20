@@ -74,19 +74,11 @@ watch(
 async function generateChatTitle(content: string) {
   const setting = loadSetting();
   if (!setting) return "";
-  const headers = {
-    "x-api-type": setting.apiType,
-    "x-cipher-api-key": setting.apiKey ?? "",
-    "x-api-host": setting.apiHost ?? "",
-    "x-azure-api-version": setting.azureApiVersion ?? "",
-    "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
-    "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
-  };
 
   try {
     const complete = await $fetch("/api/chat/completions", {
       method: "post",
-      headers,
+      headers: store.getHeaders(setting),
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [

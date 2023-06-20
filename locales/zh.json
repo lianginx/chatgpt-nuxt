@@ -7,10 +7,13 @@
     "placeholder": "请输入"
   },
   "ChatList": {
-    "conversations": "对话"
+    "conversations": "对话",
+    "images": "图片"
   },
   "ChatSendBar": {
-    "placeholder": "输入消息，Enter 发送，Shift + Enter 换行"
+    "placeholder": "输入消息，Enter 发送，Shift + Enter 换行",
+    "imageN": "图片数量",
+    "imageSize": "图片大小"
   },
   "ChatSendButton": {
     "label": "发送"
@@ -32,6 +35,10 @@
     "azureGpt4DeploymentId": {
       "label": "GPT-4模型的部署名称",
       "placeholder": "gpt-4"
+    },
+    "azureDalleDeploymentId": {
+      "label": "DALL·E模型的部署名称",
+      "placeholder": "dalle"
     },
     "azureApiVersion": {
       "label": "Azure OpenAI Service 的 API 版本",
@@ -166,6 +173,7 @@
   },
   "FuncBar": {
     "chat": "新建聊天",
+    "image": "新图片",
     "setting": "设置",
     "github": "查看项目"
   },

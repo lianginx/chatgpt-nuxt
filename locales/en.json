@@ -7,10 +7,13 @@
     "placeholder": "Pleas input."
   },
   "ChatList": {
-    "conversations": "Conversations"
+    "conversations": "Conversations",
+    "images": "Images"
   },
   "ChatSendBar": {
-    "placeholder": "Type a message and press [Enter] to send, press [Shift]+[Enter] to start a new line."
+    "placeholder": "Type a message and press [Enter] to send, press [Shift]+[Enter] to start a new line.",
+    "imageN": "Number of images",
+    "imageSize": "Size of image"
   },
   "ChatSendButton": {
     "label": "Send"
@@ -32,6 +35,10 @@
     "azureGpt4DeploymentId": {
       "label": "Deployment name of the GPT-4 model",
       "placeholder": "gpt-4"
+    },
+    "azureDalleDeploymentId": {
+      "label": "Deployment name of the DALL·E model",
+      "placeholder": "dalle"
     },
     "azureApiVersion": {
       "label": "API version of Azure OpenAI Service",
@@ -166,6 +173,7 @@
   },
   "FuncBar": {
     "chat": "New Chat",
+    "image": "New Image",
     "setting": "Setting",
     "github": "Project"
   },

@@ -10,7 +10,8 @@
         <HamburgerButton size="22" />
       </div>
       <div class="flex-none hidden sm:block">
-        <Message size="24" />
+        <Picture v-if="store.chat?.model === 'dall-e'" size="24" />
+        <Message v-else size="24" />
       </div>
       <input
         ref="titleInputDom"
@@ -51,7 +52,13 @@
 </template>
 
 <script setup lang="ts">
-import { HamburgerButton, Message, Clear, Help } from "@icon-park/vue-next";
+import {
+  HamburgerButton,
+  Picture,
+  Message,
+  Clear,
+  Help,
+} from "@icon-park/vue-next";
 import { useChatStore } from "@/stores/chat";
 import { ChatItem } from "@/types";
 
