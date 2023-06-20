@@ -1,10 +1,31 @@
-node_modules
-*.log*
+# Nuxt dev/build outputs
+.output
 .nuxt
 .nitro
 .cache
-.output
-.env
 dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
 .DS_Store
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# deploy script
 deploy.sh
