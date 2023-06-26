@@ -59,7 +59,7 @@ export const useChatStore = defineStore("chat", () => {
   async function getAllChats() {
     chats.value = (await db.chat.reverse().toArray()) as ChatItem[];
 
-    // 没有则创建
+    // 没有则创建 (create without)
     if (!chats.value.length) {
       await createImageChat();
       await createChat();
@@ -73,7 +73,7 @@ export const useChatStore = defineStore("chat", () => {
     const chatItem: ChatOption = item ?? { name: "New Chat", order: 0 };
     await db.chat.put({ ...chatItem });
 
-    // 加载列表并打开第一个
+    // 加载列表并打开第一个 (load the list and open the first)
     await getAllChats();
   }
 
@@ -89,7 +89,7 @@ export const useChatStore = defineStore("chat", () => {
   }
 
   async function openChat(item: ChatItem) {
-    console.log(item);
+    // console.log(item);
     chat.value = item;
     await getChatMessages(item.id);
   }
@@ -237,11 +237,11 @@ export const useChatStore = defineStore("chat", () => {
       return;
     }
 
-    // 开始对话
+    // 开始对话 (start a conversation)
     clearSendMessageContent();
     startTalking(chatId);
 
-    // 追加到消息队列
+    // 追加到消息队列 (append to message queue)
     await createMessage(message);
     const assistantMessageId = await createMessage({
       role: "assistant",
@@ -249,14 +249,14 @@ export const useChatStore = defineStore("chat", () => {
       chatId,
     });
 
-    // 用于主动中断请求
+    // 用于主动中断请求 (for unsolicited interrupt requests)
     controller = new AbortController();
 
     try {
-      // 打印标准列表
+      // 打印标准列表 (print standard list)
       console.log(standardList.value);
 
-      // 发送请求
+      // 发送请求 (send request)
       const { status, statusText, body } = await fetch(
         "/api/chat/completions",
         {
@@ -287,7 +287,7 @@ export const useChatStore = defineStore("chat", () => {
 
         const text = decoder.decode(concatenatedValue);
 
-        // 处理服务端返回的异常消息并终止读取
+        // 处理服务端返回的异常消息并终止读取 (Handle the exception message returned by the server and terminate the read)
         if (status !== 200) {
           const error = JSON.parse(text);
           content += `${status}: ${statusText}\n`;
@@ -295,7 +295,7 @@ export const useChatStore = defineStore("chat", () => {
           return await makeErrorMessage(assistantMessageId, content);
         }
 
-        // 读取正文
+        // 读取正文 (read text)
         const line = text
           .split(/\r?\n/)
           .map((line) => line.replace(/(\n)?^data:\s*/, "").trim()) // remove prefix
@@ -315,7 +315,7 @@ export const useChatStore = defineStore("chat", () => {
         }
       }
     } catch (e: any) {
-      // 主动终止时触发
+      // 主动终止时触发 (Triggered on active termination)
       await makeErrorMessage(
         assistantMessageId,
         `\n\n**${

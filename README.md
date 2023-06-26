@@ -27,6 +27,8 @@ To begin, please ensure you have installed all dependencies:
 npm i
 # or
 yarn
+# or
+pnpm i
 ```
 
 ## Development Server
@@ -37,6 +39,8 @@ Launch the development server and view it at <http://localhost:3000>:
 npm run dev
 # or
 yarn dev
+# or
+pnpm dev
 ```
 
 ## Production
@@ -47,6 +51,8 @@ To build your application for production, execute:
 npm run build
 # or
 yarn build
+# or
+pnpm build
 ```
 
 Preview the production build locally with the following command:
@@ -55,6 +61,8 @@ Preview the production build locally with the following command:
 npm run preview
 # or
 yarn preview
+# or
+pnpm preview
 ```
 
 ## Deploy
