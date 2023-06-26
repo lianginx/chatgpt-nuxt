@@ -65,4 +65,5 @@ export default defineNuxtConfig({
     classSuffix: "",
   },
   ssr: false,
+  devtools: { enabled: false }
 });
