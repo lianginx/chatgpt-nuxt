@@ -13,13 +13,13 @@
 </template>
 
 <script setup lang="ts">
-import { Plus, Setting, Github, Router, Target } from "@icon-park/vue-next";
+import { Plus, Setting, Github, AddPicture } from "@icon-park/vue-next";
 import { useChatStore } from "@/stores/chat";
 
 const store = useChatStore();
 const funcs = [
   { type: "chat", icon: Plus },
-  { type: "image", icon: Plus },
+  { type: "image", icon: AddPicture },
   { type: "setting", icon: Setting },
   { type: "github", icon: Github },
 ];
