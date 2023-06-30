@@ -1,5 +1,6 @@
 {
-  "name": "nuxt-app",
+  "name": "chatgpt-nuxt",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "build": "nuxt build",
