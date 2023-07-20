@@ -42,7 +42,7 @@
     },
     "azureApiVersion": {
       "label": "API version of Azure OpenAI Service",
-      "placeholder": "2023-05-15"
+      "placeholder": "2023-06-01-preview"
     },
     "temperature": "temperature",
     "language": "Language",
