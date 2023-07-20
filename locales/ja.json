@@ -42,7 +42,7 @@
     },
     "azureApiVersion": {
       "label": "Azure OpenAI Service の API バージョン",
-      "placeholder": "2023-05-15"
+      "placeholder": "2023-06-01-preview"
     },
     "temperature": "temperature",
     "language": "言語",

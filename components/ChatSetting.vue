@@ -164,7 +164,7 @@ const setting = ref<ChatSettingOption>({
   azureGpt35DeploymentId: useEnv ? undefined : "",
   azureGpt4DeploymentId: useEnv ? undefined : "",
   azureDalleDeploymentId: useEnv ? undefined : "",
-  azureApiVersion: useEnv ? undefined : "2023-05-15",
+  azureApiVersion: useEnv ? undefined : "2023-06-01-preview",
   temperature: useEnv ? Number(runtimeConfig.public.defaultTemperature) : 1,
   locale: i18n.getBrowserLocale()!,
   colorMode: "system",

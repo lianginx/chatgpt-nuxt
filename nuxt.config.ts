@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     apiKey: "",
     apiHost: "",
-    azureApiVersion: "2023-05-15",
+    azureApiVersion: "2023-06-01-preview",
     azureGpt35DeploymentId: "",
     azureGpt4DeploymentId: "",
     azureDalleDeploymentId: "",
