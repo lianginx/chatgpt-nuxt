@@ -79,16 +79,6 @@
             v-model.trim="setting.azureGpt4DeploymentId"
           />
         </div>
-
-        <!-- Azure Deployment ID (DALL-E) -->
-        <div>
-          <label>{{ $t("ChatSetting.azureDalleDeploymentId.label") }}</label>
-          <input
-            type="text"
-            :placeholder="$t('ChatSetting.azureDalleDeploymentId.placeholder')"
-            v-model.trim="setting.azureDalleDeploymentId"
-          />
-        </div>
       </template>
     </template>
 
@@ -163,7 +153,6 @@ const setting = ref<ChatSettingOption>({
   apiHost: useEnv ? undefined : "",
   azureGpt35DeploymentId: useEnv ? undefined : "",
   azureGpt4DeploymentId: useEnv ? undefined : "",
-  azureDalleDeploymentId: useEnv ? undefined : "",
   azureApiVersion: useEnv ? undefined : "2023-06-01-preview",
   temperature: useEnv ? Number(runtimeConfig.public.defaultTemperature) : 1,
   locale: i18n.getBrowserLocale()!,

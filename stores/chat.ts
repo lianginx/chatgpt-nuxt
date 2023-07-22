@@ -457,7 +457,6 @@ export const useChatStore = defineStore("chat", () => {
       "x-azure-api-version": setting.azureApiVersion ?? "",
       "x-azure-gpt35-deployment-id": setting.azureGpt35DeploymentId ?? "",
       "x-azure-gpt4-deployment-id": setting.azureGpt4DeploymentId ?? "",
-      "x-azure-dalle-deployment-id": setting.azureDalleDeploymentId ?? "",
     };
   }
 

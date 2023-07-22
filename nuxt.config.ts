@@ -7,7 +7,6 @@ export default defineNuxtConfig({
     azureApiVersion: "2023-06-01-preview",
     azureGpt35DeploymentId: "",
     azureGpt4DeploymentId: "",
-    azureDalleDeploymentId: "",
     public: {
       useEnv: "no",
       apiType: "openai",
@@ -65,5 +64,5 @@ export default defineNuxtConfig({
     classSuffix: "",
   },
   ssr: false,
-  devtools: { enabled: false }
+  devtools: { enabled: false },
 });
