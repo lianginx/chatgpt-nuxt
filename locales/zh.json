@@ -36,10 +36,6 @@
       "label": "GPT-4模型的部署名称",
       "placeholder": "gpt-4"
     },
-    "azureDalleDeploymentId": {
-      "label": "DALL·E模型的部署名称",
-      "placeholder": "dalle"
-    },
     "azureApiVersion": {
       "label": "Azure OpenAI Service 的 API 版本",
       "placeholder": "2023-06-01-preview"
