@@ -59,7 +59,27 @@ yarn preview
 
 ## デプロイ
 
+クイックデプロイメントのためのワンライナーコマンド：
+
+```bash
+docker run -d \
+  -p 80:3000 \
+  --restart unless-stopped \
+  --name chatgpt-nux \
+  lianginx/chatgpt-nuxt:latest
+```
+
 Docker Compose を用いてデプロイが可能です。
+
+```bash
+version: "3"
+services:
+  chatgpt-nux:
+    image: lianginx/chatgpt-nuxt:latest
+    ports:
+      - 80:3000
+    restart: unless-stopped
+```
 
 ```bash
 docker-compose up -d # バックグラウンドで起動
@@ -67,7 +87,7 @@ docker-compose stop  # 停止
 docker-compose down  # 停止＆削除
 ```
 
-デプロイが完了すると `80`番ポートで接続できるようになります。
+デプロイが完了すると `80` 番ポートで接続できるようになります。
 
 この README ドキュメントを改善するためのフィードバックや提案がある場合は、遠慮なくお知らせください。あなたのご意見を大切にしています。
 

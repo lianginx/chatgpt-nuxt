@@ -67,7 +67,27 @@ pnpm preview
 
 ## Deploy
 
+One-line command for quick deployment:
+
+```bash
+docker run -d \
+  -p 80:3000 \
+  --restart unless-stopped \
+  --name chatgpt-nux \
+  lianginx/chatgpt-nuxt:latest
+```
+
 To deploy using Docker Compose:
+
+```bash
+version: "3"
+services:
+  chatgpt-nux:
+    image: lianginx/chatgpt-nuxt:latest
+    ports:
+      - 80:3000
+    restart: unless-stopped
+```
 
 ```bash
 docker-compose up -d # Start and run in the background.

@@ -59,7 +59,27 @@ yarn preview
 
 ## 部署
 
-要使用 Docker Compose 部署：
+一行命令快速部署：
+
+```bash
+docker run -d \
+  -p 80:3000 \
+  --restart unless-stopped \
+  --name chatgpt-nux \
+  lianginx/chatgpt-nuxt:latest
+```
+
+使用 Docker Compose 文件部署：
+
+```bash
+version: "3"
+services:
+  chatgpt-nux:
+    image: lianginx/chatgpt-nuxt:latest
+    ports:
+      - 80:3000
+    restart: unless-stopped
+```
 
 ```bash
 docker-compose up -d # 启动并在后台运行。
