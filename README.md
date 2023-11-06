@@ -73,7 +73,7 @@ One-line command for quick deployment:
 docker run -d \
   -p 80:3000 \
   --restart unless-stopped \
-  --name chatgpt-nux \
+  --name chatgpt-nuxt \
   lianginx/chatgpt-nuxt:latest
 ```
 
@@ -82,7 +82,7 @@ To deploy using Docker Compose:
 ```bash
 version: "3"
 services:
-  chatgpt-nux:
+  chatgpt-nuxt:
     image: lianginx/chatgpt-nuxt:latest
     ports:
       - 80:3000

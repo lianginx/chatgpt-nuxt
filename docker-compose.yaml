@@ -1,6 +1,6 @@
 version: "3"
 services:
-  chatgpt-nux:
+  chatgpt-nuxt:
     build: .
     ports:
       - 80:3000

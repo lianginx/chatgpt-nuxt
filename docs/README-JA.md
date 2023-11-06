@@ -65,7 +65,7 @@ yarn preview
 docker run -d \
   -p 80:3000 \
   --restart unless-stopped \
-  --name chatgpt-nux \
+  --name chatgpt-nuxt \
   lianginx/chatgpt-nuxt:latest
 ```
 
@@ -74,7 +74,7 @@ Docker Compose を用いてデプロイが可能です。
 ```bash
 version: "3"
 services:
-  chatgpt-nux:
+  chatgpt-nuxt:
     image: lianginx/chatgpt-nuxt:latest
     ports:
       - 80:3000
