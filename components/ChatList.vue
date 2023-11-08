@@ -22,7 +22,7 @@
       </div>
       <CloseOne
         class="invisible group-hover:visible text-rose-400"
-        @click.stop.left="store.removeChat(item.id)"
+        @click.stop.left="closeChat(item)"
       />
     </div>
 
@@ -69,6 +69,11 @@ async function openChat(item: ChatItem) {
   store.$patch({ showSetting: false, chat: item });
   await store.getChatMessages(item.id);
   toggleSideBar();
+}
+
+async function closeChat(item: ChatItem) {
+  await store.removeChat(item.id);
+  await openChat(store.chats[0]);
 }
 </script>
 
