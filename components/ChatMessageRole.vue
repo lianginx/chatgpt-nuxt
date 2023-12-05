@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { ChatMessageExItem } from "@/types";
+import type { ChatMessageExItem } from "~/types";
 
 defineProps<{
   item: ChatMessageExItem;

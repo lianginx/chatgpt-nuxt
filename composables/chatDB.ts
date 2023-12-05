@@ -1,16 +1,11 @@
 import Dexie from "dexie";
-import {
+import type {
   ChatSettingOption,
-  ChatItem,
-  ChatMessageExItem,
-  ChatSettingItem,
-  ChatPromptCategoryItem,
-  ChatPromptItem,
   ChatMessageExOption,
   ChatOption,
   ChatPromptOption,
   ChatPromptCategoryOption,
-} from "@/types";
+} from "~/types";
 
 const databaseName = "ChatGPT";
 const lastVersion = 2;

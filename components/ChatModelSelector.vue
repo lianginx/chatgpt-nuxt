@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { useChatStore } from "@/stores/chat";
-import { ChatModel } from "~/types";
+import type { ChatModel } from "~/types";
 
 const store = useChatStore();
 

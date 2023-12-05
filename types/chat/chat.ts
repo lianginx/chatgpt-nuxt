@@ -1,4 +1,4 @@
-import { ChatPromptCategoryItem, ChatSettingItem } from "@/types";
+import type { ChatPromptCategoryItem, ChatSettingItem } from "~/types";
 
 export type ChatModel = "gpt-3.5-turbo" | "gpt-4" | "dall-e";
 

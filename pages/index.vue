@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { useChatStore } from "@/stores/chat";
-import { CreateChatCompletionRequest } from "openai";
+import type { CreateChatCompletionRequest } from "openai";
 import hotkeys from "hotkeys-js";
 
 const store = useChatStore();

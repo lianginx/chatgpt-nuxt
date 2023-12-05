@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChatRole } from "@/types";
+import type { ChatRole } from "~/types";
 
 defineProps<{
   role: ChatRole;

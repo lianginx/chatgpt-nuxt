@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import { useChatStore } from "@/stores/chat";
-import { ImageSize } from "~/types";
+import type { ImageSize } from "~/types";
 
 const store = useChatStore();
 const composing = ref(false);

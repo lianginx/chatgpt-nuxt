@@ -1,4 +1,4 @@
-import { ChatSettingItem, ChatSettingOption } from "@/types";
+import type { ChatSettingItem, ChatSettingOption } from "~/types";
 
 const key = "chatSetting";
 
