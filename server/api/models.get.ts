@@ -1,5 +1,5 @@
 import { RequestHeaders } from "h3";
-import { ApiType } from "@/types";
+import type { ApiType } from "~/types";
 import { errorHandler, setResStatus } from "~/server/utils/h3";
 import { getOpenAIApiInstance } from "../utils/openai";
 

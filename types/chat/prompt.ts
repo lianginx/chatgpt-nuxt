@@ -1,4 +1,4 @@
-import { ChatMessageExItem } from "@/types";
+import type { ChatMessageExItem } from "~/types";
 
 export interface ChatPromptCategoryItem extends ChatPromptCategoryOption {
   id: number;

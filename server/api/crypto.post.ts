@@ -1,5 +1,5 @@
 import CryptoJS from "crypto-js";
-import { CryptoRequest } from "@/types";
+import type { CryptoRequest } from "~/types";
 
 const key = "lianginx";
 

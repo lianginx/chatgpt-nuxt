@@ -61,7 +61,7 @@ import {
   CloseOne,
 } from "@icon-park/vue-next";
 import { useChatStore } from "@/stores/chat";
-import { ChatItem } from "@/types";
+import type { ChatItem } from "~/types";
 
 const store = useChatStore();
 

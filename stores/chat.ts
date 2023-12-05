@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import {
+import type {
   ApiRequest,
   ChatItem,
   ChatMessageExItem,
@@ -9,7 +9,7 @@ import {
   ChatSettingItem,
   ImageSize,
 } from "@/types";
-import {
+import type {
   CreateChatCompletionRequest,
   CreateChatCompletionResponse,
   CreateImageRequest,
@@ -318,8 +318,7 @@ export const useChatStore = defineStore("chat", () => {
       // 主动终止时触发 (Triggered on active termination)
       await makeErrorMessage(
         assistantMessageId,
-        `\n\n**${
-          e.name === "AbortError" ? i18n.t("ChatStop.message") : e.message
+        `\n\n**${e.name === "AbortError" ? i18n.t("ChatStop.message") : e.message
         }**`
       );
     } finally {
@@ -424,8 +423,7 @@ export const useChatStore = defineStore("chat", () => {
     } catch (e: any) {
       await makeErrorMessage(
         assistantMessageId,
-        `\n\n**${
-          e.name === "AbortError" ? i18n.t("ChatStop.message") : e.message
+        `\n\n**${e.name === "AbortError" ? i18n.t("ChatStop.message") : e.message
         }**`
       );
     } finally {

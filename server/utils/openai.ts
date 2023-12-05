@@ -1,7 +1,7 @@
 import { RequestHeaders } from "h3";
 import { aesCrypto } from "~/server/api/crypto.post";
 import { Configuration, CreateChatCompletionRequest, OpenAIApi } from "openai";
-import { ApiRequest, ApiRequestModel, ApiType, ChatModel } from "~/types";
+import type { ApiRequest, ApiRequestModel, ApiType, ChatModel } from "~/types";
 import { createAxiosInstance } from "./axios";
 import { AzureOpenAIApi } from "./azure";
 
@@ -51,14 +51,14 @@ function createOpenAIConfiguration(
   const azureOptions =
     apiType === "azure"
       ? {
-          basePath,
-          baseOptions: {
-            headers: { "api-key": apiKey },
-            params: {
-              "api-version": azureApiVersion,
-            },
+        basePath,
+        baseOptions: {
+          headers: { "api-key": apiKey },
+          params: {
+            "api-version": azureApiVersion,
           },
-        }
+        },
+      }
       : {};
 
   return new Configuration({
